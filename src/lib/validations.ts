@@ -15,6 +15,11 @@ export const SignUpSchema = z
     confirm_password: z.string().min(5, { message: "Mínimo de 5 caracteres" }),
   })
   .refine((data) => data.password === data.confirm_password, {
-    message: "As senhas não conferem.",
-    path: ["confirm"],
+    message: "As senhas não são iguais.",
+    path: ["confirm_password"],
   });
+
+export const SignInSchema = z.object({
+  email: z.string().email().min(5, { message: "E-mail inválido." }),
+  password: z.string().min(5, { message: "Mínimo de 5 caracteres" }),
+});
