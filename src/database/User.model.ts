@@ -35,6 +35,9 @@ const UserSchema = new Schema(
       trim: true,
       minLength: 3,
       maxLength: 30,
+      unique: true,
+      lowercase: true,
+      index: true,
     },
     email: {
       type: String,
@@ -56,6 +59,7 @@ const UserSchema = new Schema(
     },
     avatar: {
       type: String,
+      default: "/assets/images/default_avatar.png",
     },
     state: {
       type: String,
@@ -77,6 +81,8 @@ const UserSchema = new Schema(
   { timestamps: true }
 );
 
-UserSchema.plugin(uniqueValidator);
+UserSchema.plugin(uniqueValidator, {
+  message: "\n\nErro, {PATH} já cadastrado. ",
+});
 
 export default models.User || model("User", UserSchema);

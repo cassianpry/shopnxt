@@ -18,6 +18,9 @@ import { usePathname, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { SignUpSchema } from "@/src/lib/validations";
 import { Input } from "@/src/components/ui/input";
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
+import Link from "next/link";
 
 const SignUp = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -27,6 +30,7 @@ const SignUp = () => {
   // 1. Define your form.
   const form = useForm<z.infer<typeof SignUpSchema>>({
     resolver: zodResolver(SignUpSchema),
+    reValidateMode: "onSubmit",
     defaultValues: {
       name: "",
       username: "",
@@ -37,11 +41,28 @@ const SignUp = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof SignUpSchema>) => {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     setIsSubmitting(true);
-    router.push("/");
-    console.log(values);
+
+    try {
+      await axios
+        .post(`${process.env.API}/register`, {
+          name: values.name,
+          username: values.username,
+          email: values.email,
+          password: values.password,
+        })
+        .then((response) => {
+          toast.success("Usuário cadastrado com sucesso!!");
+        })
+        .catch((error) => {
+          toast.error(error.response.data.error, { duration: 4000 });
+        });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsSubmitting(false);
+      router.push("/redirect");
+    }
   };
 
   return (
@@ -196,11 +217,11 @@ const SignUp = () => {
                   </Button>
                   <p className="mt-6 text-center text-xs text-dark500_light700">
                     Já possui uma conta?
-                    <a href="">
+                    <Link href="/sign-in">
                       <span className="font-semibold text-blue-600">
                         &#160;Acessar
                       </span>
-                    </a>
+                    </Link>
                   </p>
                 </div>
               </div>
