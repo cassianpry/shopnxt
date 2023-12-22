@@ -14,7 +14,7 @@ import {
   FormMessage,
 } from "@/src/components/ui/form";
 import { Button } from "@/src/components/ui/button";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { SignInSchema } from "@/src/lib/validations";
 import { Input } from "@/src/components/ui/input";
@@ -25,6 +25,10 @@ import { signIn } from "next-auth/react";
 const SignIn = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const callbackURL = searchParams.get("callbackUrl") || "/";
+  console.log(callbackURL);
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof SignInSchema>>({
@@ -56,7 +60,7 @@ const SignIn = () => {
       console.log(error);
     } finally {
       setIsSubmitting(false);
-      router.push("/");
+      router.push(callbackURL);
     }
   };
 
