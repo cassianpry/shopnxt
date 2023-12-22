@@ -1,4 +1,5 @@
-import { Schema, models, model, Document } from "mongoose";
+import bcrypt from "bcrypt";
+import { Schema, models, model, Document, CallbackError } from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
 
 interface IResetCode {
@@ -80,6 +81,24 @@ const UserSchema = new Schema(
   },
   { timestamps: true }
 );
+UserSchema.pre("save", async function (next) {
+  // Apenas gera a senha se ela não foi fornecida manualmente (pode ser melhorada)
+  if (this.isModified("password") || !this.password) {
+    try {
+      // Gera um hash da senha
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(this.password, salt);
+
+      // Define a senha no modelo
+      this.password = hashedPassword;
+      next();
+    } catch (error) {
+      next(error as CallbackError);
+    }
+  } else {
+    return next();
+  }
+});
 
 UserSchema.plugin(uniqueValidator, {
   message: "\n\nErro, {PATH} já cadastrado. ",
