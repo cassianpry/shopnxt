@@ -9,12 +9,13 @@ import { Skeleton } from "../ui/skeleton";
 
 const Navbar = () => {
   const { data, status } = useSession();
+
   return (
     <nav className="flex-between bg-blue-900 fixed z-50 w-full gap-5 p-6 shadow-light-300 dark:shadow-none sm:px-12">
       <Link className="flex items-center gap-1 text-light-850" href="/">
         <BiJoystick className="w-[70px] h-[70px] " />
         <Image
-          className="h-auto w-auto"
+          className="h-auto w-auto hidden lg:block"
           src="/assets/images/logo.png"
           width={130}
           height={130}
