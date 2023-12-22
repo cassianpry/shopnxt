@@ -1,5 +1,6 @@
 import Image from "next/image";
 import React from "react";
+import not_found from "@/public/assets/images/404.svg";
 
 const Notfound = () => {
   return (
@@ -14,10 +15,11 @@ const Notfound = () => {
       <div className="flex justify-center">
         <Image
           className="justify-center"
-          src="assets/images/404.svg"
+          src={not_found}
           alt="404"
           width={700}
           height={700}
+          priority
         />
       </div>
     </div>
