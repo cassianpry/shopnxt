@@ -10,6 +10,8 @@ import { Skeleton } from "../ui/skeleton";
 const Navbar = () => {
   const { data, status } = useSession();
 
+  const user = data?.user as { name: string | null | undefined; role: string };
+
   return (
     <nav className="flex-between bg-blue-900 fixed z-50 w-full gap-5 p-6 shadow-light-300 dark:shadow-none sm:px-12">
       <Link className="flex items-center gap-1 text-light-850" href="/">
@@ -32,13 +34,15 @@ const Navbar = () => {
         {status === "loading" ? (
           <Skeleton className="h-10 w-10 rounded-full bg-blue-500" />
         ) : (
-          <>
+          <div className="flex justify-end items-center">
             <Theme />
             {status === "authenticated" ? (
               <>
-                <p className="text-light-900">{data.user?.name}</p>
+                <p className="text-light-900">
+                  {user?.name} ({user?.role})&nbsp;&nbsp;
+                </p>
                 <p
-                  className="cursor-pointer text-light-900"
+                  className="cursor-pointer text-light-900 hover:text-blue-400"
                   onClick={() => signOut({ callbackUrl: "/" })}
                 >
                   Logout
@@ -49,7 +53,7 @@ const Navbar = () => {
                 <Link href="/sign-in">Login</Link>
               </p>
             )}
-          </>
+          </div>
         )}
       </div>
     </nav>
