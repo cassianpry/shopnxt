@@ -4,7 +4,6 @@ import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import User from "./User.model";
 import { connectToDatabase } from "./dbConnect";
-import axios from "axios";
 
 interface CredentialsProps {
   email: string;
@@ -12,6 +11,13 @@ interface CredentialsProps {
 }
 
 interface UserProps {
+  token: {
+    user: Object;
+    email: string;
+  };
+  session: {
+    user: Object;
+  };
   user: {
     name?: string;
     password?: string;
@@ -94,6 +100,17 @@ export const authOptions = {
         console.log(error);
         return false;
       }
+    },
+    jwt: async ({ token }: UserProps) => {
+      const userByEmail = await User.findOne({ email: token.email });
+      userByEmail.password = undefined;
+      userByEmail.resetCode = undefined;
+      token.user = userByEmail!;
+      return token;
+    },
+    session: async ({ session, token }: UserProps) => {
+      session.user = token.user;
+      return session;
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
