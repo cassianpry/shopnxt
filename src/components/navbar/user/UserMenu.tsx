@@ -36,7 +36,7 @@ export default function UserMenu({ user }: UserMenuProps) {
     bg-transparent shadow-none "
     >
       <MenubarMenu>
-        <MenubarTrigger className="focus:bg-blue-900 text-light-850">
+        <MenubarTrigger className="focus:bg-blue-900 text-light-850 cursor-pointer">
           <Image src={user.avatar!} alt="avatar" width={50} height={50} />
         </MenubarTrigger>
         <MenubarContent className="absolute right-[-3rem] mt-3 min-w-[120px] rounded border bg-light-900 py-2 dark:border-dark-400 dark:bg-dark-300 w-[180px]">
