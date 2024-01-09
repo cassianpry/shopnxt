@@ -25,6 +25,16 @@ const buttonVariants = cva(
         lg: "h-11 rounded-md px-8",
         icon: "h-10 w-10",
       },
+      align: {
+        flexLeft: "flex items-start justify-start",
+        flexCenter: "flex items-center justify-center",
+        flexRight: "flex items-end justify-end",
+        flexBetween: "flex items-center justify-between",
+        inlineLeft: "inline-flex items-start justify-start",
+        inlineCenter: "inline-flex items-center justify-center",
+        inlineRight: "inline-flex items-end justify-end",
+        inlineBetween: "inline-flex items-center justify-between",
+      },
     },
     defaultVariants: {
       variant: "default",
