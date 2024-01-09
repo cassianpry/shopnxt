@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from "react";
 import { MdCategory, MdPersonAddAlt1 } from "react-icons/md";
 import { SidebarLink } from "../types";
