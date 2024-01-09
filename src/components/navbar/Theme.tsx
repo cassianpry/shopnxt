@@ -23,9 +23,9 @@ const Theme = () => {
       <MenubarMenu>
         <MenubarTrigger className="focus:bg-blue-900">
           {mode === "light" ? (
-            <FiSun className="w-[20px] h-[20px] text-light-850" />
+            <FiSun className="w-[20px] h-[20px] text-light-850 cursor-pointer" />
           ) : (
-            <FiMoon className="w-[20px] h-[20px] text-light-850" />
+            <FiMoon className="w-[20px] h-[20px] text-light-850 cursor-pointer" />
           )}
         </MenubarTrigger>
         <MenubarContent className="absolute right-[-3rem] mt-3 min-w-[120px] rounded border bg-light-900 py-2 dark:border-dark-400 dark:bg-dark-300">

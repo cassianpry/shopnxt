@@ -3,14 +3,23 @@ import React from "react";
 import { BiJoystick } from "react-icons/bi";
 import Theme from "./Theme";
 import SearchBar from "../search/SearchBar";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { Skeleton } from "../ui/skeleton";
+import UserMenu from "./user/UserMenu";
 
 const Navbar = () => {
   const { data, status } = useSession();
 
-  const user = data?.user as { name: string | null | undefined; role: string };
+  const user = data?.user as {
+    name: string;
+    username: string;
+    role: string;
+    email: string;
+    avatar: string;
+
+    icon: string;
+  };
 
   return (
     <nav className="flex-between bg-blue-900 fixed z-50 w-full gap-5 p-6 shadow-light-300 dark:shadow-none sm:px-12">
@@ -24,10 +33,6 @@ const Navbar = () => {
           alt="logo"
           priority
         />
-        {/* <p className="h2-bold font-spaceGrotesk dark:text-light-900 max-sm:hidden">
-          Shop<span className="text-blue-300">NXT</span>
-        </p>
-       */}
       </Link>
       <SearchBar />
       <div className="flex-between gap-5">
@@ -37,17 +42,7 @@ const Navbar = () => {
           <div className="flex justify-end items-center">
             <Theme />
             {status === "authenticated" ? (
-              <>
-                <p className="text-light-900">
-                  {user?.name} ({user?.role})&nbsp;&nbsp;
-                </p>
-                <p
-                  className="cursor-pointer text-light-900 hover:text-blue-400"
-                  onClick={() => signOut({ callbackUrl: "/" })}
-                >
-                  Logout
-                </p>
-              </>
+              <UserMenu user={user} />
             ) : (
               <p className="text-light-900">
                 <Link href="/sign-in">Login</Link>

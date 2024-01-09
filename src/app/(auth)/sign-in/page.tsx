@@ -99,7 +99,7 @@ const SignIn = () => {
               height={800}
             />
           </div>
-          <div className="p-6 sm:p-12 lg:w-1/2 xl:w-5/12">
+          <div className="p-6 sm:p-12 lg:w-1/2 xl:w-5/12 bg-light-900">
             {otherLogin ? (
               <div className="flex flex-center flex-col">
                 <div className="text-center">
@@ -184,7 +184,7 @@ const SignIn = () => {
 
                         <span className="ml-3">Acessar</span>
                       </Button>
-                      <p className="mt-6 text-center text-xs text-dark500_light700">
+                      <p className="mt-6 text-center text-xs text-dark500">
                         Não possui uma conta?
                         <Link href="/sign-up">
                           <span className="font-semibold text-blue-600">

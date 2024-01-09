@@ -1,6 +1,5 @@
 import React from "react";
 import { Skeleton } from "@/src/components/ui/skeleton";
-import { title } from "process";
 
 interface LoadingProps {
   title?: string;
