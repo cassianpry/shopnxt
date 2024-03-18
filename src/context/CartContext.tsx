@@ -1,0 +1,75 @@
+import { ProductProps } from "@/types/index.d";
+import React, { createContext, useEffect, useState } from "react";
+
+interface CartContextProps {
+  cartProducts: ProductProps[];
+  addToCart: (products: ProductProps) => void;
+  removeFromCart: (prodIndex: number) => void;
+  clearCart: () => void;
+  setCartProducts: React.Dispatch<React.SetStateAction<ProductProps[]>>;
+}
+
+export const CartContext = createContext<CartContextProps>(
+  {} as CartContextProps
+);
+
+function CartProvider({ children }: { children: React.ReactNode }) {
+  const [cartProducts, setCartProducts] = useState<ProductProps[]>([]);
+
+  const ls = typeof window !== "undefined" ? window.localStorage : null;
+
+  const saveToLocalStorage = (cartProducts: ProductProps[]) => {
+    if (ls) {
+      ls.setItem("cart", JSON.stringify(cartProducts));
+    }
+  };
+
+  const addToCart = (product: ProductProps) => {
+    setCartProducts((prevProduct) => {
+      const newProducts = [...prevProduct, product];
+      saveToLocalStorage(newProducts);
+      return newProducts;
+    });
+  };
+
+  const removeFromCart = (prodIndex: number) => {
+    setCartProducts((prevProduct) => {
+      const newProducts = prevProduct.filter(
+        (p: ProductProps, index) => index !== prodIndex
+      );
+      saveToLocalStorage(newProducts);
+      return newProducts;
+    });
+  };
+
+  const clearCart = () => {
+    setCartProducts([]);
+    ls?.removeItem("cart");
+    saveToLocalStorage([]);
+  };
+
+  useEffect(() => {
+    if (ls && ls.getItem("cart")) {
+      const storedCart = ls.getItem("cart");
+      if (storedCart) {
+        setCartProducts(JSON.parse(storedCart));
+      }
+    }
+  }, [ls]);
+
+  return (
+    <CartContext.Provider
+      value={{
+        cartProducts,
+        addToCart,
+        removeFromCart,
+        clearCart,
+        setCartProducts,
+      }}
+    >
+      {children}
+    </CartContext.Provider>
+  );
+}
+
+export default CartProvider;
