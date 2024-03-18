@@ -13,9 +13,7 @@ export const connectToDatabase = async () => {
   if (!process.env.MONGODB_URL) return console.log("Está faltando MONGODB_URL");
 
   try {
-    await mongoose.connect(uri, {
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(uri);
     //await client.connect();
     // await client.db("admin").command({ ping: 1 });
 

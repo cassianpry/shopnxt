@@ -63,7 +63,7 @@ function ProductPage() {
         )
       );
     }
-  }, [wishList.data?.wishlist.products, product.data]);
+  }, [wishList.data?.wishlist?.products, product.data]);
 
   return (
     <>

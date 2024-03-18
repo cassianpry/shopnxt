@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+// next.config.js
 const nextConfig = {
   images: {
     remotePatterns: [
@@ -17,13 +18,19 @@ const nextConfig = {
     ],
   },
 
-  // Matching all API routes
-  source: "/api/:path*",
-  headers: [
-    { key: "Access-Control-Allow-Origin", value: "*" },
-    { key: "Access-Control-Allow-Methods", value: "GET,PUT,POST,DELETE" },
-    { key: "Access-Control-Allow-Headers", value: "Content-Type" },
-  ],
+  async headers() {
+    return [
+      {
+        // Matching all API routes
+        source: "/api/:path*",
+        headers: [
+          { key: "Access-Control-Allow-Origin", value: "*" },
+          { key: "Access-Control-Allow-Methods", value: "GET,PUT,POST,DELETE" },
+          { key: "Access-Control-Allow-Headers", value: "Content-Type" },
+        ],
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;
