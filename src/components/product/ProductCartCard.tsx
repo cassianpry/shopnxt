@@ -65,7 +65,7 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
             );
             return (
               <div
-                className="flex text-dark400_light900 bg-gray-200 dark:bg-gray-700 rounded-sm"
+                className="flex flex-col text-dark400_light900 bg-gray-200 dark:bg-gray-700 rounded-sm"
                 key={product._id}
               >
                 <div className="flex justify-center items-start m-5">
@@ -87,7 +87,7 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
                       })}
                     </span>
                     <span className="text-xs">{product.system}</span>
-                    {type === "wishlist" ? (
+                    {/* {type === "wishlist" ? (
                       <div className="flex gap-3 mt-3">
                         <Button
                           className="w-full mb-1 items-center justify-center rounded-md font-semibold text-xs bg-blue-900 hover:bg-blue-600 transition-all duration-300 ease-in-out text-light-900"
@@ -108,7 +108,15 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
                     ) : (
                       <div className="mt-5 flex justify-between gap-3">
                         {isWishListed ? (
-                          <></>
+                          <>
+                            <Button
+                              className="flex text-dark400_light900 justify-between items-center rounded-md text-xs border transition-all duration-300 ease-in-out hover:border-red-600 border-gray-600"
+                              onClick={() => removeFromCart(index)}
+                            >
+                              <MdOutlineDeleteForever className="w-4 h-4 mr-1" />
+                              Remover
+                            </Button>
+                          </>
                         ) : (
                           <>
                             <Button
@@ -129,9 +137,58 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
                           </>
                         )}
                       </div>
-                    )}
+                    )} */}
                   </div>
                 </div>
+                {type === "wishlist" ? (
+                  <div className="flex gap-3 m-5">
+                    <Button
+                      className="w-full mb-1 items-center justify-center rounded-md font-semibold text-xs bg-blue-900 hover:bg-blue-600 transition-all duration-300 ease-in-out text-light-900"
+                      onClick={() => addToCart(product)}
+                    >
+                      Adicionar ao carrinho
+                    </Button>
+                    <Button
+                      className="flex justify-between items-center rounded-md text-xs transition-all duration-300 ease-in-out bg-red-900 hover:bg-red-600 text-light-900"
+                      onClick={() => {
+                        removeFromWishList(userId, product?._id!);
+                      }}
+                    >
+                      <MdOutlineDeleteForever className="w-4 h-4 mr-1" />
+                      Remover
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="mx-5 mb-5 flex justify-between gap-3">
+                    {isWishListed ? (
+                      <>
+                        <Button
+                          className="flex text-dark400_light900 justify-between items-center rounded-md text-xs border transition-all duration-300 ease-in-out hover:border-red-600 border-gray-600"
+                          onClick={() => removeFromCart(index)}
+                        >
+                          <MdOutlineDeleteForever className="w-4 h-4 mr-1" />
+                          Remover
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <Button
+                          className="rounded-md font-semibold text-sm text-light-900  bg-blue-900 hover:bg-blue-600 transition-all duration-300 ease-in-out"
+                          onClick={() => addToWishList(userId, product?._id!)}
+                        >
+                          Adicionar à lista de desejos
+                        </Button>
+                        <Button
+                          className="flex text-dark400_light900 justify-between items-center rounded-md text-xs border transition-all duration-300 ease-in-out hover:border-red-600 border-gray-600"
+                          onClick={() => removeFromCart(index)}
+                        >
+                          <MdOutlineDeleteForever className="w-4 h-4 mr-1" />
+                          Remover
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                )}
               </div>
             );
           })}

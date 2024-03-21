@@ -48,11 +48,11 @@ function CartPage() {
           </div>
         </div>
       ) : (
-        <div className="flex flex-col text-dark400_light900">
+        <div className="flex flex-col mt-24 sm:mt-0 text-dark400_light900">
           <h1 className="font-bold text-4xl pb-5">Carrinho de compras</h1>
-          <div className="flex gap-4 mt-5 justify-evenly">
-            <div className="flex flex-col gap-10 max-w-[1000px]">
-              <div className="flex">
+          <div className="lg:flex gap-4 mt-5 justify-evenly">
+            <div className="gap-10">
+              <div>
                 {cartProducts?.length === 0 ? (
                   <div className="flex flex-col items-center justify-center text-center">
                     <LuShoppingCart className="w-32 h-32 leading-3" />
@@ -82,23 +82,25 @@ function CartPage() {
             {cartProducts?.length === 0 ? (
               ""
             ) : (
-              <div className="flex flex-col items-start">
-                <h3 className="font-bold text-xl mb-5">Resumo dos jogos</h3>
-                <div className="w-full flex justify-between items center text-sm font-semibold">
-                  <span>Total:&nbsp;</span>
-                  <span>
-                    {totalPrice.toLocaleString("pt-BR", {
-                      style: "currency",
-                      currency: "BRL",
-                    })}
-                  </span>
+              <div className="flex justify-center lg:justify-start">
+                <div className="flex flex-col m-5 lg:m-0 items-start w-96 lg:w-72">
+                  <h3 className="font-bold text-xl mb-5">Resumo dos jogos</h3>
+                  <div className="w-full flex justify-between items center text-sm font-semibold">
+                    <span>Total:&nbsp;</span>
+                    <span>
+                      {totalPrice.toLocaleString("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                      })}
+                    </span>
+                  </div>
+                  <Button
+                    asChild
+                    className="mt-3 w-full flex items-center justify-center rounded-md font-semibold text-xs text-light-900  bg-blue-900 hover:bg-blue-600 transition-all duration-300 ease-in-out uppercase"
+                  >
+                    <Link href="/cart/checkout">Finalizar a compra</Link>
+                  </Button>
                 </div>
-                <Button
-                  asChild
-                  className="mt-3 w-full flex items-center justify-center rounded-md font-semibold text-xs text-light-900  bg-blue-900 hover:bg-blue-600 transition-all duration-300 ease-in-out uppercase"
-                >
-                  <Link href="/cart/checkout">Finalizar a compra</Link>
-                </Button>
               </div>
             )}
           </div>

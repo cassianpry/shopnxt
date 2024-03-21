@@ -58,7 +58,8 @@ function ProductCard({
     }
 
     setNewProducts([products[index1], products[index2]]);
-  }, [products]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
