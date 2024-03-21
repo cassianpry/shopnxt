@@ -106,9 +106,11 @@ function ProductCard({
                       })}
                     </p>
                     <div className="flex justify-start gap-4 text-dark400_light900">
-                      <Button className="focus:shadow-outline items-center justify-center rounded-md font-semibold text-xs tracking-wide text-light-900  bg-blue-900 hover:bg-blue-600 transition-all duration-300 ease-in-out uppercase">
-                        Compre já
-                      </Button>
+                      <Link href={`/products/${products.slug}`}>
+                        <Button className="focus:shadow-outline items-center justify-center rounded-md font-semibold text-xs tracking-wide text-light-900  bg-blue-900 hover:bg-blue-600 transition-all duration-300 ease-in-out uppercase">
+                          Compre já
+                        </Button>
+                      </Link>
                       {isWishListed.includes(products.slug!) ? (
                         <Link
                           href={{

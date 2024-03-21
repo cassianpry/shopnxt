@@ -8,16 +8,21 @@ import mongoose from "mongoose";
 const uri = process.env.MONGODB_URL;
 //const client = new MongoClient(uri);
 
+let isConnected: boolean = false;
+
 export const connectToDatabase = async () => {
-  // mongoose.set("strictQuery", true);
-  if (!process.env.MONGODB_URL) return console.log("Está faltando MONGODB_URL");
+  if (!process.env.MONGODB_LOCAL)
+    return console.log("Está faltando MONGODB_URL");
 
   try {
-    await mongoose.connect(uri);
+    if (process.env.NODE_ENV === "production") {
+      await mongoose.connect(uri);
+    } else {
+      await mongoose.connect(process.env.MONGODB_LOCAL, { dbName: "shopnxt" });
+    }
     //await client.connect();
     // await client.db("admin").command({ ping: 1 });
 
-    // await mongoose.connect(process.env.MONGODB_URL);
     // isConnected = true;
     // console.log(
     //   "MongoDB connected",

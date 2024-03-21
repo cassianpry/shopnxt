@@ -157,7 +157,9 @@ function ProductPage() {
                 asChild
                 className="w-full border-[1px] mb-1 items-center justify-center rounded-md font-semibold text-xs  hover:bg-gray-300 dark:hover:bg-gray-500 transition-all duration-300 ease-in-out uppercase"
               >
-                <Link href="/cart">Ir para o carrinho</Link>
+                <Link href={{ pathname: "/cart", query: { id: userId } }}>
+                  Ir para o carrinho
+                </Link>
               </Button>
             ) : (
               <Button
@@ -174,7 +176,7 @@ function ProductPage() {
                   query: { id: userId },
                 }}
               >
-                <div className="flex w-full border-[1px] mb-1 px-14 py-2.5 items-center justify-center rounded-md font-semibold text-xs  hover:bg-gray-300 dark:hover:bg-gray-500 transition-all duration-300 ease-in-out uppercase">
+                <div className="flex border-[1px] mb-1 px-14 py-2.5 items-center justify-center rounded-md font-semibold text-xs text-nowrap  hover:bg-gray-300 dark:hover:bg-gray-500 transition-all duration-300 ease-in-out uppercase">
                   <IoMdCheckmarkCircleOutline className="w-4 h-4" />
                   &nbsp;Na lista de desejos
                 </div>

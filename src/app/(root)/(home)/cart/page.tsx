@@ -3,20 +3,22 @@ import ProductCartCard from "@/components/product/ProductCartCard";
 import { Button } from "@/components/ui/button";
 
 import { CartContext } from "@/context/CartContext";
-import { ProductProps } from "@/types/index.d";
+import { ProductProps, UserProps } from "@/types/index.d";
 import Link from "next/link";
 import React, { useContext, useEffect, useState } from "react";
 import { LuShoppingCart } from "react-icons/lu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWishListUser } from "@/app/services/wishlist/queries";
 import { useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 function CartPage() {
+  const user = useSession();
   const { cartProducts } = useContext(CartContext);
   const [loading, setLoading] = useState(true);
   const searchParams = useSearchParams();
   const id: string | "" = searchParams.get("id") || "";
-  const wishlistProducts = useWishListUser(id);
+  const wishlistResult = useWishListUser(id);
 
   const calcTotalPrice = (products: ProductProps[]) => {
     let total = 0;
@@ -25,7 +27,7 @@ function CartPage() {
     });
     return total;
   };
-
+  const userId: string = (user?.data?.user as UserProps)?._id!;
   const totalPrice = calcTotalPrice(cartProducts);
 
   useEffect(() => {
@@ -38,7 +40,7 @@ function CartPage() {
 
   return (
     <>
-      {loading ? (
+      {loading && wishlistResult.isLoading ? (
         <div className="flex flex-col space-y-3 my-20">
           <Skeleton className="h-4  w-[250px] bg-gray-500" />
           <Skeleton className="h-[125px] w-[250px] rounded-xl bg-gray-500" />
@@ -72,10 +74,17 @@ function CartPage() {
                     </Link>
                   </div>
                 ) : (
-                  <ProductCartCard
-                    products={cartProducts}
-                    wishList={wishlistProducts?.data?.wishlist.products}
-                  />
+                  <>
+                    {cartProducts?.map((prod: ProductProps, index: number) => (
+                      <ProductCartCard
+                        product={prod}
+                        wishList={wishlistResult?.data?.wishlist?.products}
+                        key={prod._id}
+                        index={index as number}
+                        isLoading={wishlistResult.isLoading}
+                      />
+                    ))}
+                  </>
                 )}
               </div>
             </div>

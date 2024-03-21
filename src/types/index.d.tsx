@@ -43,9 +43,9 @@ export interface FormGenreValues {
 export interface ProductProps {
   [x: string]: any;
   [key: number]: string | number | any;
+  _id?: string;
   length?: number;
   data: any;
-  _id?: string;
   name: string;
   slug?: string;
   description: string;

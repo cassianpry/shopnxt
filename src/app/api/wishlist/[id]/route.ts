@@ -11,7 +11,7 @@ interface contextProps {
 
 export async function GET(req: NextRequest, { params }: contextProps) {
   if (params.id === "undefined") {
-    return NextResponse.json({});
+    return NextResponse.json("Id Indefinido");
   } else {
     try {
       await connectToDatabase();
