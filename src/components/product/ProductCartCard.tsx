@@ -65,12 +65,7 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
       );
       setWishListed(wishListCheck);
     }
-  }, [isLoading, product, type, wishList]);
-
-  console.log("Carrinho=>", isCartListed);
-  // console.log("Lista de Desejos=>", isWishListed);
-  // console.log("Wishlist=>", wishList);
-  // console.log("Cart=>", product);
+  }, [index, isLoading, product, type, wishList]);
 
   return (
     <>
@@ -138,16 +133,13 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
             </div>
           </div>
           {type === "wishlist" ? (
-            <div className="flex gap-3 m-5">
+            <div className="flex justify-between gap-3 m-5">
               {isCartListed ? (
                 <Button
-                  className="flex justify-between items-center rounded-md text-xs transition-all duration-300 ease-in-out bg-red-900 hover:bg-red-600 text-light-900"
-                  onClick={() => {
-                    removeFromWishList(userId, wishList?._id!);
-                  }}
+                  disabled={true}
+                  className="mb-1 items-center justify-center rounded-md font-semibold text-xs bg-blue-900 hover:bg-blue-600 transition-all duration-300 ease-in-out text-light-900"
                 >
-                  <MdOutlineDeleteForever className="w-4 h-4 mr-1" />
-                  Remover
+                  No Carrinho
                 </Button>
               ) : (
                 <Button
@@ -157,6 +149,15 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
                   Adicionar ao carrinho
                 </Button>
               )}
+              <Button
+                className="flex justify-between items-center rounded-md text-xs transition-all duration-300 ease-in-out bg-red-900 hover:bg-red-600 text-light-900"
+                onClick={() => {
+                  removeFromWishList(userId, wishList?._id!);
+                }}
+              >
+                <MdOutlineDeleteForever className="w-4 h-4 mr-1" />
+                Remover
+              </Button>
             </div>
           ) : (
             <div className="mx-5 mb-5 flex justify-between gap-3">
