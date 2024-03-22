@@ -89,7 +89,6 @@ export function useResetPassword() {
 }
 
 export function useUpdatePassword() {
-  const queryClient = useQueryClient();
   const router = useRouter();
   return useMutation({
     mutationFn: (values: any) => updatePasswordUser(values),

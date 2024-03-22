@@ -4,6 +4,7 @@ import User from "@/database/user.model";
 import { connectToDatabase } from "@/lib/actions/mongoose";
 import { FilterQuery } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
+import { redirect } from "next/navigation";
 
 export async function GET(req: NextRequest) {
   const searchQuery = new URL(
@@ -28,7 +29,7 @@ export async function GET(req: NextRequest) {
         await ResetPassword.deleteOne({ _id: checkToken._id });
         return NextResponse.json(
           { error: "Token expirado ou não existe." },
-          { status: 500 }
+          { status: 404 }
         );
       }
 
