@@ -9,7 +9,7 @@ import { Skeleton } from "../ui/skeleton";
 interface SearchBarProps {
   className?: string;
   route: string;
-  isLoading: boolean;
+  isLoading?: boolean;
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({

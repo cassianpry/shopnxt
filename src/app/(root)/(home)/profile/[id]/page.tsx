@@ -6,7 +6,7 @@ import ProfileForm from "@/components/form/ProfileForm";
 import { redirect } from "next/navigation";
 
 import { UserProps } from "@/types/index.d";
-import Loading from "@/app/loading";
+import Loading from "@/components/loading";
 
 const ProfileEditPage = () => {
   const { data, status } = useSession();

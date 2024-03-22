@@ -19,9 +19,9 @@ import { useForm } from "react-hook-form";
 import { MdAutorenew, MdLogin } from "react-icons/md";
 import { GoPasskeyFill } from "react-icons/go";
 import { toast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
-import Loading from "@/app/loading";
+
 import { useUpdatePassword } from "@/app/services/users/mutations";
+import Loading from "@/components/loading";
 
 interface ResetPasswordProps {
   searchParams: {
