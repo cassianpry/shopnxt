@@ -12,6 +12,7 @@ import { ProductProps } from "@/types/index.d";
 import { useQueryClient } from "@tanstack/react-query";
 import { Skeleton } from "../ui/skeleton";
 import { useCreateWishList } from "@/app/services/wishlist/mutation";
+import LoadingProductCarousel from "../loadings/LoadingProductCarousel";
 
 interface ProductCarouselProps {
   userId?: string;
@@ -98,14 +99,7 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({
   return (
     <>
       {isLoading ? (
-        <div className="flex flex-col gap-2 pb-5">
-          <Skeleton className="h-4  w-[250px] bg-gray-500" />
-          <Skeleton className="h-[125px] w-[250px] rounded-xl bg-gray-500" />
-          <div className="space-y-2">
-            <Skeleton className="h-4 w-[250px] bg-gray-500" />
-            <Skeleton className="h-4 w-[200px] bg-gray-500" />
-          </div>
-        </div>
+        <LoadingProductCarousel />
       ) : (
         <div
           className="max-w-[1100px] m-auto pt-5 relative text-dark400_light900 group"

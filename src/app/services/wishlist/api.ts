@@ -2,7 +2,6 @@ export const getWishList = async (id: string | undefined) => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/wishlist/${id}`
   );
-
   return await response.json();
 };
 

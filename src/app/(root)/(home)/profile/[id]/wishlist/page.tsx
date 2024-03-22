@@ -1,5 +1,6 @@
 "use client";
 import { useWishListUser } from "@/app/services/wishlist/queries";
+import LoadingProductCard from "@/components/loadings/LoadingProductCard";
 import ProductCartCard from "@/components/product/ProductCartCard";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -14,24 +15,12 @@ function WishList() {
   const [loading, setLoading] = useState(true);
   const { cartProducts } = useContext(CartContext);
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (cartProducts) {
-        setLoading(false);
-      }
-    }, 1000);
-  }, [cartProducts]);
-
   return (
     <>
-      {loading ? (
-        <div className="flex flex-col space-y-3 my-20">
-          <Skeleton className="h-4  w-[250px] bg-gray-500" />
-          <Skeleton className="h-[125px] w-[250px] rounded-xl bg-gray-500" />
-          <div className="space-y-2">
-            <Skeleton className="h-4 w-[250px] bg-gray-500" />
-            <Skeleton className="h-4 w-[200px] bg-gray-500" />
-          </div>
+      {wishlistResult.isLoading ? (
+        <div className="flex flex-col mt-10 gap-5">
+          <LoadingProductCard />
+          <LoadingProductCard />
         </div>
       ) : (
         <div className="">

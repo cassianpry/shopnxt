@@ -63,6 +63,13 @@ export interface ProductProps {
   price: string;
 }
 
+export interface UserRegisterProps {
+  name: string;
+  email: string;
+  password: string;
+  confirm_password: string;
+}
+
 export interface UserProps {
   _id?: string;
   name: string;

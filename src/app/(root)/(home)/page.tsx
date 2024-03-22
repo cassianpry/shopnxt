@@ -10,8 +10,8 @@ import { ProductCarousel } from "@/components/product/ProductCarousel";
 import { ProductPriceCard } from "@/components/product/ProductPriceCard";
 import ProductCard from "@/components/product/ProductCard";
 import Link from "next/link";
-import { useCreateWishList } from "@/app/services/wishlist/mutation";
-import { useQueryClient } from "@tanstack/react-query";
+import LoadingProductCarousel from "@/components/loadings/LoadingProductCarousel";
+import LoadingHome from "@/components/loadings/LoadingHome";
 
 interface userSessionProps {
   user?: {
@@ -51,34 +51,11 @@ function LandingPage({ searchParams }: SearchParamsProps) {
   return (
     <>
       {products.isLoading ? (
-        <div className="flex flex-col justify-start items-center space-y-3 w-full">
-          <div className="mb-12 mt-11 flex flex-wrap gap-5 items-center space-x-4">
-            <Skeleton className="h-14 w-14 rounded-full bg-gray-500" />
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-[250px] bg-gray-500" />
-              <Skeleton className="h-4 w-[200px] bg-gray-500" />
-            </div>
-          </div>
-          <div className="flex flex-col gap-2 pb-5">
-            <Skeleton className="h-4  w-[250px] bg-gray-500" />
-            <Skeleton className="h-[125px] w-[250px] rounded-xl bg-gray-500" />
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-[250px] bg-gray-500" />
-              <Skeleton className="h-4 w-[200px] bg-gray-500" />
-            </div>
-          </div>
-          <div className="flex flex-col gap-2 pb-5">
-            <Skeleton className="h-[250px] w-[125px] rounded-xl bg-gray-500" />
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-[125px] bg-gray-500" />
-              <Skeleton className="h-4 w-[110px] bg-gray-500" />
-            </div>
-          </div>
-        </div>
+        <LoadingHome />
       ) : (
         <>
           <div className="flex justify-start items-center space-x-4 mb-10 text-dark300_light700">
-            <SearchBar route="/browse" />
+            <SearchBar route="/browse" isLoading={products.isLoading} />
             <Link
               href="/"
               className="hover:dark:text-light-900 hover:text-light-400"

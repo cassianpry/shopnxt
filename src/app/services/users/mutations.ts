@@ -1,25 +1,55 @@
-import { UserProps } from "@/types/index.d";
+import { UserProps, UserRegisterProps } from "@/types/index.d";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { resetPasswordUser, updatePasswordUser, updateUser } from "./api";
-import { useRouter } from "next/navigation";
+import {
+  loginUser,
+  registerUser,
+  resetPasswordUser,
+  updatePasswordUser,
+  updateUser,
+} from "./api";
+import { useRouter, useSearchParams } from "next/navigation";
 
-// export function useCreateUser() {
-//   const queryClient = useQueryClient();
-//   return useMutation({
-//     mutationFn: (data: FormProfileProps) => createUser(data),
+export function useRegisterUser() {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: UserRegisterProps) => registerUser(data),
 
-//     onError: (error) => {
-//       console.log("Error=>", error);
-//     },
-//     onSettled: async (_, error) => {
-//       if (error) {
-//         console.error(error);
-//       } else {
-//         await queryClient.invalidateQueries({ queryKey: ["users"] });
-//       }
-//     },
-//   });
-// }
+    onError: (error) => {
+      console.log("Error=>", error);
+    },
+    onSettled: async (_, error) => {
+      if (error) {
+        console.error(error);
+      } else {
+        await queryClient.invalidateQueries({ queryKey: ["users"] });
+        router.push("/sign-in");
+      }
+    },
+  });
+}
+
+export function useLoginUser() {
+  const searchParams = useSearchParams();
+  const callbackURL = searchParams.get("callbackUrl");
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: { email: string; password: string }) => loginUser(data),
+
+    onError: (error) => {
+      console.log("Error=>", error);
+    },
+    onSettled: async (_, error) => {
+      if (error) {
+        console.error(error);
+      } else {
+        await queryClient.invalidateQueries({ queryKey: ["users"] });
+        router.push(callbackURL ? callbackURL : "/");
+      }
+    },
+  });
+}
 
 export function useUpdateUser() {
   const queryClient = useQueryClient();

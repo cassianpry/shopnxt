@@ -16,18 +16,16 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { MdAutorenew, MdLogin, MdPersonOutline } from "react-icons/md";
-import { useToast } from "@/components/ui/use-toast";
 import { useRouter, useSearchParams } from "next/navigation";
-import { signIn } from "next-auth/react";
 import ResetPasswordForm from "@/components/form/ResetPasswordForm";
+import { useLoginUser } from "@/app/services/users/mutations";
 
 const SignIn = () => {
   const searchParams = useSearchParams();
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const { toast } = useToast();
   const router = useRouter();
   const callbackURL = searchParams.get("callbackUrl");
+  const loginUser = useLoginUser();
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof SignInSchema>>({
@@ -40,32 +38,9 @@ const SignIn = () => {
 
   // 2. Define a submit handler.
   const onSubmit = async (values: z.infer<typeof SignInSchema>) => {
-    setIsSubmitting(true);
     try {
-      const result = await signIn("credentials", {
-        redirect: false,
-        email: values.email,
-        password: values.password,
-      });
-      if (result!.error) {
-        toast({
-          className: "bg-yellow-600 text-light-800",
-          title: "Erro ao acessar",
-          description:
-            "Verifique se os dados estão corretos e tente novamente.",
-        });
-        setIsSubmitting(false);
-      } else {
-        toast({
-          className: "bg-green-600 text-light-800",
-          title: "Acesso efetuado",
-          description: "Seu acesso foi efetuado com sucesso!",
-        });
-        setTimeout(() => {
-          router.push(callbackURL ? callbackURL : "/");
-          setIsSubmitting(false);
-        }, 5000);
-      }
+      loginUser.mutate(values);
+      // router.push(callbackURL ? callbackURL : "/");
     } catch (error) {
       console.log(error);
     }
@@ -105,7 +80,7 @@ const SignIn = () => {
                       className="w-[100%] dark:text-dark-500 font-semibold"
                       type="email"
                       placeholder="johndoe@example.com"
-                      disabled={isSubmitting}
+                      disabled={loginUser.isPending}
                       {...field}
                     />
                   </FormControl>
@@ -135,7 +110,7 @@ const SignIn = () => {
                       className="w-[100%] dark:text-dark-500 font-semibold focus:ring-0 focus:ring-offset-0"
                       type="password"
                       autoComplete="currentPassword"
-                      disabled={isSubmitting}
+                      disabled={loginUser.isPending}
                       {...field}
                     />
                   </FormControl>
@@ -145,10 +120,10 @@ const SignIn = () => {
 
             <Button
               type="submit"
-              disabled={isSubmitting}
+              disabled={loginUser.isPending}
               className="bg-blue-900 text-light-850 text-md p-6 w-full hover:bg-blue-600"
             >
-              {isSubmitting ? (
+              {loginUser.isPending ? (
                 <>
                   <MdAutorenew className="w-5 h-5 mr-2 animate-spin" />
                   <p className="animate-pulse">Acessando...</p>

@@ -18,12 +18,12 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { MdAutorenew, MdLogin } from "react-icons/md";
 import { useToast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
+import { useRegisterUser } from "@/app/services/users/mutations";
 
 const SignUp = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
-  const router = useRouter();
+  const registerUser = useRegisterUser();
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof SignUpSchema>>({
     resolver: zodResolver(SignUpSchema),
@@ -38,37 +38,9 @@ const SignUp = () => {
 
   // 2. Define a submit handler.
   const onSubmit = async (values: z.infer<typeof SignUpSchema>) => {
-    setIsSubmitting(true);
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/register`,
-        {
-          method: "POST",
-          body: JSON.stringify(values),
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-
-      if (!response.ok) {
-        setIsSubmitting(false);
-        toast({
-          className: "bg-yellow-600 text-light-800",
-          title: "Erro ao cadastrar",
-          description: "Algo de errado ao criar a sua conta. Tente novamente.",
-        });
-      } else {
-        toast({
-          className: "bg-green-600 text-light-800",
-          title: "Usuário criado",
-          description: "Seu usuário foi registrado com sucesso!",
-        });
-        setTimeout(() => {
-          router.push("/sign-in");
-          setIsSubmitting(false);
-        }, 5000);
-      }
+      registerUser.mutate(values);
     } catch (error) {
-      setIsSubmitting(false);
       toast({
         className: "bg-red-600 text-light-800",
         title: "Entre em contato com o suporte",
@@ -109,8 +81,9 @@ const SignUp = () => {
                     <Input
                       className="w-[50%]"
                       type="text"
+                      autoComplete="nome"
                       placeholder="Seu nome..."
-                      disabled={isSubmitting}
+                      disabled={registerUser.isPending}
                       {...field}
                     />
                   </FormControl>
@@ -134,7 +107,7 @@ const SignUp = () => {
                       className="w-[50%]"
                       type="email"
                       placeholder="johndoe@example.com"
-                      disabled={isSubmitting}
+                      disabled={registerUser.isPending}
                       {...field}
                     />
                   </FormControl>
@@ -157,7 +130,8 @@ const SignUp = () => {
                     <Input
                       className="w-[50%]"
                       type="password"
-                      disabled={isSubmitting}
+                      autoComplete="password"
+                      disabled={registerUser.isPending}
                       {...field}
                     />
                   </FormControl>
@@ -180,7 +154,8 @@ const SignUp = () => {
                     <Input
                       className="w-[50%]"
                       type="password"
-                      disabled={isSubmitting}
+                      autoComplete="confirm_password"
+                      disabled={registerUser.isPending}
                       {...field}
                     />
                   </FormControl>
@@ -192,10 +167,10 @@ const SignUp = () => {
             />
             <Button
               type="submit"
-              disabled={isSubmitting}
-              className="bg-blue-900 text-light-850 text-md p-6 w-full hover:bg-blue-600"
+              disabled={registerUser.isPending}
+              className="bg-blue-900 text-light-850 text-md p-6  hover:bg-blue-600"
             >
-              {isSubmitting ? (
+              {registerUser.isPending ? (
                 <>
                   <MdAutorenew className="w-5 h-5 mr-2 animate-spin" />
                   <p className="animate-pulse">Criando o cadastro...</p>
