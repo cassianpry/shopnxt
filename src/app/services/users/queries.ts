@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getToken, getUser, getUsers } from "./api";
+import { getToken, getUser, getUsers, updateUser } from "./api";
 
 export function useUsers(searchQuery: Record<string, string>) {
   return useQuery({

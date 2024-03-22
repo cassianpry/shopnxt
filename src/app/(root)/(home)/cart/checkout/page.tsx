@@ -8,10 +8,6 @@ import React from "react";
 const Checkout = () => {
   const { data } = useSession();
 
-  // if (!data?.user) {
-  //   redirect("/sign-in");
-  // }
-
   return (
     <div className="text-dark400_light900">
       {data?.user ? (

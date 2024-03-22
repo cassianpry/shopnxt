@@ -41,10 +41,6 @@ function ProductPage() {
 
   const addWishList = useCreateWishList();
 
-  // const isWishListed = wishList?.data?.wishlist?.products.some(
-  //   (wishListProduct: any) => wishListProduct?.slug === product?.data?.slug
-  // );
-
   const addToWishList = async (user: string, product: string) => {
     try {
       addWishList.mutate({ user, product });

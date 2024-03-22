@@ -23,8 +23,6 @@ import { useLoginUser } from "@/app/services/users/mutations";
 const SignIn = () => {
   const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
-  const callbackURL = searchParams.get("callbackUrl");
   const loginUser = useLoginUser();
 
   // 1. Define your form.
@@ -40,7 +38,6 @@ const SignIn = () => {
   const onSubmit = async (values: z.infer<typeof SignInSchema>) => {
     try {
       loginUser.mutate(values);
-      // router.push(callbackURL ? callbackURL : "/");
     } catch (error) {
       console.log(error);
     }

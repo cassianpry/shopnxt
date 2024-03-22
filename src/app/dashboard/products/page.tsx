@@ -25,24 +25,24 @@ function Products({ searchParams }: SearchParamsProps) {
     page: (searchParams.page ? +searchParams.page : 1).toString(),
     pageSize: (searchParams.pageSize || 10).toString(),
   });
-  const { data, isLoading } = products;
+  const { data, isLoading, isFetching } = products;
 
-  if (isLoading) {
-    return (
-      <section>
-        <h1 className="h1-bold text-dark100_light900"></h1>
-        <div className="my-12 pt-5 flex flex-wrap gap-5 items-center space-x-4">
-          <div className="flex flex-col space-y-2 justify-center items-center gap-3">
-            <Skeleton className="h-4 w-[350px] bg-gray-500" />
-            <Skeleton className="h-4 w-[350px] bg-gray-500" />
-            <Skeleton className="h-4 w-[350px] bg-gray-500" />
-            <Skeleton className="h-4 w-[350px] bg-gray-500" />
-            <Skeleton className="h-4 w-[350px] bg-gray-500" />
-          </div>
-        </div>
-      </section>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <section>
+  //       <h1 className="h1-bold text-dark100_light900"></h1>
+  //       <div className="my-12 pt-5 flex flex-wrap gap-5 items-center space-x-4">
+  //         <div className="flex flex-col space-y-2 justify-center items-center gap-3">
+  //           <Skeleton className="h-4 w-[350px] bg-gray-500" />
+  //           <Skeleton className="h-4 w-[350px] bg-gray-500" />
+  //           <Skeleton className="h-4 w-[350px] bg-gray-500" />
+  //           <Skeleton className="h-4 w-[350px] bg-gray-500" />
+  //           <Skeleton className="h-4 w-[350px] bg-gray-500" />
+  //         </div>
+  //       </div>
+  //     </section>
+  //   );
+  // }
 
   return (
     <div>
@@ -89,10 +89,18 @@ function Products({ searchParams }: SearchParamsProps) {
                       className="hover:background-light700_dark400 truncate"
                     >
                       <TableCell className="capitalize whitespace-nowrap overflow-hidden text-ellipsis max-w-52">
-                        {product.name}
+                        {isLoading || isFetching ? (
+                          <Skeleton className="h-3 w-auto bg-gray-500" />
+                        ) : (
+                          product.name
+                        )}
                       </TableCell>
                       <TableCell className="whitespace-nowrap overflow-hidden text-ellipsis max-w-52 max-xl:hidden">
-                        {product.shortDescription}
+                        {isLoading || isFetching ? (
+                          <Skeleton className="h-3 w-auto bg-gray-500" />
+                        ) : (
+                          product.shortDescription
+                        )}
                       </TableCell>
                       <TableCell className="capitalize whitespace-nowrap overflow-hidden text-ellipsis max-w-52 max-xl:hidden">
                         {product?.genres?.map((g: any) => (
@@ -100,73 +108,89 @@ function Products({ searchParams }: SearchParamsProps) {
                         ))}
                       </TableCell>
                       <TableCell className="capitalize">
-                        {product.developer}
+                        {isLoading || isFetching ? (
+                          <Skeleton className="h-3 w-auto bg-gray-500" />
+                        ) : (
+                          product.developer
+                        )}
                       </TableCell>
                       <TableCell className="capitalize">
-                        {product.publisher}
+                        {isLoading || isFetching ? (
+                          <Skeleton className="h-3 w-auto bg-gray-500" />
+                        ) : (
+                          product.publisher
+                        )}
                       </TableCell>
 
-                      {/* <TableCell className="capitalize max-xl:hidden">
-                        {product.system}
-                      </TableCell>
-                      <TableCell className="capitalize max-xl:hidden">
-                        {product.processor}
-                      </TableCell>
-                      <TableCell className="capitalize text-center max-xl:hidden">
-                        {product.memory}GB
-                      </TableCell>
-                      <TableCell className="capitalize text-center max-xl:hidden">
-                        {product.storage}GB
-                      </TableCell>
-                      <TableCell className="capitalize max-xl:hidden">
-                        {product.graphicCard}
-                      </TableCell> */}
                       {product.price !== "0" ? (
                         <TableCell>
-                          {parseFloat(product.price).toLocaleString("pt-BR", {
-                            style: "currency",
-                            currency: "BRL",
-                          })}
+                          {isLoading || isFetching ? (
+                            <Skeleton className="h-3 w-auto bg-gray-500" />
+                          ) : (
+                            parseFloat(product.price).toLocaleString("pt-BR", {
+                              style: "currency",
+                              currency: "BRL",
+                            })
+                          )}
                         </TableCell>
                       ) : (
-                        <TableCell>Gratuito</TableCell>
+                        <TableCell>
+                          {isLoading || isFetching ? (
+                            <Skeleton className="h-3 w-auto bg-gray-500" />
+                          ) : (
+                            "Gratuito"
+                          )}
+                        </TableCell>
                       )}
                       <TableCell className="capitalize">
-                        <span
-                          className={`${
-                            product.active === true
-                              ? "text-green-600"
-                              : "text-red-600"
-                          }`}
-                        >
-                          {product.active === true ? "Ativo" : "Inativo"}
-                        </span>
+                        {isLoading || isFetching ? (
+                          <Skeleton className="h-3 w-auto bg-gray-500" />
+                        ) : (
+                          <span
+                            className={`${
+                              product.active === true
+                                ? "text-green-600"
+                                : "text-red-600"
+                            }`}
+                          >
+                            {product.active === true ? "Ativo" : "Inativo"}
+                          </span>
+                        )}
                       </TableCell>
                       <TableCell className=" flex text-right justify-center gap-2">
-                        <Link
-                          href={{
-                            pathname: "/dashboard/products/edit/",
-                            query: { id: product._id },
-                          }}
-                        >
-                          <div className="p-0.5 rounded-full  hover:bg-slate-400 cursor-pointer">
-                            <MdEdit className="w-5 h-5 text-yellow-500" />
+                        {isLoading || isFetching ? (
+                          <Skeleton className="h-5 w-5 bg-gray-500" />
+                        ) : (
+                          <Link
+                            href={{
+                              pathname: "/dashboard/products/edit/",
+                              query: { id: product._id },
+                            }}
+                          >
+                            <div className="p-0.5 rounded-full  hover:bg-slate-400 cursor-pointer">
+                              <MdEdit className="w-5 h-5 text-yellow-500" />
+                            </div>
+                          </Link>
+                        )}
+
+                        {isLoading || isFetching ? (
+                          <Skeleton className="h-5 w-5 bg-gray-500" />
+                        ) : (
+                          <div className="p-0.5 rounded-full  hover:bg-slate-400 justify-center cursor-pointer">
+                            <MdDeleteForever
+                              className="w-5 h-5 text-red-500"
+                              onClick={() =>
+                                toast({
+                                  className: "bg-green-600 text-light-800",
+                                  duration: 1500,
+                                  variant: "destructive",
+                                  title: "Excluir produto.",
+                                  description: "produto excluído",
+                                })
+                              }
+                            />
                           </div>
-                        </Link>
-                        <div className="p-0.5 rounded-full  hover:bg-slate-400 cursor-pointer">
-                          <MdDeleteForever
-                            className="w-5 h-5 text-red-500"
-                            onClick={() =>
-                              toast({
-                                className: "bg-green-600 text-light-800",
-                                duration: 1500,
-                                variant: "destructive",
-                                title: "Excluir produto.",
-                                description: "produto excluído",
-                              })
-                            }
-                          />
-                        </div>
+                        )}
                       </TableCell>
                     </TableRow>
                   ))}

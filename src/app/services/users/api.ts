@@ -38,12 +38,6 @@ export const loginUser = async (values: {
         title: "Erro ao acessar",
         description: "Verifique se os dados estão corretos e tente novamente.",
       });
-    } else {
-      toast({
-        className: "bg-green-600 text-light-800",
-        title: "Acesso efetuado",
-        description: "Seu acesso foi efetuado com sucesso!",
-      });
     }
   } catch (error) {
     console.error(error);

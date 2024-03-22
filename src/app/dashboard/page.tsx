@@ -33,7 +33,10 @@ const AdminDashboard = ({ searchParams }: SearchParamsProps) => {
         />
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 mt-5">
-        <RecentSales orders={orders?.data?.orders} />
+        <RecentSales
+          orders={orders?.data?.orders}
+          isLoading={users?.isLoading}
+        />
       </div>
     </div>
   );

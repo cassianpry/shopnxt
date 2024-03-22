@@ -14,7 +14,8 @@ export async function GET(req: NextRequest, { params }: contextProps) {
 
     const user = await User.findById(params.id);
     user.password = null;
-    return NextResponse.json(user, { status: 200 });
+    console.log(user);
+    return NextResponse.json({ user }, { status: 200 });
   } catch (error) {
     console.log(error);
     return NextResponse.json(
@@ -30,8 +31,6 @@ export async function PUT(req: NextRequest, context: contextProps) {
 
   try {
     await connectToDatabase();
-
-    console.log(data);
 
     const user = await User.findByIdAndUpdate(
       params.id,

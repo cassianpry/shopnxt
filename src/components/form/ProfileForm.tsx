@@ -1,6 +1,5 @@
 "use client";
-import React, { FC, useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { FC } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@/components/ui/use-toast";
 import { ProfileSchema } from "@/lib/actions/validations";
@@ -9,18 +8,17 @@ import { MdAutorenew, MdSave } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Label } from "../ui/label";
-import Image from "next/image";
 import { UserProps } from "@/types/index.d";
+import { useUpdateUser } from "@/app/services/users/mutations";
 
 interface ProfileFormProps {
   user: UserProps;
 }
 
 const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
-  const router = useRouter();
   const { name, email, address, city, phone, state, postalCode, role } = user;
+  const updateUser = useUpdateUser();
 
   const {
     register,
@@ -41,36 +39,11 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
   });
 
   const onSubmit = async (data: UserProps) => {
-    setIsSubmitting(true);
-
+    data._id = user._id;
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/user/${user._id}`,
-        {
-          method: "PUT",
-          body: JSON.stringify(data),
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      if (!response.ok) {
-        setIsSubmitting(false);
-        toast({
-          className: "bg-yellow-600 text-light-800",
-          title: "Erro ao cadastrar",
-          description: "Algo de errado ao criar a sua conta. Tente novamente.",
-        });
-      } else {
-        toast({
-          className: "bg-green-600 text-light-800",
-          title: "Usuário alterado",
-          description: "Seu usuário foi alterado com sucesso!",
-        });
-
-        setIsSubmitting(false);
-        // router.push(`/`);
-      }
+      console.log(data);
+      updateUser.mutate(data);
     } catch (error) {
-      setIsSubmitting(false);
       toast({
         className: "bg-red-600 text-light-800",
         title: "Entre em contato com o suporte",
@@ -78,7 +51,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
       });
     }
   };
-  console.log("ERROS=>", errors);
+
   return (
     <div className="flex max-w-[500px] items-center justify-center mx-auto text-dark400_light900">
       <form
@@ -91,6 +64,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
             className="background-light800_dark300"
             type="text"
             placeholder="John Doe"
+            disabled={updateUser.isPending}
             {...register("name")}
           />
           {errors && (
@@ -103,6 +77,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
             className="background-light800_dark300"
             type="email"
             placeholder="john.doe@example.com"
+            disabled={updateUser.isPending}
             {...register("email")}
           />
           {errors && (
@@ -115,6 +90,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
             className="background-light800_dark300 capitalize"
             type="text"
             placeholder="Av. Paulista, 1234"
+            disabled={updateUser.isPending}
             {...register("address")}
           />
           {errors && (
@@ -129,6 +105,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
             className="background-light800_dark300"
             type="text"
             placeholder="12345-123"
+            disabled={updateUser.isPending}
             {...register("postalCode")}
           />
           {errors && (
@@ -143,6 +120,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
             className="background-light800_dark300 uppercase"
             type="text"
             placeholder="SP"
+            disabled={updateUser.isPending}
             {...register("state")}
           />
           {errors && (
@@ -155,6 +133,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
             className="background-light800_dark300 capitalize"
             type="text"
             placeholder="São Paulo"
+            disabled={updateUser.isPending}
             {...register("city")}
           />
           {errors && (
@@ -167,6 +146,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
             className="background-light800_dark300"
             type="text"
             placeholder="(11)9123-4567"
+            disabled={updateUser.isPending}
             {...register("phone")}
           />
           {errors && (
@@ -176,10 +156,10 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
 
         <Button
           type="submit"
-          disabled={isSubmitting}
+          disabled={updateUser.isPending}
           className="bg-blue-900 text-light-850 text-md p-6 w-full hover:bg-blue-600 mt-8"
         >
-          {isSubmitting ? (
+          {updateUser.isPending ? (
             <>
               <MdAutorenew className="w-5 h-5 mr-2 animate-spin" />
               <p className="animate-pulse">Alterando seu perfil...</p>
