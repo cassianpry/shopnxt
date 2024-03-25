@@ -23,12 +23,14 @@ import { ProductProps, UserProps } from "@/types/index.d";
 import Image from "next/image";
 import { Separator } from "../ui/separator";
 import { MdAutorenew } from "react-icons/md";
+import { useRouter } from "next/navigation";
 
 interface ProfileFormProps {
   user: UserProps;
 }
 
 function UserCheckoutForm({ user }: ProfileFormProps) {
+  const router = useRouter();
   const createOrder = useCreateOrder();
   const { cartProducts, clearCart } = useContext(CartContext);
 
@@ -65,6 +67,10 @@ function UserCheckoutForm({ user }: ProfileFormProps) {
   };
 
   const totalPrice = calcTotalPrice(cartProducts);
+
+  if (totalPrice === 0) {
+    router.push("/");
+  }
 
   const onSubmit = async (values: z.infer<typeof UserOrderSchema>) => {
     try {
