@@ -30,7 +30,7 @@ export interface OrderModalProps {
 export interface GenreProps {
   [x: string]: any;
   isPending?: boolean;
-  _id: string;
+  _id?: string;
   name: string;
   slug: string;
 }

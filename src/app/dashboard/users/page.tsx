@@ -29,6 +29,12 @@ function Users({ searchParams }: SearchParamsProps) {
   });
   const user = useUser(userId);
 
+  const renderTableCell = (content: React.ReactNode) => (
+    <TableCell>
+      {isFetching ? <Skeleton className="h-3 w-auto bg-gray-500" /> : content}
+    </TableCell>
+  );
+
   return (
     <>
       <div>
@@ -40,7 +46,7 @@ function Users({ searchParams }: SearchParamsProps) {
             <div className="flex justify-start gap-3 pb-4">
               <SearchBar route="/dashboard/users" />
             </div>
-            {users?.users?.length > 0 ? (
+            {users?.users?.length ? (
               <div className="flex mx-auto border rounded-md mt-1 text-dark400_light900">
                 <Table>
                   <TableHeader>
@@ -58,34 +64,10 @@ function Users({ searchParams }: SearchParamsProps) {
                         key={user._id}
                         className="hover:background-light800_dark400"
                       >
-                        <TableCell className="font-medium whitespace-nowrap overflow-hidden text-ellipsis max-w-10">
-                          {isFetching ? (
-                            <Skeleton className="h-3 w-auto bg-gray-500" />
-                          ) : (
-                            user._id
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          {isFetching ? (
-                            <Skeleton className="h-3 w-auto bg-gray-500" />
-                          ) : (
-                            user.name
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          {isFetching ? (
-                            <Skeleton className="h-3 w-auto bg-gray-500" />
-                          ) : (
-                            user.email
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          {isFetching ? (
-                            <Skeleton className="h-3 w-auto bg-gray-500" />
-                          ) : (
-                            user.role
-                          )}
-                        </TableCell>
+                        {renderTableCell(user._id)}
+                        {renderTableCell(user.name)}
+                        {renderTableCell(user.email)}
+                        {renderTableCell(user.role)}
                         <TableCell className=" flex text-right justify-center gap-2">
                           <div className="p-0.5 rounded-full  hover:bg-slate-400 cursor-pointer">
                             {isFetching ? (

@@ -3,21 +3,21 @@ import React from "react";
 import SearchBar from "@/components/search/SearchBar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { MdAddCircleOutline, MdDeleteForever, MdEdit } from "react-icons/md";
+import { MdAddCircleOutline } from "react-icons/md";
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { toast } from "@/components/ui/use-toast";
+
 import { ProductProps, SearchParamsProps } from "@/types/index.d";
 import Link from "next/link";
-import { Skeleton } from "@/components/ui/skeleton";
+
 import { useProducts } from "@/app/services/product/queries";
 import Pagination from "@/components/Pagination";
+import ProductRow from "@/components/product/ProductRow";
 
 function Products({ searchParams }: SearchParamsProps) {
   const products = useProducts({
@@ -84,115 +84,12 @@ function Products({ searchParams }: SearchParamsProps) {
                 </TableHeader>
                 <TableBody>
                   {(data.products as ProductProps[])?.map((product) => (
-                    <TableRow
+                    <ProductRow
                       key={product._id}
-                      className="hover:background-light700_dark400 truncate"
-                    >
-                      <TableCell className="capitalize whitespace-nowrap overflow-hidden text-ellipsis max-w-52">
-                        {isLoading || isFetching ? (
-                          <Skeleton className="h-3 w-auto bg-gray-500" />
-                        ) : (
-                          product.name
-                        )}
-                      </TableCell>
-                      <TableCell className="whitespace-nowrap overflow-hidden text-ellipsis max-w-52 max-xl:hidden">
-                        {isLoading || isFetching ? (
-                          <Skeleton className="h-3 w-auto bg-gray-500" />
-                        ) : (
-                          product.shortDescription
-                        )}
-                      </TableCell>
-                      <TableCell className="capitalize whitespace-nowrap overflow-hidden text-ellipsis max-w-52 max-xl:hidden">
-                        {product?.genres?.map((g: any) => (
-                          <span key={g._id}>{g.name}&nbsp;</span>
-                        ))}
-                      </TableCell>
-                      <TableCell className="capitalize">
-                        {isLoading || isFetching ? (
-                          <Skeleton className="h-3 w-auto bg-gray-500" />
-                        ) : (
-                          product.developer
-                        )}
-                      </TableCell>
-                      <TableCell className="capitalize">
-                        {isLoading || isFetching ? (
-                          <Skeleton className="h-3 w-auto bg-gray-500" />
-                        ) : (
-                          product.publisher
-                        )}
-                      </TableCell>
-
-                      {product.price !== "0" ? (
-                        <TableCell>
-                          {isLoading || isFetching ? (
-                            <Skeleton className="h-3 w-auto bg-gray-500" />
-                          ) : (
-                            parseFloat(product.price).toLocaleString("pt-BR", {
-                              style: "currency",
-                              currency: "BRL",
-                            })
-                          )}
-                        </TableCell>
-                      ) : (
-                        <TableCell>
-                          {isLoading || isFetching ? (
-                            <Skeleton className="h-3 w-auto bg-gray-500" />
-                          ) : (
-                            "Gratuito"
-                          )}
-                        </TableCell>
-                      )}
-                      <TableCell className="capitalize">
-                        {isLoading || isFetching ? (
-                          <Skeleton className="h-3 w-auto bg-gray-500" />
-                        ) : (
-                          <span
-                            className={`${
-                              product.active === true
-                                ? "text-green-600"
-                                : "text-red-600"
-                            }`}
-                          >
-                            {product.active === true ? "Ativo" : "Inativo"}
-                          </span>
-                        )}
-                      </TableCell>
-                      <TableCell className=" flex text-right justify-center gap-2">
-                        {isLoading || isFetching ? (
-                          <Skeleton className="h-5 w-5 bg-gray-500" />
-                        ) : (
-                          <Link
-                            href={{
-                              pathname: "/dashboard/products/edit/",
-                              query: { id: product._id },
-                            }}
-                          >
-                            <div className="p-0.5 rounded-full  hover:bg-slate-400 cursor-pointer">
-                              <MdEdit className="w-5 h-5 text-yellow-500" />
-                            </div>
-                          </Link>
-                        )}
-
-                        {isLoading || isFetching ? (
-                          <Skeleton className="h-5 w-5 bg-gray-500" />
-                        ) : (
-                          <div className="p-0.5 rounded-full  hover:bg-slate-400 justify-center cursor-pointer">
-                            <MdDeleteForever
-                              className="w-5 h-5 text-red-500"
-                              onClick={() =>
-                                toast({
-                                  className: "bg-green-600 text-light-800",
-                                  duration: 1500,
-                                  variant: "destructive",
-                                  title: "Excluir produto.",
-                                  description: "produto excluído",
-                                })
-                              }
-                            />
-                          </div>
-                        )}
-                      </TableCell>
-                    </TableRow>
+                      product={product}
+                      isLoading={isLoading}
+                      isFetching={isFetching}
+                    />
                   ))}
                 </TableBody>
               </Table>
