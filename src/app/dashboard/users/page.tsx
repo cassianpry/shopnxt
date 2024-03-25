@@ -1,6 +1,7 @@
 "use client";
 import { useUser, useUsers } from "@/app/services/users/queries";
 import Pagination from "@/components/Pagination";
+import UsersRow from "@/components/dashboard/users/UsersRow";
 import UserForm from "@/components/form/UserForm";
 import SearchBar from "@/components/search/SearchBar";
 import { Separator } from "@/components/ui/separator";
@@ -8,32 +9,23 @@ import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { toast } from "@/components/ui/use-toast";
 import { SearchParamsProps, UserProps } from "@/types/index.d";
 import React, { useState } from "react";
-import { MdDeleteForever, MdEdit } from "react-icons/md";
 
 function Users({ searchParams }: SearchParamsProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [userId, setUserId] = useState("");
 
-  const { data: users, isFetching } = useUsers({
+  const users = useUsers({
     searchQuery: searchParams.query,
     page: (searchParams.page ? +searchParams.page : 1).toString(),
     pageSize: (searchParams.pageSize || 10).toString(),
   });
   const user = useUser(userId);
-
-  const renderTableCell = (content: React.ReactNode) => (
-    <TableCell>
-      {isFetching ? <Skeleton className="h-3 w-auto bg-gray-500" /> : content}
-    </TableCell>
-  );
 
   return (
     <>
@@ -46,7 +38,7 @@ function Users({ searchParams }: SearchParamsProps) {
             <div className="flex justify-start gap-3 pb-4">
               <SearchBar route="/dashboard/users" />
             </div>
-            {users?.users?.length ? (
+            {users?.data?.users?.length > 0 && !users?.isFetching ? (
               <div className="flex mx-auto border rounded-md mt-1 text-dark400_light900">
                 <Table>
                   <TableHeader>
@@ -59,76 +51,54 @@ function Users({ searchParams }: SearchParamsProps) {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {(users?.users as UserProps[])?.map((user) => (
-                      <TableRow
+                    {(users?.data?.users as UserProps[])?.map((user) => (
+                      <UsersRow
                         key={user._id}
-                        className="hover:background-light800_dark400"
-                      >
-                        {renderTableCell(user._id)}
-                        {renderTableCell(user.name)}
-                        {renderTableCell(user.email)}
-                        {renderTableCell(user.role)}
-                        <TableCell className=" flex text-right justify-center gap-2">
-                          <div className="p-0.5 rounded-full  hover:bg-slate-400 cursor-pointer">
-                            {isFetching ? (
-                              <Skeleton className="h-5 w-5 bg-gray-500" />
-                            ) : (
-                              <MdEdit
-                                className="w-5 h-5 text-yellow-500"
-                                onClick={() => {
-                                  setUserId(user._id!);
-                                  setIsOpen(true);
-                                }}
-                              />
-                            )}
-                          </div>
-                          <div className="p-0.5 rounded-full  hover:bg-slate-400 cursor-pointer">
-                            {isFetching ? (
-                              <Skeleton className="h-5 w-5 bg-gray-500" />
-                            ) : (
-                              <MdDeleteForever
-                                className="w-5 h-5 text-red-500"
-                                onClick={() =>
-                                  toast({
-                                    className: "bg-red-600 text-light-800",
-                                    duration: 1500,
-                                    variant: "destructive",
-                                    title: "Excluir gênero.",
-                                    description: "Gênero excluído: {user name}",
-                                  })
-                                }
-                              />
-                            )}
-                          </div>
-                        </TableCell>
-                      </TableRow>
+                        user={user}
+                        isFetching={users?.isFetching}
+                        setIsOpen={setIsOpen}
+                        setUserId={setUserId}
+                      />
                     ))}
                   </TableBody>
                 </Table>
               </div>
-            ) : (
+            ) : users?.data?.users?.length === 0 && !users.isFetching ? (
               <div className="text-light400_light500 pt-10">
                 Nenhum usuário cadastrado.
+              </div>
+            ) : (
+              <div>
+                <h1 className="h1-bold text-dark100_light900"></h1>
+                <div className="my-12 pt-5 flex flex-wrap gap-5 items-center space-x-4">
+                  <div className="flex flex-col space-y-2 justify-center items-center gap-3">
+                    <Skeleton className="h-4 w-[350px] bg-gray-500" />
+                    <Skeleton className="h-4 w-[350px] bg-gray-500" />
+                    <Skeleton className="h-4 w-[350px] bg-gray-500" />
+                    <Skeleton className="h-4 w-[350px] bg-gray-500" />
+                    <Skeleton className="h-4 w-[350px] bg-gray-500" />
+                  </div>
+                </div>
               </div>
             )}
             <div className="flex items-center justify-between space-x-2 py-4 text-dark300_light700">
               <div className="flex-1 text-sm text-muted-foreground">
                 {searchParams.query !== undefined &&
-                users?.users !== undefined ? (
+                users?.data?.users !== undefined ? (
                   <>
                     <span className="font-semibold text-md">
                       Total de usuários encontrados:
                     </span>
                     &nbsp;
-                    {users.users.length}
+                    {users?.data?.users.length}
                   </>
-                ) : users?.users !== undefined ? (
+                ) : users?.data?.users !== undefined ? (
                   <>
                     <span className="font-semibold text-md">
                       Total de usuário cadastrados:
                     </span>
                     &nbsp;
-                    {users?.totalUsers}
+                    {users?.data?.totalUsers}
                   </>
                 ) : (
                   ""
@@ -136,8 +106,8 @@ function Users({ searchParams }: SearchParamsProps) {
               </div>
               <Pagination
                 pageNumber={searchParams?.page ? +searchParams.page : 1}
-                isNext={users?.isNext}
-                total={users?.totalUsers ?? 0}
+                isNext={users?.data?.isNext}
+                total={users?.data?.totalUsers ?? 0}
               />
             </div>
           </div>

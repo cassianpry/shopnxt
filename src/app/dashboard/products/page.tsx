@@ -18,6 +18,7 @@ import Link from "next/link";
 import { useProducts } from "@/app/services/product/queries";
 import Pagination from "@/components/Pagination";
 import ProductRow from "@/components/product/ProductRow";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function Products({ searchParams }: SearchParamsProps) {
   const products = useProducts({
@@ -25,24 +26,6 @@ function Products({ searchParams }: SearchParamsProps) {
     page: (searchParams.page ? +searchParams.page : 1).toString(),
     pageSize: (searchParams.pageSize || 10).toString(),
   });
-  const { data, isLoading, isFetching } = products;
-
-  // if (isLoading) {
-  //   return (
-  //     <section>
-  //       <h1 className="h1-bold text-dark100_light900"></h1>
-  //       <div className="my-12 pt-5 flex flex-wrap gap-5 items-center space-x-4">
-  //         <div className="flex flex-col space-y-2 justify-center items-center gap-3">
-  //           <Skeleton className="h-4 w-[350px] bg-gray-500" />
-  //           <Skeleton className="h-4 w-[350px] bg-gray-500" />
-  //           <Skeleton className="h-4 w-[350px] bg-gray-500" />
-  //           <Skeleton className="h-4 w-[350px] bg-gray-500" />
-  //           <Skeleton className="h-4 w-[350px] bg-gray-500" />
-  //         </div>
-  //       </div>
-  //     </section>
-  //   );
-  // }
 
   return (
     <div>
@@ -65,7 +48,7 @@ function Products({ searchParams }: SearchParamsProps) {
             </Link>
           </div>
 
-          {data?.products !== undefined ? (
+          {products?.data?.products?.length > 0 && !products.isFetching ? (
             <div className="flex mx-auto border rounded-md mt-1 text-dark400_light900">
               <Table>
                 <TableHeader>
@@ -83,41 +66,56 @@ function Products({ searchParams }: SearchParamsProps) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {(data.products as ProductProps[])?.map((product) => (
-                    <ProductRow
-                      key={product._id}
-                      product={product}
-                      isLoading={isLoading}
-                      isFetching={isFetching}
-                    />
-                  ))}
+                  {(products?.data?.products as ProductProps[])?.map(
+                    (product) => (
+                      <ProductRow
+                        key={product._id}
+                        product={product}
+                        isLoading={products.isLoading}
+                        isFetching={products.isFetching}
+                      />
+                    )
+                  )}
                 </TableBody>
               </Table>
             </div>
-          ) : (
+          ) : products?.data?.products?.length === 0 && !products.isFetching ? (
             <div className="text-light400_light500 pt-10">
               Nenhum produto cadastrado.
+            </div>
+          ) : (
+            <div>
+              <h1 className="h1-bold text-dark100_light900"></h1>
+              <div className="my-12 pt-5 flex flex-wrap gap-5 items-center space-x-4">
+                <div className="flex flex-col space-y-2 justify-center items-center gap-3">
+                  <Skeleton className="h-4 w-[350px] bg-gray-500" />
+                  <Skeleton className="h-4 w-[350px] bg-gray-500" />
+                  <Skeleton className="h-4 w-[350px] bg-gray-500" />
+                  <Skeleton className="h-4 w-[350px] bg-gray-500" />
+                  <Skeleton className="h-4 w-[350px] bg-gray-500" />
+                </div>
+              </div>
             </div>
           )}
 
           <div className="flex items-center justify-between space-x-2 py-4 text-dark300_light700">
             <div className="flex-1 text-sm text-muted-foreground">
               {searchParams.query !== undefined &&
-              data?.products !== undefined ? (
+              products?.data?.products !== undefined ? (
                 <>
                   <span className="font-semibold text-md">
                     Total de produtos encontrados:
                   </span>
                   &nbsp;
-                  {data.products.length}
+                  {products?.data.products.length}
                 </>
-              ) : data?.products !== undefined ? (
+              ) : products?.data?.products !== undefined ? (
                 <>
                   <span className="font-semibold text-md">
                     Total de produtos cadastrados:
                   </span>
                   &nbsp;
-                  {data?.totalProducts}
+                  {products?.data?.totalProducts}
                 </>
               ) : (
                 ""
@@ -125,8 +123,8 @@ function Products({ searchParams }: SearchParamsProps) {
             </div>
             <Pagination
               pageNumber={searchParams?.page ? +searchParams.page : 1}
-              isNext={data?.isNext}
-              total={data?.totalProducts ?? 0}
+              isNext={products?.data?.isNext}
+              total={products?.data?.totalProducts ?? 0}
             />
           </div>
         </div>
