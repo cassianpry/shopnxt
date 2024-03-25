@@ -118,17 +118,17 @@ function UserCheckoutForm({ user }: ProfileFormProps) {
   //   }
   // }, [user, form]);
   return (
-    <div className="flex flex-col text-dark400_light900">
+    <div className="flex flex-col text-dark400_light700">
       {user ? (
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-8 pt-2 text-dark400_light700"
+            className="space-y-8 pt-2"
           >
-            <div className="flex justify-between">
+            <div className="flex justify-between gap-5">
               <div className="flex flex-col w-full max-w-[900px]">
                 <div className="flex flex-col">
-                  <h1 className="font-bold text-4xl pb-1">
+                  <h1 className="font-bold text-4xl pb-1 text-center lg:text-left">
                     Informações do cliente
                   </h1>
                   <div className="flex gap-4 pb-3">
@@ -294,8 +294,8 @@ function UserCheckoutForm({ user }: ProfileFormProps) {
                     />
                   </div>
                 </div>
-                <div className="flex flex-col">
-                  <h1 className="font-bold text-4xl pb-2">
+                <div className="flex flex-col mt-3">
+                  <h1 className="font-bold text-4xl pb-2 text-center lg:text-left">
                     Informações de pagamento
                   </h1>
                   <p className="font-normal text-xl dark:text-gray-400 pb-2">
@@ -404,7 +404,7 @@ function UserCheckoutForm({ user }: ProfileFormProps) {
                   </div>
                 </div>
                 <div className="flex flex-col">
-                  <h1 className="font-bold text-4xl pb-2">
+                  <h1 className="font-bold text-4xl mt-5 text-center lg:text-left">
                     Informações de cobrança
                   </h1>
 

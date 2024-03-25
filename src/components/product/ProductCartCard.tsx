@@ -2,7 +2,7 @@ import { CartContext } from "@/context/CartContext";
 import Image from "next/image";
 import React, { useContext, useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import { MdOutlineDeleteForever } from "react-icons/md";
+import { MdAutorenew, MdOutlineDeleteForever } from "react-icons/md";
 import { ProductProps, UserProps } from "@/types/index.d";
 import { Skeleton } from "../ui/skeleton";
 import { useSession } from "next-auth/react";
@@ -171,9 +171,16 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
               ) : (
                 <Button
                   className="mb-1 items-center justify-center rounded-md font-semibold text-xs bg-blue-900 hover:bg-blue-600 transition-all duration-300 ease-in-out text-light-900"
+                  disabled={addWishList.isPending}
                   onClick={() => addToCart(wishList)}
                 >
-                  Adicionar ao carrinho
+                  {addWishList.isPending === true ? (
+                    <>
+                      <MdAutorenew className="w-5 h-5 mr-2 animate-spin" />
+                    </>
+                  ) : (
+                    "Adicionar ao carrinho"
+                  )}
                 </Button>
               )}
               <Button

@@ -119,29 +119,55 @@ const Genres = ({ searchParams }: SearchParamsProps) => {
                       key={genre._id}
                       className="hover:background-light700_dark400"
                     >
-                      <TableCell className="font-medium">{genre._id}</TableCell>
-                      <TableCell>{genre.slug}</TableCell>
-                      <TableCell className="capitalize">{genre.name}</TableCell>
+                      <TableCell className="font-medium">
+                        {newGenres.isFetching ? (
+                          <Skeleton className="h-3 w-auto bg-gray-500" />
+                        ) : (
+                          genre._id
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {newGenres.isFetching ? (
+                          <Skeleton className="h-3 w-auto bg-gray-500" />
+                        ) : (
+                          genre.slug
+                        )}
+                      </TableCell>
+                      <TableCell className="capitalize">
+                        {newGenres.isFetching ? (
+                          <Skeleton className="h-3 w-auto bg-gray-500" />
+                        ) : (
+                          genre.name
+                        )}
+                      </TableCell>
                       <TableCell className=" flex text-right justify-center gap-2">
-                        <div className="p-0.5 rounded-full  hover:bg-slate-400 cursor-pointer">
-                          <MdEdit
-                            className="w-5 h-5 text-yellow-500"
-                            onClick={() => handleGenre(genre._id)}
-                          />
+                        <div className="p-0.5 rounded-full  hover:bg-slate-400 cursor-pointer justify-between">
+                          {newGenres.isFetching ? (
+                            <Skeleton className="h-5 w-5 rounded-md bg-gray-500" />
+                          ) : (
+                            <MdEdit
+                              className="w-5 h-5 text-yellow-500"
+                              onClick={() => handleGenre(genre._id)}
+                            />
+                          )}
                         </div>
-                        <div className="p-0.5 rounded-full  hover:bg-slate-400 cursor-pointer">
-                          <MdDeleteForever
-                            className="w-5 h-5 text-red-500"
-                            onClick={() =>
-                              toast({
-                                className: "bg-red-600 text-light-800",
-                                duration: 1500,
-                                variant: "destructive",
-                                title: "Excluir gênero.",
-                                description: "Gênero excluído: {genre name}",
-                              })
-                            }
-                          />
+                        <div className="p-0.5 rounded-full  hover:bg-slate-400 cursor-pointer justify-center">
+                          {newGenres.isFetching ? (
+                            <Skeleton className="h-5 w-5 rounded-md bg-gray-500" />
+                          ) : (
+                            <MdDeleteForever
+                              className="w-5 h-5 text-red-500"
+                              onClick={() =>
+                                toast({
+                                  className: "bg-red-600 text-light-800",
+                                  duration: 1500,
+                                  variant: "destructive",
+                                  title: "Excluir gênero.",
+                                  description: "Gênero excluído: {genre name}",
+                                })
+                              }
+                            />
+                          )}
                         </div>
                       </TableCell>
                     </TableRow>
