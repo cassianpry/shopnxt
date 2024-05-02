@@ -10,27 +10,23 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   try {
     await connectToDatabase();
-
+    console.log("Checando usuário=>", body.email);
     //Validation if a email or username exists in DB
     const existingUser = await User.findOne({
       email: body.email,
     });
 
     if (!existingUser) {
-      console.log("usuário null=>", existingUser);
-      return NextResponse.json(
-        { error: "E-mail já enviado ou não existe." },
-        { status: 500 }
-      );
+      throw new Error("E-mail já enviado ou usuário não existe");
     }
 
     const existingResetData = await ResetPassword.findOne({
       userId: existingUser._id,
     });
 
-    if (existingResetData) {
-      await ResetPassword.deleteOne({ userId: existingUser._id });
-    }
+    // if (existingResetData) {
+    //   await ResetPassword.deleteOne({ userId: existingUser._id });
+    // }
 
     const resetData = await ResetPassword.create({
       userId: existingUser._id,
@@ -41,8 +37,8 @@ export async function POST(req: NextRequest) {
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
-      //host:'smtp.gmail.com',
-      //port: 587
+      host: "smtp.gmail.com",
+      port: 587,
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_APP_PASSWORD,
@@ -859,10 +855,8 @@ export async function POST(req: NextRequest) {
 
     const info = await transporter.sendMail(mailOptions);
 
-    console.log(info);
-
     return NextResponse.json("Redefinição de senha recebida.");
   } catch (error) {
-    return NextResponse.json((error as Error).message, { status: 500 });
+    throw new Error();
   }
 }

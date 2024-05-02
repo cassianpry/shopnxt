@@ -6,7 +6,7 @@ import CartProvider from "@/context/CartContext";
 import { UserProps } from "@/types/index.d";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import React, { ReactElement, ReactNode } from "react";
+import React, { ReactNode } from "react";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const queryClient = new QueryClient();

@@ -54,7 +54,6 @@ export const authOptions = {
         if (!user) {
           throw new Error("E-mail ou Password inválidos.");
         }
-
         const isPasswordMatched = await bcrypt.compare(password, user.password);
         if (!isPasswordMatched) {
           throw new Error("E-mail ou Password inválidos.");

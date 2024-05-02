@@ -1,5 +1,9 @@
 "use client";
+import React, { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 import { useToken } from "@/app/services/users/queries";
+import { useUpdatePassword } from "@/app/services/users/mutations";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -13,15 +17,10 @@ import { Input } from "@/components/ui/input";
 import { ResetPasswordSchema } from "@/lib/actions/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-
-import React from "react";
-import { useForm } from "react-hook-form";
 import { MdAutorenew, MdKey, MdLogin } from "react-icons/md";
 import { GoPasskeyFill } from "react-icons/go";
 import { toast } from "@/components/ui/use-toast";
-import { useUpdatePassword } from "@/app/services/users/mutations";
 import LoadingResetPassword from "@/components/loadings/LoadingResetPassword";
-import { useRouter } from "next/navigation";
 
 interface ResetPasswordProps {
   searchParams: {
@@ -33,10 +32,7 @@ function ResetPassword({ searchParams }: ResetPasswordProps) {
   const token = useToken({ token: searchParams?.token?.toString() });
   const updatePassword = useUpdatePassword();
   const userId = token?.data?.checkToken?.userId;
-
-  if (token.data === null || token.data === undefined) {
-    window.location.href = "/";
-  }
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof ResetPasswordSchema>>({
     resolver: zodResolver(ResetPasswordSchema),
@@ -46,6 +42,16 @@ function ResetPassword({ searchParams }: ResetPasswordProps) {
       confirm_password: "",
     },
   });
+
+  useEffect(() => {
+    if (!token.isLoading && token?.error !== null) {
+      router.push("/");
+    }
+  }, [token, router]);
+
+  // if (!token.isLoading && token?.error !== null) {
+  //   router.push("/");
+  // }
 
   const onSubmit = async (values: z.infer<typeof ResetPasswordSchema>) => {
     values.userId = userId;
@@ -61,12 +67,14 @@ function ResetPassword({ searchParams }: ResetPasswordProps) {
     }
   };
 
+  console.log(token?.data?.checkToken);
+
   return (
     <main className="flex flex-row mx-auto items-center justify-center h-screen w-1/3 max-xl:w-1/2">
-      {token.data === undefined || token.data === null ? (
-        <>Token inválido</>
-      ) : token.isLoading ? (
+      {token.isLoading ? (
         <LoadingResetPassword />
+      ) : !token.isLoading && token?.error !== null ? (
+        "Token Inválido"
       ) : (
         <div className="container">
           <h1 className="flex items-center text-center text-slate-700 text-3xl font-bold justify-center dark:text-light-900">

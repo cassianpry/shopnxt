@@ -1,6 +1,7 @@
 import { toast } from "@/components/ui/use-toast";
 import { UserProps, UserRegisterProps } from "@/types/index.d";
 import { signIn } from "next-auth/react";
+import { NextResponse } from "next/server";
 
 export const getUsers = async (searchQuery: Record<string, string>) => {
   const queryString = new URLSearchParams(searchQuery).toString();
@@ -128,11 +129,14 @@ export const resetPasswordUser = async (values: string) => {
       }
     );
 
+    const res = await response.json();
+
     if (!response.ok) {
-      //Return nothing
+      return NextResponse.json(res, { status: 500 });
     }
   } catch (error) {
     console.log(error);
+    throw new Error();
   }
 };
 

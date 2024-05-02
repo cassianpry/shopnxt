@@ -15,11 +15,11 @@ export const connectToDatabase = async () => {
     return console.log("Está faltando MONGODB_URL");
 
   try {
-    if (process.env.NODE_ENV === "production") {
-      await mongoose.connect(uri);
-    } else {
-      await mongoose.connect(process.env.MONGODB_LOCAL, { dbName: "shopnxt" });
-    }
+    // if (process.env.NODE_ENV === "production") {
+    await mongoose.connect(uri);
+    // } else {
+    // await mongoose.connect(process.env.MONGODB_LOCAL, { dbName: "shopnxt" });
+    // }
     //await client.connect();
     // await client.db("admin").command({ ping: 1 });
 
