@@ -12,9 +12,7 @@ interface QuantityUsersProps {
 
 const QuantityUsers: React.FC<QuantityUsersProps> = ({ users, isLoading }) => {
   //Total sales based on current month
-  const currentMonthUsers = users?.filter((user) =>
-    moment(user?.createdAt).isSame(moment(), "month")
-  );
+  const currentMonthUsers = users?.filter((user) => moment(user?.createdAt));
 
   const usersPercentage = growUsersPercentage(users);
 
@@ -44,7 +42,7 @@ const QuantityUsers: React.FC<QuantityUsersProps> = ({ users, isLoading }) => {
                   +{usersPercentage} % desde o ultimo mês
                 </p>
               ) : (
-                0
+                "0% desde o ultimo mês"
               )}
             </div>
           )}
