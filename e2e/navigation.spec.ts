@@ -3,7 +3,9 @@ import { test, expect } from "@playwright/test";
 test.describe("Navigation", () => {
   test("homepage loads with expected content", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByText(/descobrir/i).first()).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: /descobrir/i })
+    ).toBeVisible();
   });
 
   test("browse page loads products", async ({ page }) => {

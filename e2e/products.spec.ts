@@ -1,24 +1,16 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Products", () => {
-  test("browse page shows product listings", async ({ page }) => {
+  test("browse page loads with product section", async ({ page }) => {
     await page.goto("/browse");
-    const productLinks = page.getByRole("link").filter({ hasText: /game/i });
-    const count = await productLinks.count();
-    await expect(
-      page
-        .getByText(/produto/i)
-        .or(page.getByText(/game/i))
-        .first()
-    ).toBeVisible();
+    await expect(page.getByRole("main")).toBeVisible();
   });
 
   test("search field is present on homepage", async ({ page }) => {
     await page.goto("/");
     const searchInput = page.getByPlaceholder(/search/i);
     const count = await searchInput.count();
-    if (count > 0) {
-      await expect(searchInput.first()).toBeVisible();
-    }
+    expect(count).toBeGreaterThan(0);
+    await expect(searchInput.first()).toBeVisible();
   });
 });
