@@ -4,9 +4,10 @@ import SearchBar from "@/components/search/SearchBar";
 import { ProductProps, SearchParamsProps } from "@/types/index.d";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { use } from "react";
 
-function Browse({ searchParams }: SearchParamsProps) {
+function Browse(props: SearchParamsProps) {
+  const searchParams = use(props.searchParams);
   const products = useProducts({ searchQuery: searchParams.query });
 
   return (

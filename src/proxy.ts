@@ -1,8 +1,7 @@
-//export { default } from "next-auth/middleware";
+// export { default } from "next-auth/middleware";
 import { withAuth } from "next-auth/middleware";
-import { NextMiddlewareResult } from "next/dist/server/web/types";
-import { NextRequest, NextResponse } from "next/server";
 import { JWT } from "next-auth/jwt";
+import { NextRequest, NextResponse } from "next/server";
 
 interface CustomNextRequest extends NextRequest {
   nextauth?: {
@@ -18,12 +17,11 @@ export const config = {
   matcher: ["/dashboard/:path*", "/cart", "/profile/:path*", "/api/:path*"],
 };
 
-export default (withAuth as any)(
-  async function (
-    req: CustomNextRequest
-  ): Promise<NextMiddlewareResult | undefined> {
+export const proxy = (withAuth as any)(
+  async function proxy(req: CustomNextRequest): Promise<NextResponse | void> {
     const url = req?.nextUrl?.pathname;
     const userRole = req?.nextauth?.token?.user?.role;
+
     if (
       (url?.includes("/dashboard") || url?.includes("/api")) &&
       userRole !== "admin"
@@ -37,7 +35,11 @@ export default (withAuth as any)(
         if (!token) {
           return false;
         }
+
+        return true;
       },
     },
   }
 );
+
+export default proxy;

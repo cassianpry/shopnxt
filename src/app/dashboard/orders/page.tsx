@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, use } from "react";
 import { useOrders } from "@/app/services/orders/queries";
 import Pagination from "@/components/Pagination";
 import SearchBar from "@/components/search/SearchBar";
@@ -17,7 +17,8 @@ import { OrderProps, SearchParamsProps } from "@/types/index.d";
 import Link from "next/link";
 import OrderModal from "@/components/order/OrderModal";
 
-function Orders({ searchParams }: SearchParamsProps) {
+function Orders(props: SearchParamsProps) {
+  const searchParams = use(props.searchParams);
   const [isOpen, setIsOpen] = useState(false);
   const [order, setOrder] = useState("");
 

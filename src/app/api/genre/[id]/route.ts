@@ -4,13 +4,13 @@ import { NextRequest, NextResponse } from "next/server";
 import slugify from "slugify";
 
 interface contextProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export async function GET(req: NextRequest, context: contextProps) {
-  const { params } = context;
+  const params = await context.params;
   try {
     await connectToDatabase();
 
@@ -26,7 +26,7 @@ export async function GET(req: NextRequest, context: contextProps) {
 }
 
 export async function PUT(req: NextRequest, context: contextProps) {
-  const { params } = context;
+  const params = await context.params;
 
   try {
     await connectToDatabase();
@@ -39,7 +39,7 @@ export async function PUT(req: NextRequest, context: contextProps) {
           slug: slugify(data.name),
         },
       },
-      { new: true }
+      { returnDocument: 'after' }
     );
     return NextResponse.json(genre);
   } catch (error) {

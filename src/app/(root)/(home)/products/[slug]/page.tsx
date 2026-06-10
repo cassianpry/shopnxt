@@ -9,6 +9,7 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 import moment from "moment";
+// @ts-expect-error -- moment locale has no type declarations
 import "moment/locale/pt-br";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CartContext } from "@/context/CartContext";
@@ -23,7 +24,7 @@ import { useWishListUser } from "@/app/services/wishlist/queries";
 import { useQueryClient } from "@tanstack/react-query";
 
 function ProductPage() {
-  const params = useParams();
+  const params = useParams<{ slug: string }>();
   const product = useProductBySlug(params.slug.toString());
   const { addToCart, cartProducts } = useContext(CartContext);
   const user = useSession();

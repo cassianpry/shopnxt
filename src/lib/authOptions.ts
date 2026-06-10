@@ -27,21 +27,6 @@ interface UserProps {
   };
 }
 
-//Função para gerar uma senha aleatória de 10 caracteres
-// const generateHashedPassword = async () => {
-//   const characters =
-//     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
-//   let newpassword = "";
-//   for (let i = 0; i < 10; i++) {
-//     const randomIndex = Math.floor(Math.random() * characters.length);
-//     newpassword += characters.charAt(randomIndex);
-//   }
-
-//   const salt = await bcrypt.genSalt(10);
-//   const hashedPassword = await bcrypt.hash(newpassword, salt);
-//   return hashedPassword;
-// };
-
 export const authOptions = {
   session: { strategy: "jwt" },
   providers: [

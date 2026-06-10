@@ -1,7 +1,6 @@
 import { Genres } from "@/database/genre.model";
 import { Product } from "@/database/product.model";
 import { connectToDatabase } from "@/lib/actions/mongoose";
-import { FilterQuery } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 import slugify from "slugify";
 
@@ -28,7 +27,7 @@ export async function GET(req: NextRequest) {
 
   try {
     await connectToDatabase();
-    const query: FilterQuery<typeof Product> = {};
+    const query: Record<string, unknown> = {};
 
     if (searchQuery !== "undefined") {
       query.$or = [

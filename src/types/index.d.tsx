@@ -12,7 +12,7 @@ export interface SidebarLink {
 }
 
 export interface SearchParamsProps {
-  searchParams: Record<string, string>;
+  searchParams: Promise<Record<string, string>>;
 }
 
 export interface FormGenreProps {

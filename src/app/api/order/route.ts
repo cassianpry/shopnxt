@@ -1,6 +1,5 @@
 import Order from "@/database/order.model";
 import { connectToDatabase } from "@/lib/actions/mongoose";
-import { FilterQuery } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -27,7 +26,7 @@ export async function GET(req: NextRequest) {
   try {
     await connectToDatabase();
 
-    const query: FilterQuery<typeof Order> = {};
+    const query: Record<string, unknown> = {};
 
     if (searchQuery !== "undefined") {
       query.$or = [

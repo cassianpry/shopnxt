@@ -4,12 +4,14 @@ import { connectToDatabase } from "@/lib/actions/mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
 interface contextProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
-export async function GET(req: NextRequest, { params }: contextProps) {
+export async function GET(req: NextRequest, context: contextProps) {
+  const params = await context.params;
+
   if (params.id === "undefined" || params.id == "") {
     return NextResponse.json("Id Indefinido");
   } else {
@@ -37,7 +39,8 @@ export async function GET(req: NextRequest, { params }: contextProps) {
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: contextProps) {
+export async function DELETE(req: NextRequest, context: contextProps) {
+  const params = await context.params;
   const data = await req.json();
   if (params.id === "undefined") {
     return NextResponse.json({});

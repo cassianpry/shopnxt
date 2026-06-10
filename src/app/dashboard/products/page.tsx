@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { use } from "react";
 import SearchBar from "@/components/search/SearchBar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -20,7 +20,8 @@ import Pagination from "@/components/Pagination";
 import ProductRow from "@/components/product/ProductRow";
 import { Skeleton } from "@/components/ui/skeleton";
 
-function Products({ searchParams }: SearchParamsProps) {
+function Products(props: SearchParamsProps) {
+  const searchParams = use(props.searchParams);
   const products = useProducts({
     searchQuery: searchParams.query,
     page: (searchParams.page ? +searchParams.page : 1).toString(),

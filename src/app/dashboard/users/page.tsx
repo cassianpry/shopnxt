@@ -14,9 +14,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { SearchParamsProps, UserProps } from "@/types/index.d";
-import React, { useState } from "react";
+import React, { useState, use } from "react";
 
-function Users({ searchParams }: SearchParamsProps) {
+function Users(props: SearchParamsProps) {
+  const searchParams = use(props.searchParams);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [userId, setUserId] = useState("");
 

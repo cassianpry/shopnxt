@@ -20,7 +20,7 @@ const OrderSchema = new Schema(
   { timestamps: true }
 );
 
-OrderSchema.pre("save", function (next) {
+OrderSchema.pre("save", function () {
   if (!this.orderNum) {
     const date = new Date();
     const dateString = `${date.getDate()}${
@@ -31,7 +31,6 @@ OrderSchema.pre("save", function (next) {
       .padStart(5, "0");
     this.orderNum = `${dateString}${randomNumber}`;
   }
-  next();
 });
 
 const Order = models?.Order || model("Order", OrderSchema);

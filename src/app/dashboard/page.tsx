@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { use } from "react";
 import { useOrders } from "../services/orders/queries";
 import { useUsers } from "../services/users/queries";
 import { BiDollar } from "react-icons/bi";
@@ -11,7 +11,8 @@ import { MdPeopleAlt } from "react-icons/md";
 import TotalSales from "@/components/dashboard/TotalSales";
 import QuantityUsers from "@/components/dashboard/QuantityUsers";
 
-const AdminDashboard = ({ searchParams }: SearchParamsProps) => {
+const AdminDashboard = (props: SearchParamsProps) => {
+  const searchParams = use(props.searchParams);
   const orders = useOrders();
   const users = useUsers({ searchQuery: searchParams.query });
 

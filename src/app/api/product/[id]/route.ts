@@ -5,12 +5,14 @@ import { NextRequest, NextResponse } from "next/server";
 import slugify from "slugify";
 
 interface contextProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
-export async function GET(req: NextRequest, { params }: contextProps) {
+export async function GET(req: NextRequest, context: contextProps) {
+  const params = await context.params;
+
   try {
     await connectToDatabase();
     const product = await Product.findById(params.id);
@@ -21,7 +23,8 @@ export async function GET(req: NextRequest, { params }: contextProps) {
   }
 }
 
-export async function PUT(req: NextRequest, { params }: contextProps) {
+export async function PUT(req: NextRequest, context: contextProps) {
+  const params = await context.params;
   const data = await req.json();
 
   try {

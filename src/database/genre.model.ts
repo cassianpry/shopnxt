@@ -1,17 +1,13 @@
-import { Schema, models, model, Model } from "mongoose";
+import { Schema, models, model } from "mongoose";
 
-interface IGenre extends Document {
+interface IGenre {
   name: string;
   slug: string;
 }
 
 const GenresSchema = new Schema<IGenre>(
-  {
-    name: { type: String, required: true },
-    slug: { type: String, required: true },
-  },
+  { name: { type: String, required: true }, slug: { type: String, required: true } },
   { timestamps: true }
 );
 
-export const Genres: Model<IGenre> =
-  models?.Genres || model("Genres", GenresSchema);
+export const Genres = models?.Genres || model("Genres", GenresSchema);

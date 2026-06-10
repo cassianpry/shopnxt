@@ -354,7 +354,7 @@ const ProductForm = () => {
                     }
                     onBlur={field.onBlur}
                     onEditorChange={(content) => field.onChange(content)}
-                    initialValue={"" || product.data?.about}
+                    initialValue={product.data?.about}
                     init={{
                       height: 350,
                       language: "pt_BR",

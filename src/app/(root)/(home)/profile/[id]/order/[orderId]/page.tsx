@@ -18,7 +18,7 @@ import React from "react";
 import { MdOutlineCheckCircle } from "react-icons/md";
 
 const UserOrder = () => {
-  const params = useParams();
+  const params = useParams<{ id: string; orderId: string }>();
   const order = useOrder(params.orderId.toString());
 
   return (

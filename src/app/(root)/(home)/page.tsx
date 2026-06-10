@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, use } from "react";
 import { useProducts } from "@/app/services/product/queries";
 import { useWishListUser } from "@/app/services/wishlist/queries";
 import { useSession } from "next-auth/react";
@@ -20,7 +20,8 @@ interface userSessionProps {
   };
 }
 
-function LandingPage({ searchParams }: SearchParamsProps) {
+function LandingPage(props: SearchParamsProps) {
+  const searchParams = use(props.searchParams);
   const products = useProducts({ searchQuery: searchParams.query });
   const { data, status } = useSession();
   const [isWishListed, setIsWishListed] = useState<string[]>([]);

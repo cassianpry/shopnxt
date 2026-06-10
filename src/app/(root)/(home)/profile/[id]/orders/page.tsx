@@ -16,7 +16,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 const UserOrders = () => {
-  const params = useParams();
+  const params = useParams<{ id: string }>();
   const orders = useOrder(params.id.toString());
   const { data, status } = useSession();
 

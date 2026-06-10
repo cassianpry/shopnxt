@@ -1,6 +1,6 @@
 "use client";
-import React, { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import React, { Suspense, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useToken } from "@/app/services/users/queries";
 import { useUpdatePassword } from "@/app/services/users/mutations";
@@ -22,14 +22,9 @@ import { GoPasskeyFill } from "react-icons/go";
 import { toast } from "@/components/ui/use-toast";
 import LoadingResetPassword from "@/components/loadings/LoadingResetPassword";
 
-interface ResetPasswordProps {
-  searchParams: {
-    token: string;
-  };
-}
-
-function ResetPassword({ searchParams }: ResetPasswordProps) {
-  const token = useToken({ token: searchParams?.token?.toString() });
+function ResetPasswordForm() {
+  const searchParams = useSearchParams();
+  const token = useToken({ token: searchParams.get("token") ?? "" });
   const updatePassword = useUpdatePassword();
   const userId = token?.data?.checkToken?.userId;
   const router = useRouter();
@@ -160,6 +155,14 @@ function ResetPassword({ searchParams }: ResetPasswordProps) {
         </div>
       )}
     </main>
+  );
+}
+
+function ResetPassword() {
+  return (
+    <Suspense fallback={<LoadingResetPassword />}>
+      <ResetPasswordForm />
+    </Suspense>
   );
 }
 

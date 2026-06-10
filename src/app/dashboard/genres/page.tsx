@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, use } from "react";
 import GenreForm from "@/components/form/GenreForm";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -32,7 +32,8 @@ interface GenresProps {
   };
 }
 
-const Genres = ({ searchParams }: SearchParamsProps) => {
+const Genres = (props: SearchParamsProps) => {
+  const searchParams = use(props.searchParams);
   const [editGenre, setEditGenre] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isNew, setIsNew] = useState(false);

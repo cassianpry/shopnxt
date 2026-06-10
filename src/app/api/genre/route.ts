@@ -2,7 +2,6 @@ import { connectToDatabase } from "@/lib/actions/mongoose";
 import { NextRequest, NextResponse } from "next/server";
 import { Genres } from "@/database/genre.model";
 import slugify from "slugify";
-import { FilterQuery } from "mongoose";
 
 export async function GET(req: NextRequest) {
   const searchQuery = new URL(
@@ -26,7 +25,7 @@ export async function GET(req: NextRequest) {
 
   try {
     await connectToDatabase();
-    const query: FilterQuery<typeof Genres> = {};
+    const query: Record<string, unknown> = {};
     if (searchQuery !== "undefined") {
       query.$or = [
         { name: { $regex: searchQuery, $options: "i" } },

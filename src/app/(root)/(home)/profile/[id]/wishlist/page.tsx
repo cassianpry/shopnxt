@@ -10,7 +10,7 @@ import { useParams } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 
 function WishList() {
-  const params = useParams();
+  const params = useParams<{ id: string }>();
   const wishlistResult = useWishListUser(params.id.toString());
   const [loading, setLoading] = useState(true);
   const { cartProducts } = useContext(CartContext);

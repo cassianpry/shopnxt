@@ -2,7 +2,6 @@ import bcrypt from "bcrypt";
 import ResetPassword from "@/database/resetpasswd.model";
 import User from "@/database/user.model";
 import { connectToDatabase } from "@/lib/actions/mongoose";
-import { FilterQuery } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 import { nullable } from "zod";
 
@@ -14,7 +13,7 @@ export async function GET(req: NextRequest) {
   try {
     await connectToDatabase();
 
-    const query: FilterQuery<typeof ResetPassword> = {};
+    const query: Record<string, unknown> = {};
 
     if (searchQuery !== "undefined") {
       query.$or = [{ token: { $regex: searchQuery, $options: "i" } }];
@@ -63,7 +62,7 @@ export async function PUT(req: NextRequest) {
           password: hashedPassword,
         },
       },
-      { new: true }
+      { returnDocument: 'after' }
     );
 
     await ResetPassword.deleteOne({ userId: body.userId });

@@ -1,6 +1,5 @@
 import User from "@/database/user.model";
 import { connectToDatabase } from "@/lib/actions/mongoose";
-import { FilterQuery } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -25,7 +24,7 @@ export async function GET(req: NextRequest) {
 
   try {
     await connectToDatabase();
-    const query: FilterQuery<typeof User> = {};
+    const query: Record<string, unknown> = {};
 
     if (searchQuery !== "undefined") {
       query.$or = [
