@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url("../styles/theme.css");
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -18,8 +19,8 @@
   --color-light-400: #858ead;
   --color-accent-blue: #1da1f2;
 
-  --font-family-inter: var(--font-inter);
-  --font-family-space-grotesk: var(--font-space-grotesk);
+  --font-inter: var(--font-inter);
+  --font-space-grotesk: var(--font-space-grotesk);
 
   --shadow-light-100: 0px 12px 20px 0px rgba(184, 184, 184, 0.03), 0px 6px 12px 0px;
   --shadow-light-200: 10px 10px 20px 0px rgba(218, 213, 213, 0.10);
@@ -29,11 +30,15 @@
 
   --breakpoint-xs: 420px;
   --breakpoint-3xl: 1639px;
+
+  --bg-auth-dark: url('/assets/images/auth-dark.png');
+  --bg-auth-light: url('/assets/images/auth-light.png');
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
 }
 
 @plugin "@tailwindcss/typography";
-
-@import url("../styles/theme.css");
 
 .fade-anim img {
   animation: fadeAnim 0.5s ease-out;
