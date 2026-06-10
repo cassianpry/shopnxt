@@ -1,6 +1,6 @@
 import { connectToDatabase } from "@/lib/actions/mongoose";
 import { NextRequest, NextResponse } from "next/server";
-import { Genres } from "@/database/genre.model";
+import Genres from "@/database/genre.model";
 import slugify from "slugify";
 
 export async function GET(req: NextRequest) {

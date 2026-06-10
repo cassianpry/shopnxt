@@ -245,17 +245,6 @@ export const UserOrderSchema = z.object({
         message: "Expirada ou inválida",
       }
     ),
-  // month: z
-  //   .string({ required_error: "Inválido" })
-  //   .regex(/^(0?[1-9]|1[0-2])$/i, "Mês 01 a 12")
-  //   .length(2, { message: "Mês inválido" }),
-
-  // year: z
-  //   .string({ required_error: "Inválido" })
-  //   .length(2, { message: "Ano inválido" })
-  //   .regex(/^[0-9]+$/i, "Apenas números.")
-  //   .refine((data) => parseInt(data) >= 24, { message: "Expirado" }),
-
   cvv: z
     .string({ required_error: "Inválido" })
     .length(3, { message: "CVV inválido" })

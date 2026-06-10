@@ -67,14 +67,10 @@ export const authOptions = {
 
         let dbUser = await User.findOne({ email: user.email });
 
-        //Gera uma senha aleatória
-        //const hashedPassword = await generateHashedPassword();
-
         if (!dbUser) {
           dbUser = await User.create({
             name: user.name,
             username: user.name,
-            //password: hashedPassword,
             email: user.email,
             avatar: user.image,
           });

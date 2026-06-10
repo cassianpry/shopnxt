@@ -1,4 +1,4 @@
-import { Genres } from "@/database/genre.model";
+import Genres from "@/database/genre.model";
 import { connectToDatabase } from "@/lib/actions/mongoose";
 import { NextRequest, NextResponse } from "next/server";
 import slugify from "slugify";

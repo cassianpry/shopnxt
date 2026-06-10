@@ -10,4 +10,5 @@ const GenresSchema = new Schema<IGenre>(
   { timestamps: true }
 );
 
-export const Genres = models?.Genres || model("Genres", GenresSchema);
+const Genres = models?.Genres || model("Genres", GenresSchema);
+export default Genres;
