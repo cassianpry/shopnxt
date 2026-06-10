@@ -1,7 +1,9 @@
 // @vitest-environment jsdom
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, screen, cleanup } from "@testing-library/react";
 import React from "react";
+
+afterEach(cleanup);
 
 vi.mock("next/link", () => ({
   default: ({
@@ -57,14 +59,12 @@ describe("ProductCard", () => {
   };
 
   it("renders product information", () => {
-    cleanup();
     render(<ProductCard {...defaultProps} />);
-    expect(screen.getByText("Test Game")).toBeDefined();
-    expect(screen.getByText("Another Game")).toBeDefined();
+    expect(screen.getByText("Test Game")).toBeInTheDocument();
+    expect(screen.getByText("Another Game")).toBeInTheDocument();
   });
 
   it("renders free label when price is 0", () => {
-    cleanup();
     const freeProducts = mockProducts.map((p) => ({ ...p, price: "0" }));
     render(
       <ProductCard {...defaultProps} products={freeProducts} />
@@ -73,7 +73,6 @@ describe("ProductCard", () => {
   });
 
   it("renders loading state when isLoading is true", () => {
-    cleanup();
     const { container } = render(
       <ProductCard {...defaultProps} isLoading={true} />
     );

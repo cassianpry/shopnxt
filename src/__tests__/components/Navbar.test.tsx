@@ -1,7 +1,9 @@
 // @vitest-environment jsdom
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, screen, cleanup } from "@testing-library/react";
 import React from "react";
+
+afterEach(cleanup);
 
 vi.mock("next-auth/react", () => ({
   useSession: () => ({ data: null, status: "unauthenticated" }),
@@ -27,26 +29,22 @@ import Navbar from "@/components/navbar/Navbar";
 
 describe("Navbar", () => {
   it("renders navigation element", () => {
-    cleanup();
     render(
       <Navbar user={null as any} status="unauthenticated" />
     );
-    expect(screen.getByRole("navigation")).toBeDefined();
+    expect(screen.getByRole("navigation")).toBeInTheDocument();
   });
 
   it("shows login links when unauthenticated", () => {
-    cleanup();
     render(<Navbar user={null as any} status="unauthenticated" />);
-    const loginLinks = screen.getAllByText("login");
-    expect(loginLinks.length).toBeGreaterThan(0);
-    expect(screen.getByText("cadastre-se")).toBeDefined();
+    expect(screen.getAllByText("login").length).toBeGreaterThan(0);
+    expect(screen.getByText("cadastre-se")).toBeInTheDocument();
   });
 
   it("shows user menu when authenticated", () => {
-    cleanup();
     const user = { _id: "1", name: "Test User", email: "test@test.com" };
     render(<Navbar user={user} status="authenticated" />);
-    expect(screen.getByTestId("user-menu")).toBeDefined();
-    expect(screen.getByText("Olá, Test User")).toBeDefined();
+    expect(screen.getByTestId("user-menu")).toBeInTheDocument();
+    expect(screen.getByText("Olá, Test User")).toBeInTheDocument();
   });
 });
