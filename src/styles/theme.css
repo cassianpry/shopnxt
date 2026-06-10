@@ -1,7 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @layer utilities {
   .background-light850_dark100 {
     @apply bg-light-850 dark:bg-dark-100;
@@ -16,11 +12,14 @@
   }
 
   .background-light800_darkgradient {
-    @apply bg-light-800 dark:dark-gradient;
+    @apply bg-light-800;
+  }
+  .dark .background-light800_darkgradient {
+    background: linear-gradient(232deg, rgba(23, 28, 35, 0.41) 0%, rgba(19, 22, 28, 0.7) 100%);
   }
 
   .background-light800_dark400 {
-    @apply bg-light-800 dark:bg-dark-400 !important;
+    @apply bg-light-800 dark:bg-dark-400;
   }
 
   .background-light700_dark400 {
@@ -36,11 +35,11 @@
   }
 
   .background-light800_dark300 {
-    @apply bg-light-800 dark:bg-dark-300 !important;
+    @apply bg-light-800 dark:bg-dark-300;
   }
 
   .text-dark100_light900 {
-    @apply text-dark-100 dark:text-light-900 !important;
+    @apply text-dark-100 dark:text-light-900;
   }
 
   .text-dark200_light900 {
@@ -48,7 +47,7 @@
   }
 
   .text-dark200_light800 {
-    @apply text-dark-200 dark:text-light-800 !important;
+    @apply text-dark-200 dark:text-light-800;
   }
 
   .text-dark300_light700 {
@@ -60,7 +59,7 @@
   }
 
   .text-dark500_light700 {
-    @apply text-dark-500 dark:text-light-700 !important;
+    @apply text-dark-500 dark:text-light-700;
   }
 
   .text-dark500_light500 {
@@ -72,7 +71,7 @@
   }
 
   .text-dark300_light900 {
-    @apply text-dark-300 dark:text-light-900 !important;
+    @apply text-dark-300 dark:text-light-900;
   }
 
   .text-dark400_light800 {
@@ -80,7 +79,7 @@
   }
 
   .text-light400_light500 {
-    @apply text-light-400 dark:text-light-500 !important;
+    @apply text-light-400 dark:text-light-500;
   }
 
   .text-dark400_light500 {
@@ -88,11 +87,11 @@
   }
 
   .text-dark400_light900 {
-    @apply text-dark-400 dark:text-light-900 !important;
+    @apply text-dark-400 dark:text-light-900;
   }
 
   .text-light400_light500 {
-    @apply text-light-400 dark:text-light-500 !important;
+    @apply text-light-400 dark:text-light-500;
   }
 
   .light-border {
@@ -100,7 +99,7 @@
   }
 
   .light-border-2 {
-    @apply border-light-700 dark:border-dark-400 !important;
+    @apply border-light-700 dark:border-dark-400;
   }
 
   .h1-bold {
@@ -172,7 +171,7 @@
   }
 
   .subtle-medium {
-    @apply text-[10px] font-medium leading-[13px] !important;
+    @apply text-[10px] font-medium leading-[13px];
   }
 
   .subtle-regular {
@@ -200,7 +199,7 @@
   }
 
   .active {
-    @apply underline text-blue-600 !important;
+    @apply underline text-blue-600;
   }
 
   .dark-gradient {
