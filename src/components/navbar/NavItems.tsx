@@ -21,7 +21,7 @@ const NavItems = () => {
           <p
             className={`${
               active === item.id ? "text-accent" : "text-text-body"
-            } h2-bold text-lg font-spaceGrotesk hover:text-accent pl-1 max-sm:text-lg transition-colors`}
+            } text-lg font-spaceGrotesk hover:text-accent pl-1 max-sm:text-lg transition-colors`}
           >
             {item.name}
           </p>

@@ -9,7 +9,7 @@ function AdminNav() {
       <div className="flex flex-row items-center gap-10 w-full">
         <Link className="flex items-center gap-1" href="/">
           <BsJoystick className="text-text-high w-10 h-10 max-sm:hidden" />
-          <p className="h2-bold text-3xl font-spaceGrotesk text-text-high max-sm:hidden pl-1">
+          <p className="text-3xl font-bold font-spaceGrotesk text-text-high max-sm:hidden pl-1">
             Bit<span className="text-accent">World</span>
           </p>
         </Link>

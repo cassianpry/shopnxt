@@ -33,7 +33,7 @@ const UserOrder = () => {
           </div>
         </div>
       ) : (
-        <div className="flex text-dark400_light900 justify-between">
+        <div className="flex text-text-high justify-between">
           <div className="flex flex-col gap-3 max-w-[50%]">
             <div className="flex flex-col items-center">
               <MdOutlineCheckCircle className="text-green-600 w-48 h-48" />

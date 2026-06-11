@@ -16,7 +16,7 @@ const ProfileEditPage = () => {
 
   return (
     <div className="mt-0">
-      <h1 className="text-4xl text-center font-bold tracking-tight sm:text-6xl text-dark400_light900">
+      <h1 className="text-4xl text-center font-bold tracking-tight sm:text-6xl text-text-high">
         Perfil de usuário
       </h1>
       {status === "loading" ? (

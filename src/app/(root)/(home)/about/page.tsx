@@ -9,7 +9,7 @@ import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 export default function About() {
   return (
     <>
-      <div className="py-20 mx-auto text-center flex flex-col items-center max-w-3xl text-dark400_light900">
+      <div className="py-20 mx-auto text-center flex flex-col items-center max-w-3xl text-text-high">
         <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
           Sua loja com os melhores&nbsp;
           <span className="text-blue-600">jogos digitais</span>.
@@ -29,7 +29,7 @@ export default function About() {
           </Link>
         </div>
       </div>
-      <section className="bg-blue-950 flex items-center justify-center w-full">
+      <section className="bg-dark-200 flex items-center justify-center w-full">
         <MaxWidthWrapper className="py-10 ">
           <div className="grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-3 ">
             {perks.map((perk) => (

@@ -24,7 +24,7 @@ function WishList() {
         </div>
       ) : (
         <div className="">
-          <h1 className="h1-bold text-dark400_light900">Lista de desejos</h1>
+          <h1 className="text-4xl font-bold text-text-high font-spaceGrotesk">Lista de desejos</h1>
           <Separator orientation="horizontal" className="bg-light-400" />
           {wishlistResult?.data?.wishlist?.products.length === 0 ||
           wishlistResult?.data?.wishlist?.products.length === undefined ? (

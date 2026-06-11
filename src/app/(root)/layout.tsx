@@ -15,7 +15,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <QueryClientProvider client={queryClient}>
       <CartProvider>
-        <main className="background-light800_dark300 flex flex-col min-h-screen">
+        <main className="bg-dark-100 flex flex-col min-h-screen">
           <div style={{ flex: 1 }}>
             <Navbar user={data?.user as UserProps} status={status} />
             <div className="container flex">

@@ -27,7 +27,7 @@ const UserOrders = () => {
   console.log(orders?.data);
 
   return (
-    <div className="flex text-dark400_light900 max-w-[700px]">
+    <div className="flex text-text-high max-w-[700px]">
       {(data?.user && orders?.data === null) || orders?.data?.length === 0 ? (
         <div className="flex flex-col items-center justify-center text-center">
           <span className="mt-10 text-3xl font-bold">

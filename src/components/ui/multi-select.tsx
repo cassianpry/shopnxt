@@ -50,7 +50,7 @@ const MultiSelect = forwardRef<HTMLButtonElement, MultiSelectProps>(
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className={`w-full justify-between background-light800_dark300 ${
+            className={`w-full justify-between bg-dark-300 ${
               selected.length > 1 ? "h-full p-2" : "h-9 p-4"
             }`}
             onClick={() => setOpen(!open)}
@@ -61,7 +61,7 @@ const MultiSelect = forwardRef<HTMLButtonElement, MultiSelectProps>(
                     <Badge
                       variant="secondary"
                       key={item}
-                      className="mr-1 mb-1 background-light800_dark300"
+                      className="mr-1 mb-1 bg-dark-300"
                       onClick={() => handleUnselect(item)}
                     >
                       {options.find((option) => item === option._id)?.name}
@@ -94,7 +94,7 @@ const MultiSelect = forwardRef<HTMLButtonElement, MultiSelectProps>(
             <CommandGroup className="max-h-64 overflow-auto">
               {options.map((option) => (
                 <CommandItem
-                  className="hover:background-light700_dark300"
+                  className="hover:bg-dark-400"
                   key={option._id}
                   onSelect={() => {
                     onChange(
