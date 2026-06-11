@@ -13,7 +13,7 @@ function Browse(props: SearchParamsProps) {
   return (
     <div className="bg-dark-100 min-h-screen">
       <div className="flex max-w-[1400px] mx-auto px-4 sm:px-6 gap-6 pt-24 pb-12">
-        <aside className="w-56 shrink-0 hidden lg:block">
+        <aside className="w-64 shrink-0 hidden lg:block sticky top-24 self-start">
           <div className="bg-dark-300 rounded-lg p-4 mb-4">
             <h3 className="text-text-high font-medium text-sm mb-3 uppercase tracking-wider">
               Buscar
