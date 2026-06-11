@@ -213,8 +213,8 @@
 
 body {
   font-family: "Inter", sans-serif;
-  background-color: #0f1117;
-  color: #94a3b8;
+  background-color: var(--color-dark-200);
+  color: var(--color-text-body);
 }
 
 @layer utilities {
@@ -306,7 +306,7 @@ body {
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #151821;
+  background: var(--color-dark-300);
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
@@ -320,7 +320,7 @@ body {
 
 /* Markdown Start */
 .markdown a {
-  color: #1da1f2;
+  color: var(--color-accent);
 }
 
 .markdown a,
@@ -338,7 +338,7 @@ code {
   hyphens: auto;
 
   padding: 2px;
-  color: #ff7000;
+  color: var(--color-text-body);
 }
 
 .markdown pre {
