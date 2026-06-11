@@ -70,41 +70,55 @@ export async function GET(req: NextRequest) {
   }
 }
 
+import { ProductFormSchema } from "@/lib/actions/validations";
+
 export async function POST(req: NextRequest) {
   const data = await req.json();
   try {
+    const parsed = ProductFormSchema.safeParse(data);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.flatten().fieldErrors },
+        { status: 400 }
+      );
+    }
+
+    const validated = parsed.data;
+    delete validated._id;
+
     await connectToDatabase();
 
-    data.slug = slugify(data.name).toLowerCase();
-    const existingProduct = await Product.find({ slug: data.slug });
+    const existingProduct = await Product.find({
+      slug: slugify(validated.name).toLowerCase(),
+    });
     if (existingProduct.length > 0) {
       return NextResponse.json(
-        { error: "Produto já cadastrado!", existingProduct },
+        { error: "Produto já cadastrado!" },
         { status: 400 }
       );
     }
 
     const product = await Product.create({
-      name: data.name,
-      slug: slugify(data.name),
-      description: data.description,
-      shortDescription: data.shortDescription,
-      about: data.about,
-      productImage: data.productImage,
+      name: validated.name,
+      slug: slugify(validated.name),
+      description: validated.description,
+      shortDescription: validated.shortDescription,
+      about: validated.about,
+      productImage: validated.productImage,
       genres: [],
-      developer: data.developer,
-      publisher: data.publisher,
-      system: data.system,
-      processor: data.processor,
-      memory: data.memory,
-      storage: data.storage,
-      graphicCard: data.graphicCard,
-      price: data.price,
-      active: data.active,
+      developer: validated.developer,
+      publisher: validated.publisher,
+      system: validated.system,
+      processor: validated.processor,
+      memory: validated.memory,
+      storage: validated.storage,
+      graphicCard: validated.graphicCard,
+      price: validated.price,
+      active: validated.active,
     });
 
     const genreDocuments = [];
-    for (const genre of data.genres) {
+    for (const genre of validated.genres) {
       const existingGenre = await Genres.findById(genre);
 
       genreDocuments.push({
@@ -113,13 +127,16 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const productWithGenres = await Product.findByIdAndUpdate(product._id, {
+    await Product.findByIdAndUpdate(product._id, {
       $push: { genres: { $each: genreDocuments } },
     });
 
-    return NextResponse.json("Produto criado", productWithGenres);
+    return NextResponse.json("Produto criado");
   } catch (error) {
     console.log(error);
-    return NextResponse.json(error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }

@@ -1,45 +1,67 @@
-// export { default } from "next-auth/middleware";
 import { withAuth } from "next-auth/middleware";
 import { JWT } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
-interface CustomNextRequest extends NextRequest {
-  nextauth?: {
-    token?: {
-      user?: {
-        role?: string | null | undefined;
-      };
-    };
-  };
-}
+const PUBLIC_API_ROUTES = [
+  "/api/auth",
+  "/api/register",
+  "/api/forgot-password",
+];
+
+const PUBLIC_READ_API_ROUTES = ["/api/product", "/api/genre"];
 
 export const config = {
   matcher: ["/dashboard/:path*", "/cart", "/profile/:path*", "/api/:path*"],
 };
 
 export const proxy = (withAuth as any)(
-  async function proxy(req: CustomNextRequest): Promise<NextResponse | void> {
-    const url = req?.nextUrl?.pathname;
-    const userRole = req?.nextauth?.token?.user?.role;
+  async function middleware(req: NextRequest): Promise<NextResponse | void> {
+    const url = req.nextUrl.pathname;
+    const token: JWT | null = (req as any).nextauth?.token ?? null;
+
+    const isPublicApi = PUBLIC_API_ROUTES.some((route) =>
+      url.startsWith(route),
+    );
+    if (url.startsWith("/api") && isPublicApi) {
+      return;
+    }
+
+    if (!token) {
+      const signInUrl = new URL("/sign-in", req.url);
+      signInUrl.searchParams.set("callbackUrl", url);
+      return NextResponse.redirect(signInUrl);
+    }
+
+    const userRole = (token.user as { role?: string })?.role;
+
+    if (url.startsWith("/dashboard") && userRole !== "admin") {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
 
     if (
-      (url?.includes("/dashboard") || url?.includes("/api")) &&
+      url.startsWith("/api") &&
+      !PUBLIC_READ_API_ROUTES.some((r) => url.startsWith(r)) &&
       userRole !== "admin"
     ) {
-      return NextResponse.redirect(new URL("/", req.url));
+      const method = req.method;
+      const isReadRoute = PUBLIC_READ_API_ROUTES.some((r) =>
+        url.startsWith(r),
+      );
+      if (!isReadRoute) {
+        return NextResponse.redirect(new URL("/", req.url));
+      }
+      if (isReadRoute && method !== "GET") {
+        return NextResponse.redirect(new URL("/", req.url));
+      }
     }
   },
   {
     callbacks: {
       authorized: ({ token }: { token: JWT | null }) => {
-        if (!token) {
-          return false;
-        }
-
         return true;
       },
     },
-  }
+  },
 );
 
 export default proxy;

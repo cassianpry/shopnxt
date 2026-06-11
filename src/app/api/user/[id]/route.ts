@@ -1,5 +1,8 @@
 import User from "@/database/user.model";
 import { connectToDatabase } from "@/lib/actions/mongoose";
+import { authOptions } from "@/lib/authOptions";
+import { getServerSession } from "next-auth";
+import type { Session } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 interface contextProps {
@@ -34,20 +37,29 @@ export async function PUT(req: NextRequest, context: contextProps) {
   try {
     await connectToDatabase();
 
+    const session = (await getServerSession(authOptions)) as Session | null;
+    if (!session?.user) {
+      return NextResponse.json({ error: "Não autenticado" }, { status: 401 });
+    }
+
+    const sessionUser = session.user as { _id?: string; role?: string };
+    if (sessionUser._id !== params.id && sessionUser.role !== "admin") {
+      return NextResponse.json({ error: "Não autorizado" }, { status: 403 });
+    }
+
+    const updateFields: Record<string, string> = {
+      name: data.name,
+      email: data.email?.toLowerCase(),
+      address: data.address,
+      postalCode: data.postalCode,
+      phone: data.phone,
+      city: data.city,
+      state: data.state,
+    };
+
     const user = await User.findByIdAndUpdate(
       params.id,
-      {
-        $set: {
-          name: data.name,
-          email: data.email.toLowerCase(),
-          address: data.address,
-          postalCode: data.postalCode,
-          phone: data.phone,
-          city: data.city,
-          state: data.state,
-          role: data.role,
-        },
-      },
+      { $set: updateFields },
       { returnDocument: 'after' }
     );
 

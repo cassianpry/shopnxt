@@ -1,4 +1,5 @@
 import { Schema, model, models } from "mongoose";
+import crypto from "crypto";
 
 const ResetPasswordSchema = new Schema(
   {
@@ -17,6 +18,12 @@ const ResetPasswordSchema = new Schema(
   },
   { timestamps: true }
 );
+
+ResetPasswordSchema.pre("save", async function () {
+  if (this.isModified("token")) {
+    this.token = crypto.createHash("sha256").update(this.token).digest("hex");
+  }
+});
 
 const ResetPassword =
   models?.ResetPassword || model("ResetPassword", ResetPasswordSchema);

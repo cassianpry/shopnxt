@@ -27,16 +27,16 @@ describe("ForgotPasswordSchema", () => {
 describe("ResetPasswordSchema", () => {
   it("validates matching passwords", () => {
     const result = ResetPasswordSchema.safeParse({
-      password: "12345",
-      confirm_password: "12345",
+      password: "Abc12345",
+      confirm_password: "Abc12345",
     });
     expect(result.success).toBe(true);
   });
 
   it("rejects mismatched passwords", () => {
     const result = ResetPasswordSchema.safeParse({
-      password: "12345",
-      confirm_password: "54321",
+      password: "Abc12345",
+      confirm_password: "Xyz67890",
     });
     expect(result.success).toBe(false);
   });
@@ -101,9 +101,6 @@ describe("UserOrderSchema", () => {
     state: "SP",
     city: "São Paulo",
     phone: "11999999999",
-    cardNumber: "1234567890123456",
-    expireDate: "12/30",
-    cvv: "123",
     checkAddress: true,
     billingAddress: "Rua A, 123",
     billingPostalCode: "12345-678",
@@ -114,21 +111,5 @@ describe("UserOrderSchema", () => {
   it("validates a correct order", () => {
     const result = UserOrderSchema.safeParse(validOrder);
     expect(result.success).toBe(true);
-  });
-
-  it("rejects order with invalid card number", () => {
-    const result = UserOrderSchema.safeParse({
-      ...validOrder,
-      cardNumber: "123",
-    });
-    expect(result.success).toBe(false);
-  });
-
-  it("rejects order with expired card date", () => {
-    const result = UserOrderSchema.safeParse({
-      ...validOrder,
-      expireDate: "01/20",
-    });
-    expect(result.success).toBe(false);
   });
 });

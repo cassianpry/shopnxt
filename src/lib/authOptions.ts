@@ -4,6 +4,7 @@ import User from "@/database/user.model";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
+import type { AuthOptions } from "next-auth";
 import { connectToDatabase } from "./actions/mongoose";
 
 interface CredentialsProps {
@@ -11,23 +12,7 @@ interface CredentialsProps {
   password: string;
 }
 
-interface UserProps {
-  token: {
-    user: Object;
-    email: string;
-  };
-  session: {
-    user: Object;
-  };
-  user: {
-    name?: string;
-    password?: string;
-    email?: string;
-    image?: string;
-  };
-}
-
-export const authOptions = {
+export const authOptions: AuthOptions = {
   session: { strategy: "jwt" },
   providers: [
     CredentialsProvider({
@@ -55,9 +40,8 @@ export const authOptions = {
       clientSecret: process.env.GITHUB_SECRET ?? "",
     }),
   ],
-  //send user social login(Google or Github) to database
   callbacks: {
-    async signIn({ user }: UserProps) {
+    async signIn({ user }) {
       if (!user || !user.email) {
         throw new Error("Email do usuário não fornecido.");
       }
@@ -82,15 +66,21 @@ export const authOptions = {
         return false;
       }
     },
-    jwt: async ({ token }: UserProps) => {
-      const userByEmail = await User.findOne({ email: token.email });
-      userByEmail.password = undefined;
-      userByEmail.resetCode = undefined;
-      token.user = userByEmail!;
+    async jwt({ token }) {
+      const userByEmail = await User.findOne({ email: token.email }).lean();
+      if (userByEmail) {
+        token.user = {
+          _id: userByEmail._id,
+          name: userByEmail.name,
+          email: userByEmail.email,
+          role: userByEmail.role,
+          image: userByEmail.image ?? null,
+        };
+      }
       return token;
     },
-    session: async ({ session, token }: UserProps) => {
-      session.user = token.user;
+    async session({ session, token }) {
+      session.user = token.user as typeof session.user;
       return session;
     },
   },

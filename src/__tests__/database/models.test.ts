@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll, afterEach } from "vitest";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
+import crypto from "crypto";
 import User from "@/database/user.model";
 import { Product } from "@/database/product.model";
 import Order from "@/database/order.model";
@@ -116,6 +117,7 @@ describe("ResetPassword Model", () => {
       token: "some-token",
       user: [{ _id: user._id, email: user.email }],
     });
-    expect(entry.token).toBe("some-token");
+    const expectedHash = crypto.createHash("sha256").update("some-token").digest("hex");
+    expect(entry.token).toBe(expectedHash);
   });
 });

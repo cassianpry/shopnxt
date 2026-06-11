@@ -1,6 +1,9 @@
 import User from "@/database/user.model";
 import WishList from "@/database/wishlist.model";
 import { connectToDatabase } from "@/lib/actions/mongoose";
+import { authOptions } from "@/lib/authOptions";
+import { getServerSession } from "next-auth";
+import type { Session } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 interface contextProps {
@@ -17,6 +20,12 @@ export async function GET(req: NextRequest, context: contextProps) {
   } else {
     try {
       await connectToDatabase();
+
+      const session = (await getServerSession(authOptions)) as Session | null;
+      const sessionUser = session?.user as { _id?: string } | undefined;
+      if (!sessionUser || sessionUser._id !== params.id) {
+        return NextResponse.json({ error: "Não autorizado" }, { status: 403 });
+      }
 
       const userExists = await User.findById(params.id);
 
@@ -47,6 +56,12 @@ export async function DELETE(req: NextRequest, context: contextProps) {
   } else {
     try {
       await connectToDatabase();
+
+      const session = (await getServerSession(authOptions)) as Session | null;
+      const sessionUser = session?.user as { _id?: string } | undefined;
+      if (!sessionUser || sessionUser._id !== params.id) {
+        return NextResponse.json({ error: "Não autorizado" }, { status: 403 });
+      }
 
       const wishListProductDelete = await WishList.updateOne(
         { user: params.id },

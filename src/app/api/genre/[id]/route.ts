@@ -1,5 +1,6 @@
 import Genres from "@/database/genre.model";
 import { connectToDatabase } from "@/lib/actions/mongoose";
+import { GenreFormSchema } from "@/lib/actions/validations";
 import { NextRequest, NextResponse } from "next/server";
 import slugify from "slugify";
 
@@ -18,8 +19,9 @@ export async function GET(req: NextRequest, context: contextProps) {
 
     return NextResponse.json(category);
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
-      { message: "Could not fetch category" },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }
@@ -29,22 +31,34 @@ export async function PUT(req: NextRequest, context: contextProps) {
   const params = await context.params;
 
   try {
-    await connectToDatabase();
     const data = await req.json();
+
+    const parsed = GenreFormSchema.safeParse(data);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.flatten().fieldErrors },
+        { status: 400 }
+      );
+    }
+
+    const { name } = parsed.data;
+
+    await connectToDatabase();
     const genre = await Genres.findByIdAndUpdate(
       params.id,
       {
         $set: {
-          name: data.name,
-          slug: slugify(data.name),
+          name,
+          slug: slugify(name),
         },
       },
       { returnDocument: 'after' }
     );
     return NextResponse.json(genre);
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
-      { message: "Could not update category" },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }

@@ -1,4 +1,5 @@
 import { connectToDatabase } from "@/lib/actions/mongoose";
+import { GenreFormSchema } from "@/lib/actions/validations";
 import { NextRequest, NextResponse } from "next/server";
 import Genres from "@/database/genre.model";
 import slugify from "slugify";
@@ -51,8 +52,18 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
 
   try {
+    const parsed = GenreFormSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.flatten().fieldErrors },
+        { status: 400 }
+      );
+    }
+
+    const { name } = parsed.data;
+
     await connectToDatabase();
-    const existingGenre = await Genres.findOne({ name: body.name });
+    const existingGenre = await Genres.findOne({ name });
 
     if (existingGenre) {
       return NextResponse.json(
@@ -62,11 +73,15 @@ export async function POST(req: NextRequest) {
     }
 
     const genre = await Genres.create({
-      name: body.name,
-      slug: slugify(body.name),
+      name,
+      slug: slugify(name),
     });
     return NextResponse.json({ success: "Categoria Criada", genre });
   } catch (error) {
-    return NextResponse.json((error as Error).message, { status: 500 });
+    console.log(error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }

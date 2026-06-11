@@ -1,5 +1,6 @@
 import Order from "@/database/order.model";
 import { connectToDatabase } from "@/lib/actions/mongoose";
+import { UserOrderSchema } from "@/lib/actions/validations";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -84,13 +85,31 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   const data = await req.json();
-  const userId = data.values._id;
-  delete data.values._id;
   try {
+    const parsed = UserOrderSchema.safeParse(data.values);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.flatten().fieldErrors },
+        { status: 400 }
+      );
+    }
+
+    const validated = parsed.data;
+    const userId = validated._id;
+    delete validated._id;
+    delete (validated as any).cardNumber;
+    delete (validated as any).expireDate;
+    delete (validated as any).cvv;
+    delete (validated as any).checkAddress;
+
     await connectToDatabase();
-    const order = await Order.create(data.values);
+    const order = await Order.create(validated);
     return NextResponse.json({ userId, orderId: order.orderNum });
   } catch (error) {
-    return NextResponse.json((error as Error).message, { status: 500 });
+    console.log(error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }

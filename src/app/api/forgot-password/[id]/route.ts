@@ -1,6 +1,7 @@
 import ResetPassword from "@/database/resetpasswd.model";
 import User from "@/database/user.model";
 import { connectToDatabase } from "@/lib/actions/mongoose";
+import { ForgotPasswordSchema } from "@/lib/actions/validations";
 import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
@@ -9,12 +10,18 @@ import moment from "moment";
 export async function POST(req: NextRequest) {
   const body = await req.json();
   try {
+    const parsed = ForgotPasswordSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.flatten().fieldErrors },
+        { status: 400 }
+      );
+    }
+
+    const { email } = parsed.data;
     await connectToDatabase();
-    console.log("Checando usuário=>", body.email);
-    //Validation if a email or username exists in DB
-    const existingUser = await User.findOne({
-      email: body.email,
-    });
+    console.log("Checando usuário=>", email);
+    const existingUser = await User.findOne({ email });
 
     if (!existingUser) {
       throw new Error("E-mail já enviado ou usuário não existe");
@@ -28,9 +35,10 @@ export async function POST(req: NextRequest) {
     //   await ResetPassword.deleteOne({ userId: existingUser._id });
     // }
 
+    const rawToken = `${randomUUID()}${randomUUID()}`.replace(/-/g, "");
     const resetData = await ResetPassword.create({
       userId: existingUser._id,
-      token: `${randomUUID()}${randomUUID()}`.replace(/-/g, ""),
+      token: rawToken,
       user: [{ _id: existingUser._id, email: existingUser.email }],
       resetAt: Date.now(),
     });
@@ -719,7 +727,7 @@ export async function POST(req: NextRequest) {
                                       <div align="left">
                                         <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="" style="height:51px; v-text-anchor:middle; width:205px;" arcsize="2%"  stroke="f" fillcolor="#18163a"><w:anchorlock/><center style="color:#FFFFFF;"><![endif]-->
                                         <a
-                                          href=${process.env.BASE_URL}reset-password?token=${resetData.token}
+                                          href=${process.env.BASE_URL}reset-password?token=${rawToken}
                                           target="_blank"
                                           class="v-button"
                                           style="
@@ -857,6 +865,10 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json("Redefinição de senha recebida.");
   } catch (error) {
-    throw new Error();
+    console.log(error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }

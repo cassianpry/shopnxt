@@ -6,8 +6,8 @@ describe("SignUpSchema", () => {
     const result = SignUpSchema.safeParse({
       name: "João Silva",
       email: "joao@email.com",
-      password: "12345",
-      confirm_password: "12345",
+      password: "Abc12345",
+      confirm_password: "Abc12345",
     });
     expect(result.success).toBe(true);
   });
@@ -16,8 +16,8 @@ describe("SignUpSchema", () => {
     const result = SignUpSchema.safeParse({
       name: "João Silva",
       email: "joao@email.com",
-      password: "12345",
-      confirm_password: "54321",
+      password: "Abc12345",
+      confirm_password: "Xyz67890",
     });
     expect(result.success).toBe(false);
   });
@@ -26,8 +26,8 @@ describe("SignUpSchema", () => {
     const result = SignUpSchema.safeParse({
       name: "Jo",
       email: "joao@email.com",
-      password: "12345",
-      confirm_password: "12345",
+      password: "Abc12345",
+      confirm_password: "Abc12345",
     });
     expect(result.success).toBe(false);
   });
@@ -36,8 +36,8 @@ describe("SignUpSchema", () => {
     const result = SignUpSchema.safeParse({
       name: "João Silva",
       email: "not-an-email",
-      password: "12345",
-      confirm_password: "12345",
+      password: "Abc12345",
+      confirm_password: "Abc12345",
     });
     expect(result.success).toBe(false);
   });
@@ -47,13 +47,13 @@ describe("SignInSchema", () => {
   it("validates correct sign-in payload", () => {
     const result = SignInSchema.safeParse({
       email: "joao@email.com",
-      password: "12345",
+      password: "Abc12345",
     });
     expect(result.success).toBe(true);
   });
 
   it("rejects missing email", () => {
-    const result = SignInSchema.safeParse({ password: "12345" });
+    const result = SignInSchema.safeParse({ password: "Abc12345" });
     expect(result.success).toBe(false);
   });
 });

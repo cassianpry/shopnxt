@@ -100,9 +100,6 @@ export interface OrderProps {
   city: string;
   state: string;
   phone: string;
-  cardNumber: string;
-  expireDate: string;
-  cvv: string;
   checkAddress: boolean;
   billingAddress: string;
   billingPostalCode: string;

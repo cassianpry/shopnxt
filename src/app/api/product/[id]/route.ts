@@ -1,6 +1,7 @@
 import Genres from "@/database/genre.model";
 import { Product } from "@/database/product.model";
 import { connectToDatabase } from "@/lib/actions/mongoose";
+import { ProductFormSchema } from "@/lib/actions/validations";
 import { NextRequest, NextResponse } from "next/server";
 import slugify from "slugify";
 
@@ -19,7 +20,10 @@ export async function GET(req: NextRequest, context: contextProps) {
 
     return NextResponse.json(product);
   } catch (error) {
-    return NextResponse.json((error as Error).message, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }
 
@@ -28,31 +32,42 @@ export async function PUT(req: NextRequest, context: contextProps) {
   const data = await req.json();
 
   try {
+    const parsed = ProductFormSchema.safeParse(data);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.flatten().fieldErrors },
+        { status: 400 }
+      );
+    }
+
+    const validated = parsed.data;
+    delete validated._id;
+
     await connectToDatabase();
 
     const product = await Product.findByIdAndUpdate(params.id, {
       $set: {
-        name: data.name,
-        slug: slugify(data.name),
-        description: data.description,
-        shortDescription: data.shortDescription,
-        about: data.about,
-        productImage: data.productImage,
+        name: validated.name,
+        slug: slugify(validated.name),
+        description: validated.description,
+        shortDescription: validated.shortDescription,
+        about: validated.about,
+        productImage: validated.productImage,
         genres: [],
-        developer: data.developer,
-        publisher: data.publisher,
-        system: data.system,
-        processor: data.processor,
-        memory: data.memory,
-        storage: data.storage,
-        graphicCard: data.graphicCard,
-        price: data.price,
-        active: data.active,
+        developer: validated.developer,
+        publisher: validated.publisher,
+        system: validated.system,
+        processor: validated.processor,
+        memory: validated.memory,
+        storage: validated.storage,
+        graphicCard: validated.graphicCard,
+        price: validated.price,
+        active: validated.active,
       },
     });
 
     const genreDocuments = [];
-    for (const genre of data.genres) {
+    for (const genre of validated.genres) {
       const existingGenre = await Genres.findById(genre);
 
       genreDocuments.push({
@@ -61,13 +76,16 @@ export async function PUT(req: NextRequest, context: contextProps) {
       });
     }
 
-    const productWithGenres = await Product.findByIdAndUpdate(product._id, {
+    await Product.findByIdAndUpdate(product!._id, {
       $push: { genres: { $each: genreDocuments } },
     });
 
-    return NextResponse.json("Produto alterado", productWithGenres);
+    return NextResponse.json("Produto alterado");
   } catch (error) {
     console.log(error);
-    return NextResponse.json((error as Error).message);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }

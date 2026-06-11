@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 //@ts-ignore
 import Prism from "prismjs";
 import parse from "html-react-parser";
+import DOMPurify from "isomorphic-dompurify";
 import "prismjs/components/prism-java";
 import "prismjs/components/prism-c";
 import "prismjs/components/prism-cpp";
@@ -36,7 +37,7 @@ const ParseHTML = ({ data }: ParseHTMLProps) => {
   }, []);
   return (
     <div className="markdown w-full min-w-full text-dark-500 dark:text-light-900">
-      {parse(data)}
+      {parse(DOMPurify.sanitize(data))}
     </div>
   );
 };

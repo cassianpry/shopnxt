@@ -16,9 +16,9 @@ export const SignUpSchema = z
       .email()
       .min(5, { message: "E-mail inválido." }),
 
-    password: z.string().min(5, { message: "Mínimo de 5 caracteres" }),
+    password: z.string().min(8, { message: "Mínimo de 8 caracteres." }).regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, { message: "Deve conter letra maiúscula, minúscula e número." }),
 
-    confirm_password: z.string().min(5, { message: "Mínimo de 5 caracteres" }),
+    confirm_password: z.string().min(8, { message: "Mínimo de 8 caracteres." }),
   })
   .refine((data) => data.password === data.confirm_password, {
     message: "As senhas não são iguais.",
@@ -30,7 +30,7 @@ export const SignInSchema = z.object({
     .string({ error: (issue) => issue.input === undefined ? "E-mail inválido" : "Precisa ser uma string" })
     .email({ message: "E-mail inválido" })
     .min(5, { message: "E-mail inválido." }),
-  password: z.string().min(5, { message: "Mínimo de 5 caracteres" }),
+  password: z.string().min(8, { message: "Mínimo de 8 caracteres." }),
 });
 
 export const ForgotPasswordSchema = z.object({
@@ -44,9 +44,9 @@ export const ResetPasswordSchema = z
   .object({
     userId: z.string().optional(),
 
-    password: z.string().min(5, { message: "Mínimo de 5 caracteres" }),
+    password: z.string().min(8, { message: "Mínimo de 8 caracteres." }).regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, { message: "Deve conter letra maiúscula, minúscula e número." }),
 
-    confirm_password: z.string().min(5, { message: "Mínimo de 5 caracteres" }),
+    confirm_password: z.string().min(8, { message: "Mínimo de 8 caracteres." }),
   })
   .refine((data) => data.password === data.confirm_password, {
     message: "As senhas não são iguais.",
@@ -195,60 +195,6 @@ export const UserOrderSchema = z.object({
     .string({ error: (issue) => issue.input === undefined ? "Inválido" : "Precisa ser uma string" })
     .min(10, { message: "Numero de telefone inválido" })
     .max(11),
-
-  cardNumber: z
-    .string({ error: (issue) => issue.input === undefined ? "Numero do cartão Inválido" : "Precisa ser uma string" })
-    .length(16, { message: "Numero do cartão inválido" })
-    .regex(/^[0-9]+$/i, "Apenas números."),
-
-  expireDate: z
-    .string()
-    .regex(/^(0[1-9]|1[0-2])\/\d{2}$/, "Formato de  MM/AA")
-    .refine(
-      (value) => {
-        // Extrair o mês e o ano da string
-        const [monthStr, yearStr] = value.split("/");
-
-        // Converter os valores para números
-        const month = parseInt(monthStr);
-        const year = parseInt(yearStr);
-
-        // Verificar se o mês é válido (de 1 a 12) e se o ano tem 2 dígitos
-        if (
-          isNaN(month) ||
-          isNaN(year) ||
-          month < 1 ||
-          month > 12 ||
-          year < 0 ||
-          year > 99
-        ) {
-          return false;
-        }
-
-        // Obter o ano atual
-        const currentYear = new Date().getFullYear() % 100; // Pegar apenas os 2 últimos dígitos
-
-        // Obter o mês atual
-        const currentMonth = new Date().getMonth() + 1; // Janeiro é 0, então adicionamos 1
-
-        // Comparar a data inserida com a data atual
-        if (
-          year > currentYear ||
-          (year === currentYear && month > currentMonth)
-        ) {
-          return true; // Data válida
-        } else {
-          return false; // Data expirada
-        }
-      },
-      {
-        message: "Expirada ou inválida",
-      }
-    ),
-  cvv: z
-    .string({ error: (issue) => issue.input === undefined ? "Inválido" : "Precisa ser uma string" })
-    .length(3, { message: "CVV inválido" })
-    .regex(/^[0-9]+$/i, "Inválido."),
 
   checkAddress: z.boolean(),
 

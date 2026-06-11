@@ -46,9 +46,7 @@ function UserCheckoutForm({ user }: ProfileFormProps) {
       phone: user.phone || "",
       city: user.city || "",
       state: user.state || "",
-      cardNumber: "",
-      expireDate: "",
-      cvv: "",
+
       billingAddress: "",
       billingPostalCode: "",
       billingState: "",
@@ -305,109 +303,8 @@ function UserCheckoutForm({ user }: ProfileFormProps) {
                     Informações de pagamento
                   </h1>
                   <p className="font-normal text-xl dark:text-gray-400 pb-2">
-                    Exatamente como esta no seu cartão de crédito
+                    Integração com provedor de pagamento em breve.
                   </p>
-
-                  <div className="flex gap-4">
-                    {/* Card Number */}
-                    <FormField
-                      control={form.control}
-                      name="cardNumber"
-                      render={({ field }) => (
-                        <FormItem className="">
-                          <FormLabel className="text-md font-medium">
-                            <span className="text-red-600">*</span>&nbsp;Nº do
-                            Cartão de crédito
-                          </FormLabel>
-
-                          <FormControl>
-                            <Input
-                              disabled={createOrder.isPending === true}
-                              className="background-light800_dark300 text-center"
-                              type="text"
-                              {...field}
-                              placeholder="ex:1234567891011121"
-                              maxLength={16}
-                            />
-                          </FormControl>
-                          <FormMessage className="text-red-600" />
-                        </FormItem>
-                      )}
-                    />
-                    {/* Expire Date */}
-                    <FormField
-                      control={form.control}
-                      name="expireDate"
-                      render={({ field }) => (
-                        <FormItem className="w-20">
-                          <FormLabel className="text-md font-medium">
-                            <span className="text-red-600">*</span>
-                            &nbsp;Expiração
-                          </FormLabel>
-                          <FormControl>
-                            <Input
-                              disabled={createOrder.isPending === true}
-                              className="background-light800_dark300 text-center"
-                              type="text"
-                              {...field}
-                              placeholder="06/24"
-                              maxLength={5}
-                              minLength={5}
-                            />
-                          </FormControl>
-                          <FormMessage className="text-red-600" />
-                        </FormItem>
-                      )}
-                    />
-                    {/* Year
-                    <FormField
-                      control={form.control}
-                      name="year"
-                      render={({ field }) => (
-                        <FormItem className="w-16">
-                          <FormLabel className="text-md font-medium ">
-                            <span className="text-red-600">*</span>&nbsp;Ano
-                          </FormLabel>
-
-                          <FormControl>
-                            <Input
-                            disabled={createOrder.isPending===true}
-                              className="background-light800_dark300 text-center"
-                              type="text"
-                              {...field}
-                              maxLength={2}
-                              minLength={2}
-                            />
-                          </FormControl>
-                          <FormMessage className="text-red-600" />
-                        </FormItem>
-                      )}
-                    /> */}
-                    {/* CVV */}
-                    <FormField
-                      control={form.control}
-                      name="cvv"
-                      render={({ field }) => (
-                        <FormItem className="w-16">
-                          <FormLabel className="text-md font-medium ">
-                            <span className="text-red-600">*</span>&nbsp;CVV
-                          </FormLabel>
-
-                          <FormControl>
-                            <Input
-                              disabled={createOrder.isPending === true}
-                              className="background-light800_dark300 text-center"
-                              type="text"
-                              {...field}
-                              maxLength={3}
-                              minLength={3}
-                            />
-                          </FormControl>
-                          <FormMessage className="text-red-600" />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
                 </div>
                 <div className="flex flex-col">
                   <h1 className="font-bold text-4xl mt-5 text-center lg:text-left">
