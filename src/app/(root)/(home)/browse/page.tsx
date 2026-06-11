@@ -31,13 +31,12 @@ function Browse(props: SearchParamsProps) {
                   style={{ aspectRatio: 70 / 45 }}
                 >
                   <Image
-                    className="rounded-md"
+                    className="rounded-md w-full h-full"
                     src={product.productImage}
                     fill
                     priority
                     alt=""
                     sizes="(max-width: 768px) 100vw"
-                    style={{ objectFit: "cover" }}
                   />
                 </div>
                 <div className="text-sm font-normal ">
