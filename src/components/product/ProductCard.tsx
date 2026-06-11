@@ -118,8 +118,8 @@ function ProductCard({
                   {product.price === "0" ? (
                     <div className="flex justify-between items-center">
                       <p className="text-text-high font-bold">Gratuito</p>
-                      <Button className="bg-transparent text-text-body border border-dark-500 rounded-md px-4 py-2 text-sm hover:bg-dark-400 hover:text-text-high transition-colors duration-150">
-                        <span className="body-medium">Jogue de graça</span>
+                          <Button className="bg-transparent text-text-body border border-dark-500 rounded-md px-4 py-2 text-sm hover:bg-dark-400 hover:text-text-high transition-colors duration-150">
+                        Jogue de graça
                       </Button>
                     </div>
                   ) : (
@@ -155,17 +155,15 @@ function ProductCard({
                             </Button>
                           </Link>
                         ) : (
-                          <Button
-                            className="bg-transparent text-text-body border border-dark-500 rounded-md px-3 py-2 text-xs hover:bg-dark-400 hover:text-text-high transition-colors duration-150"
-                            onClick={() =>
-                              addToWishList(product._id!, product.slug!)
-                            }
-                          >
-                            <IoMdAddCircleOutline className="w-5 h-5" />&nbsp;
-                            <span className="body-medium">
-                              Lista de desejos
-                            </span>
-                          </Button>
+                            <Button
+                          className="bg-transparent text-text-body border border-dark-500 rounded-md px-3 py-2 text-xs hover:bg-dark-400 hover:text-text-high transition-colors duration-150"
+                          onClick={() =>
+                            addToWishList(product._id!, product.slug!)
+                          }
+                        >
+                          <IoMdAddCircleOutline className="w-5 h-5" />&nbsp;
+                          Lista de desejos
+                        </Button>
                         )}
                       </div>
                     </div>

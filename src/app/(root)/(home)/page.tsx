@@ -3,13 +3,11 @@ import React, { useEffect, useState, use } from "react";
 import { useProducts } from "@/app/services/product/queries";
 import { useWishListUser } from "@/app/services/wishlist/queries";
 import { useSession } from "next-auth/react";
-import { Skeleton } from "@/components/ui/skeleton";
 import { ProductProps, SearchParamsProps } from "@/types/index.d";
 import { ProductCarousel } from "@/components/product/ProductCarousel";
 import { ProductPriceCard } from "@/components/product/ProductPriceCard";
 import ProductCard from "@/components/product/ProductCard";
 import Link from "next/link";
-import LoadingProductCarousel from "@/components/loadings/LoadingProductCarousel";
 import LoadingHome from "@/components/loadings/LoadingHome";
 
 interface userSessionProps {
@@ -54,42 +52,75 @@ function LandingPage(props: SearchParamsProps) {
         <LoadingHome />
       ) : (
         <>
-          <div className="flex justify-start items-center space-x-4 mb-10 text-dark300_light700">
-            <Link
-              href="/"
-              className="hover:dark:text-light-900 hover:text-light-400"
-            >
-              Descobrir
-            </Link>
-            <Link
-              href="/browse"
-              className="hover:dark:text-light-900 hover:text-light-400"
-            >
-              Navegar
-            </Link>
-          </div>
+          <section className="min-h-[70vh] bg-dark-100 flex items-center">
+            <div className="max-w-[1400px] mx-auto px-4 sm:px-6 w-full">
+              <div className="max-w-2xl">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-spaceGrotesk text-text-high">
+                  Descubra o mundo dos jogos em{" "}
+                  <span className="text-accent">BitWorld</span>
+                </h1>
+                <p className="text-text-body text-lg sm:text-xl max-w-xl mt-4">
+                  Explore nossa coleção de jogos digitais e encontre seu
+                  próximo título favorito.
+                </p>
+                <div className="flex flex-row gap-4 mt-8">
+                  <Link
+                    href="/browse"
+                    className="bg-accent hover:bg-accent-hover text-white font-semibold rounded-md px-6 py-3 text-sm transition-colors"
+                  >
+                    Explorar jogos
+                  </Link>
+                  <Link
+                    href="/about"
+                    className="border border-dark-500 text-text-body hover:text-text-high hover:bg-dark-400 rounded-md px-6 py-3 text-sm transition-colors"
+                  >
+                    Saiba mais
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </section>
+
           {products.data?.products?.length > 0 && (
             <>
-              <ProductCarousel
-                products={activeProducts.slice(0, 5)}
-                wishList={wishlistProducts?.data?.wishlist?.products}
-                userId={userId}
-                isLoading={products.isLoading}
-                isWishListed={isWishListed}
-                setIsWishListed={setIsWishListed}
-              />
-              <ProductPriceCard
-                products={activeProducts}
-                title="Jogos em destaque"
-              />
-              <ProductCard
-                products={activeProducts}
-                wishList={wishlistProducts?.data?.wishlist?.products}
-                userId={userId}
-                isLoading={wishlistProducts.isLoading}
-                isWishListed={isWishListed}
-                setIsWishListed={setIsWishListed}
-              />
+              <section className="bg-dark-200 py-12 sm:py-16">
+                <ProductCarousel
+                  products={activeProducts.slice(0, 5)}
+                  wishList={wishlistProducts?.data?.wishlist?.products}
+                  userId={userId}
+                  isLoading={products.isLoading}
+                  isWishListed={isWishListed}
+                  setIsWishListed={setIsWishListed}
+                />
+              </section>
+              <section className="bg-dark-100 py-12 sm:py-16">
+                <div className="max-w-[1400px] mx-auto px-4 sm:px-6">
+                  <div className="flex items-center justify-between mb-8">
+                    <h2 className="text-text-high text-2xl font-bold font-spaceGrotesk">
+                      Jogos em Destaque
+                    </h2>
+                    <Link
+                      href="/browse"
+                      className="text-accent hover:text-accent-hover text-sm transition-colors"
+                    >
+                      Ver todos
+                    </Link>
+                  </div>
+                  <ProductPriceCard products={activeProducts} title="" />
+                </div>
+              </section>
+              <section className="bg-dark-200 py-12 sm:py-16">
+                <div className="max-w-[1400px] mx-auto px-4 sm:px-6">
+                  <ProductCard
+                    products={activeProducts}
+                    wishList={wishlistProducts?.data?.wishlist?.products}
+                    userId={userId}
+                    isLoading={wishlistProducts.isLoading}
+                    isWishListed={isWishListed}
+                    setIsWishListed={setIsWishListed}
+                  />
+                </div>
+              </section>
             </>
           )}
         </>

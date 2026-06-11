@@ -10,7 +10,6 @@ import {
 } from "react-icons/io";
 import { ProductProps } from "@/types/index.d";
 import { useQueryClient } from "@tanstack/react-query";
-import { Skeleton } from "../ui/skeleton";
 import { useCreateWishList } from "@/app/services/wishlist/mutation";
 import LoadingProductCarousel from "../loadings/LoadingProductCarousel";
 
@@ -102,7 +101,7 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({
         <LoadingProductCarousel />
       ) : (
         <div
-          className="max-w-[1100px] m-auto pt-5 relative text-dark400_light900 group"
+          className="max-w-[1100px] m-auto relative text-text-high group"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
@@ -125,14 +124,14 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({
               className="absolute left-0 right-0 bottom-[5%] w-[40%] ml-10 -translate-y-10"
             >
               <div className="flex w-[55%] rounded-lg">
-                <span className="text-light-900 m-1">
+                <span className="text-text-high m-1">
                   {products[currentIndex].shortDescription}
                 </span>
               </div>
               <div className="flex justify-start items-center mt-3 gap-2">
                 <Button
                   asChild
-                  className="focus:shadow-outline flex items-center justify-center rounded-md font-semibold text-xs tracking-wide text-light-900  bg-blue-900 hover:bg-blue-600 transition-all duration-300 ease-in-out uppercase"
+                  className="bg-accent hover:bg-accent-hover text-white font-semibold rounded-md px-6 py-3 text-sm transition-colors uppercase"
                 >
                   <Link href={`/products/${products[currentIndex].slug}`}>
                     Compre já
@@ -146,7 +145,7 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({
                       query: { id: userId },
                     }}
                   >
-                    <Button className="items-center justify-center body-medium tracking-wide text-light-900 hover:text-sm transition-all duration-300 ease-in-out hover:bg-gray-600">
+                    <Button className="items-center justify-center text-sm font-medium tracking-wide text-text-body hover:text-text-high transition-all duration-300 ease-in-out hover:bg-dark-400">
                       <IoMdCheckmarkCircleOutline className="h-5 w-5" />
                       <span className="uppercase">
                         &nbsp;Na lista de desejos
@@ -155,7 +154,7 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({
                   </Link>
                 ) : (
                   <Button
-                    className="items-center justify-center body-medium tracking-wide text-light-900 hover:text-sm transition-all duration-300 ease-in-out hover:bg-gray-600"
+                    className="items-center justify-center text-sm font-medium tracking-wide text-text-body hover:text-text-high transition-all duration-300 ease-in-out hover:bg-dark-400"
                     onClick={() =>
                       addToWishList(
                         userId!,
@@ -174,7 +173,7 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({
 
           {/* Left Arrow */}
           <div
-            className={`hidden group-hover:block absolute top-1/2 transform -translate-y-1/2 left-1 text-xl text-center text-dark-400 rounded-full p-1 transition duration-300 ease-in-out bg-slate-100 cursor-pointer ${
+            className={`hidden group-hover:block absolute top-1/2 transform -translate-y-1/2 left-1 text-xl text-center text-text-high rounded-full p-1 transition duration-300 ease-in-out bg-dark-400 cursor-pointer ${
               isHovered ? "opacity-35" : "opacity-0"
             }`}
           >
@@ -187,7 +186,7 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({
 
           {/* Right Arrow */}
           <div
-            className={`hidden group-hover:block absolute top-1/2 transform -translate-y-1/2 right-1 text-xl text-center text-dark-400 rounded-full p-1 transition duration-300 ease-in-out bg-slate-100 cursor-pointer ${
+            className={`hidden group-hover:block absolute top-1/2 transform -translate-y-1/2 right-1 text-xl text-center text-text-high rounded-full p-1 transition duration-300 ease-in-out bg-dark-400 cursor-pointer ${
               isHovered ? "opacity-35" : "opacity-0"
             }`}
           >

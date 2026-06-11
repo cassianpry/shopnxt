@@ -44,9 +44,11 @@ export function ProductPriceCard({
   return (
     <div className="w-3/4 m-auto">
       <div className="mt-20">
-        <h1 className="text-dark400_light900 font-semibold mb-2 pl-2">
-          {title}
-        </h1>
+        {title && (
+          <h2 className="text-text-high text-2xl font-bold font-spaceGrotesk mb-6">
+            {title}
+          </h2>
+        )}
         <Slider {...settings}>
           {products.map((product: ProductProps) => (
             <Link
@@ -54,7 +56,7 @@ export function ProductPriceCard({
               key={product._id}
               className="flex pr-2"
             >
-              <div className="background-light800_dark300 text-dark400_light900">
+              <div className="bg-dark-300 text-text-high">
                 <div
                   className="flex relative h-48 w-36 lg:h-72 lg:w-44 justify-center items-center hover:brightness-50"
                   //style={{ aspectRatio: 70 / 45 }}
@@ -93,7 +95,7 @@ export function ProductPriceCard({
 function NextArrow(props: { onClick?: any }) {
   const { onClick } = props;
   return (
-    <div className="block text-xl text-center rounded-full p-1 transition duration-300 ease-in-out bg-gray-300 cursor-pointer absolute -top-5 transform -translate-y-1/2 right-2">
+    <div className="block text-xl text-center rounded-full p-1 transition duration-300 ease-in-out bg-dark-400 cursor-pointer absolute -top-5 transform -translate-y-1/2 right-2">
       <BsChevronCompactRight
         className="cursor-pointer"
         size={11}
@@ -106,7 +108,7 @@ function NextArrow(props: { onClick?: any }) {
 function PrevArrow(props: { onClick?: any }) {
   const { onClick } = props;
   return (
-    <div className="block text-xl text-center rounded-full p-1 transition duration-300 ease-in-out bg-gray-300 cursor-pointer absolute -top-5 transform -translate-y-1/2 right-7">
+    <div className="block text-xl text-center rounded-full p-1 transition duration-300 ease-in-out bg-dark-400 cursor-pointer absolute -top-5 transform -translate-y-1/2 right-7">
       <BsChevronCompactLeft
         className="cursor-pointer"
         size={11}
