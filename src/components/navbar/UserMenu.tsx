@@ -37,13 +37,13 @@ export default function UserMenu({ user }: UserMenuProps) {
     bg-transparent shadow-none "
     >
       <MenubarMenu>
-        <MenubarTrigger className="focus:bg-blue-900 text-light-850 cursor-pointer">
-          <span className="text-light900">Olá, {user.name}</span>
+        <MenubarTrigger className="focus:bg-dark-300 text-text-high cursor-pointer">
+          <span className="text-text-high">Olá, {user.name}</span>
         </MenubarTrigger>
-        <MenubarContent className="absolute right-[-5rem] min-w-[120px] rounded border bg-light-900 py-2 dark:border-dark-400 dark:bg-dark-300 w-[180px]">
+        <MenubarContent className="absolute right-[-5rem] min-w-[120px] rounded border bg-dark-300 py-2 dark:border-dark-400 dark:bg-dark-300 w-[180px]">
           {user.role === "admin" && (
             <Link href="/dashboard">
-              <MenubarItem className="flex cursor-pointer items-center gap-4 px-2.5 py-2 focus:bg-slate-200 dark:focus:bg-dark-400 rounded-md text-dark500_light700">
+              <MenubarItem className="flex cursor-pointer items-center gap-4 px-2.5 py-2 focus:bg-dark-400 dark:focus:bg-dark-400 rounded-md text-text-high">
                 <LuLayoutDashboard />
                 Dashboard
               </MenubarItem>
@@ -62,7 +62,7 @@ export default function UserMenu({ user }: UserMenuProps) {
                   : ""
               }
             >
-              <MenubarItem className="flex cursor-pointer items-center gap-4 px-2.5 py-2 focus:bg-slate-200 dark:focus:bg-dark-400 rounded-md text-dark500_light700">
+              <MenubarItem className="flex cursor-pointer items-center gap-4 px-2.5 py-2 focus:bg-dark-400 dark:focus:bg-dark-400 rounded-md text-text-high">
                 {menu.value === "profile" && <FaUser />}
                 {menu.value === "orders" && <FaWallet />}
                 {menu.value === "wishlist" && <RiHeartAddFill />}
@@ -73,7 +73,7 @@ export default function UserMenu({ user }: UserMenuProps) {
           <MenubarSeparator />
           <hr />
           <MenubarItem
-            className="flex items-center gap-4 px-2.5 py-2 focus:bg-slate-200 dark:focus:bg-dark-400 cursor-pointer rounded-md text-dark500_light700"
+            className="flex items-center gap-4 px-2.5 py-2 focus:bg-dark-400 dark:focus:bg-dark-400 cursor-pointer rounded-md text-text-high"
             onClick={() => signOut({ callbackUrl: "/" })}
           >
             <RxExit /> Sair

@@ -28,8 +28,8 @@ const NavItems = () => {
           <Link key={item.id} href={item.href}>
             <p
               className={`${
-                active === item.id ? "active" : "text-light-900"
-              } h2-bold text-lg font-spaceGrotesk hover:text-blue-600 pl-1 max-sm:text-lg`}
+                active === item.id ? "active" : "text-text-body"
+              } h2-bold text-lg font-spaceGrotesk hover:text-accent pl-1 max-sm:text-lg`}
               onClick={() => handleClick(item.id)}
             >
               {item.name}

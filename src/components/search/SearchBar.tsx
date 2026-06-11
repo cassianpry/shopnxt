@@ -1,10 +1,8 @@
 "use client";
-import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import { Input } from "../ui/input";
+import React, { Suspense, useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { formUrlQuery, removeKeysFromQuery } from "@/lib/utils";
-import { Skeleton } from "../ui/skeleton";
+import { MdSearch } from "react-icons/md";
 
 interface SearchBarProps {
   className?: string;
@@ -12,11 +10,7 @@ interface SearchBarProps {
   isLoading?: boolean;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({
-  className,
-  route,
-  isLoading,
-}) => {
+const SearchBarInner: React.FC<SearchBarProps> = ({ route }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -59,43 +53,26 @@ const SearchBar: React.FC<SearchBarProps> = ({
   }, [search, pathname, route, router, searchParams, query]);
 
   return (
-    <>
-      {isLoading ? (
-        <div className="flex flex-row gap-3 justify-center items-center">
-          <Skeleton className="h-10 w-52 bg-gray-500" />
-        </div>
-      ) : (
-        <div
-          className={`bg-slate-100 relative flex min-h-[56px] items-center gap-1 rounded-md px-4 border text-black ${className}`}
-        >
-          <Image
-            src="/assets/icons/search.svg"
-            alt="pesquisar"
-            width={24}
-            height={24}
-          />
-          <Input
-            type="text"
-            placeholder="Pesquise..."
-            value={search}
-            onChange={handleChange}
-            className="paragraph-regular no-focus placeholder border-none shadow-none outline-none bg-transparent"
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                if (search && pathname === "/") {
-                  const newUrl = formUrlQuery({
-                    params: searchParams.toString(),
-                    key: "query",
-                    value: search,
-                  });
-                  router.push(`/browse${newUrl}`);
-                }
-              }
-            }}
-          />
-        </div>
-      )}
-    </>
+    <div className="relative">
+      <input
+        type="text"
+        placeholder="Buscar jogos..."
+        value={search}
+        onChange={handleChange}
+        className="w-40 lg:w-56 bg-dark-400 border border-dark-500 rounded-full px-3 py-1.5 pl-9 text-sm text-text-high placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all"
+      />
+      <MdSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+    </div>
+  );
+};
+
+const SearchBar: React.FC<SearchBarProps> = ({ className, route, isLoading }) => {
+  if (isLoading) return null;
+
+  return (
+    <Suspense fallback={<div className="w-40 lg:w-56 bg-dark-400 rounded-full h-9 animate-pulse" />}>
+      <SearchBarInner route={route} />
+    </Suspense>
   );
 };
 

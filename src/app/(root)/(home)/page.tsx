@@ -5,7 +5,6 @@ import { useWishListUser } from "@/app/services/wishlist/queries";
 import { useSession } from "next-auth/react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ProductProps, SearchParamsProps } from "@/types/index.d";
-import SearchBar from "@/components/search/SearchBar";
 import { ProductCarousel } from "@/components/product/ProductCarousel";
 import { ProductPriceCard } from "@/components/product/ProductPriceCard";
 import ProductCard from "@/components/product/ProductCard";
@@ -56,7 +55,6 @@ function LandingPage(props: SearchParamsProps) {
       ) : (
         <>
           <div className="flex justify-start items-center space-x-4 mb-10 text-dark300_light700">
-            <SearchBar route="/browse" isLoading={products.isLoading} />
             <Link
               href="/"
               className="hover:dark:text-light-900 hover:text-light-400"

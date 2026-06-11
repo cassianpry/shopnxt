@@ -1,74 +1,82 @@
 "use client";
-
 import React from "react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
-
-import { FaHome } from "react-icons/fa";
 import { sidebarLinks } from "@/constants";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "../ui/accordion";
+import { usePathname } from "next/navigation";
 import { UserProps } from "@/types/index.d";
-import { redirect } from "next/navigation";
-import { Separator } from "../ui/separator";
+import { MdDashboard } from "react-icons/md";
 import { Skeleton } from "../ui/skeleton";
-import LoadingLeftSideBar from "../loadings/LoadingLeftSideBar";
 
-interface UserMenuProps {
-  user: UserProps;
-  status: "authenticated" | "loading" | "unauthenticated";
-}
-
-const LeftSidebar: React.FC<UserMenuProps> = ({ user, status }) => {
-  if (user && user === undefined && status === "loading") {
-    redirect("/sign-in");
-  }
+const LeftSidebar = () => {
+  const { data: session, status } = useSession();
+  const user = session?.user as UserProps;
+  const pathname = usePathname();
 
   return (
-    <section className="light-border sticky left-0 top-16 flex h-max flex-col justify-between overflow-y-auto border-r p-6 shadow-light-300 dark:shadow-none max-sm:hidden lg:w-[266px] custom-scrollbar text-dark300_light900">
-      {status === "loading" ? (
-        <LoadingLeftSideBar />
-      ) : (
-        <>
-          <span className="h3-semibold pb-5">Olá&nbsp;{user.name}</span>
+    <section className="sticky left-0 top-0 flex h-screen w-[220px] flex-col bg-dark-100 border-r border-dark-400 pt-16 max-sm:hidden">
+      <div className="flex flex-col flex-1 px-3 py-4">
+        {status === "authenticated" && user && (
+          <div className="flex items-center gap-3 px-3 py-3 mb-4 rounded-lg bg-dark-300">
+            <div className="w-8 h-8 rounded-full bg-dark-500 flex items-center justify-center text-xs font-bold text-text-high">
+              {user.name?.charAt(0).toUpperCase()}
+            </div>
+            <div className="flex flex-col">
+              <span className="text-sm font-medium text-text-high truncate max-w-[120px]">
+                {user.name}
+              </span>
+              <span className="text-xs text-text-muted">{user.role}</span>
+            </div>
+          </div>
+        )}
 
-          <div className="flex items-center gap-2 pb-10 hover:text-blue-600">
-            <FaHome className="w-6 h-6" />
-            <Link href="/dashboard">
-              <h1 className="h1-bold">Dashboard</h1>
-            </Link>
-          </div>
-          <div className="flex flex-1 flex-col">
-            {sidebarLinks.map((item, i) => (
-              <Accordion type="single" key={item.label} collapsible>
-                <AccordionItem value={`item-${i}`} className="border-none">
-                  <AccordionTrigger className="hover:no-underline hover:text-blue-400">
-                    {item.label}
-                  </AccordionTrigger>
-                  {item.menus?.map((menu: any) => (
-                    <Link href={menu.href} key={menu.title}>
-                      <AccordionContent className="flex pl-5 hover:text-blue-600 hover:underline ">
-                        {menu.icon}
-                        {menu.title}
-                      </AccordionContent>
-                    </Link>
-                  ))}
-                </AccordionItem>
-              </Accordion>
-            ))}
-            <Separator orientation="horizontal" className="bg-slate-700" />
-            <Link
-              href="/dashboard/orders"
-              className="mt-5 font-semibold hover:text-blue-400"
-            >
-              Vendas
-            </Link>
-          </div>
-        </>
-      )}
+        <div className="flex flex-col gap-1">
+          <Link
+            href="/dashboard"
+            className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
+              pathname === "/dashboard"
+                ? "bg-dark-400 text-accent border-l-2 border-accent"
+                : "text-text-body hover:text-text-high hover:bg-dark-400"
+            }`}
+          >
+            <MdDashboard className="w-4 h-4" />
+            Dashboard
+          </Link>
+
+          {sidebarLinks.map((link: any) => {
+            const isActive =
+              (pathname.includes(link.route) && link.route.length > 1) ||
+              pathname === link.route;
+            const Icon = link.icon;
+            return (
+              <Link
+                key={link.route}
+                href={link.route}
+                className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
+                  isActive
+                    ? "bg-dark-400 text-accent border-l-2 border-accent"
+                    : "text-text-body hover:text-text-high hover:bg-dark-400"
+                }`}
+              >
+                {Icon && <Icon className="w-4 h-4" />}
+                {link.label}
+              </Link>
+            );
+          })}
+
+          <Link
+            href="/dashboard/orders"
+            className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
+              pathname === "/dashboard/orders"
+                ? "bg-dark-400 text-accent border-l-2 border-accent"
+                : "text-text-body hover:text-text-high hover:bg-dark-400"
+            }`}
+          >
+            <span className="w-4 h-4 flex items-center justify-center text-xs">$</span>
+            Vendas
+          </Link>
+        </div>
+      </div>
     </section>
   );
 };
