@@ -27,7 +27,7 @@ export default function RootLayout({
       <html lang="pt-BR">
         <body
           className={cn(
-            "relative font-sans antialiased background-light800_dark300",
+            "relative font-sans antialiased bg-dark-200 text-text-body",
             inter.variable,
             spaceGrotesk.variable
           )}
