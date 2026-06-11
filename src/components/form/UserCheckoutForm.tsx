@@ -1,7 +1,7 @@
 "use client";
 import { UserOrderSchema } from "@/lib/actions/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import {
@@ -72,18 +72,17 @@ function UserCheckoutForm({ user }: ProfileFormProps) {
 
   const onSubmit = async (values: z.infer<typeof UserOrderSchema>) => {
     try {
-      createOrder.mutate({ ...values, cartProducts, totalPrice });
+      await createOrder.mutateAsync({ ...values, cartProducts, totalPrice });
+      localStorage.removeItem("cart");
+      clearCart();
+      form.reset();
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast({
         className: "bg-red-600 text-white",
         title: "Erro ao criar",
         description: `Algo deu errado, tente novamente! ${form.formState.errors}`,
       });
-    } finally {
-      localStorage.removeItem("cart");
-      clearCart();
-      form.reset();
     }
   };
 

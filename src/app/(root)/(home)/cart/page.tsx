@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { CartContext } from "@/context/CartContext";
 import { ProductProps, UserProps } from "@/types/index.d";
 import Link from "next/link";
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { LuShoppingCart } from "react-icons/lu";
 
 import { useWishListUser } from "@/app/services/wishlist/queries";
