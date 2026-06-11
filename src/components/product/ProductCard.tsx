@@ -38,7 +38,7 @@ function ProductCard({
       setIsWishListed([...isWishListed, slug]);
       await query.invalidateQueries({ queryKey: ["wishlists"] });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -55,8 +55,7 @@ function ProductCard({
     }
 
     setNewProducts([products[index1], products[index2]]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [products]);
 
   const formatPrice = (value: string) => {
     return parseFloat(value).toLocaleString("pt-BR", {
