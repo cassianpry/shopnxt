@@ -49,37 +49,37 @@ const SignUp = () => {
     }
   };
   return (
-    <main className="flex flex-row m-auto items-center justify-center h-screen">
-      <div className="container">
-        <h1 className="text-slate-700 text-3xl font-bold text-center">
+    <main className="min-h-screen bg-dark-100 flex items-center justify-center">
+      <div className="bg-dark-300 border border-dark-400 rounded-xl p-8 w-full max-w-md mx-4">
+        <h1 className="font-spaceGrotesk text-2xl font-bold text-text-high text-center mb-2">
           Criar seu Cadastro
         </h1>
 
-        <p className="text-slate-500 text-lg text-center font-semibold pt-5 ">
+        <p className="text-text-body text-sm text-center mb-6">
           Você vai comprar de forma mais rápida e acompanhar os pedidos feitos
           por você.
         </p>
-        <p className="pt-10 text-red-600 text-center">
-          *<span className="text-slate-800"> campos obrigatórios</span>
+        <p className="mb-6 text-red-400 text-xs text-center">
+          *<span className="text-text-body"> campos obrigatórios</span>
         </p>
 
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-8 pt-2"
+            className="flex flex-col space-y-5"
           >
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-md font-medium">
-                    <span className="text-red-600">*</span> Nome completo
+                  <FormLabel className="text-text-body text-sm mb-1 block">
+                    <span className="text-red-400">*</span> Nome completo
                   </FormLabel>
-                  <FormMessage className="text-red-600" />
+                  <FormMessage className="text-red-400 text-xs" />
                   <FormControl>
                     <Input
-                      className="w-[50%]"
+                      className="w-full bg-dark-400 border border-dark-500 rounded-md px-4 py-2.5 text-sm text-text-high placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all"
                       type="text"
                       autoComplete="nome"
                       placeholder="Seu nome..."
@@ -87,9 +87,9 @@ const SignUp = () => {
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription className="text-slate-600">
+                  <p className="text-text-muted text-xs mt-1">
                     Entre 3 a 25 caracteres.
-                  </FormDescription>
+                  </p>
                 </FormItem>
               )}
             />
@@ -98,22 +98,22 @@ const SignUp = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-md font-medium">
-                    <span className="text-red-600">*</span> E-mail
+                  <FormLabel className="text-text-body text-sm mb-1 block">
+                    <span className="text-red-400">*</span> E-mail
                   </FormLabel>
-                  <FormMessage className="text-red-600" />
+                  <FormMessage className="text-red-400 text-xs" />
                   <FormControl>
                     <Input
-                      className="w-[50%]"
+                      className="w-full bg-dark-400 border border-dark-500 rounded-md px-4 py-2.5 text-sm text-text-high placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all"
                       type="email"
                       placeholder="johndoe@example.com"
                       disabled={registerUser.isPending}
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription className="text-slate-600">
+                  <p className="text-text-muted text-xs mt-1">
                     Informe um endereço válido de e-mail.
-                  </FormDescription>
+                  </p>
                 </FormItem>
               )}
             />
@@ -122,22 +122,22 @@ const SignUp = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-md font-medium">
-                    <span className="text-red-600">*</span> Senha
+                  <FormLabel className="text-text-body text-sm mb-1 block">
+                    <span className="text-red-400">*</span> Senha
                   </FormLabel>
-                  <FormMessage className="text-red-600" />
+                  <FormMessage className="text-red-400 text-xs" />
                   <FormControl>
                     <Input
-                      className="w-[50%]"
+                      className="w-full bg-dark-400 border border-dark-500 rounded-md px-4 py-2.5 text-sm text-text-high placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all"
                       type="password"
                       autoComplete="password"
                       disabled={registerUser.isPending}
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription className="text-slate-600">
+                  <p className="text-text-muted text-xs mt-1">
                     Precisa ter entre 5 a 20 caracteres.
-                  </FormDescription>
+                  </p>
                 </FormItem>
               )}
             />
@@ -146,29 +146,29 @@ const SignUp = () => {
               name="confirm_password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-md font-medium">
-                    <span className="text-red-600">*</span>Confirmar a senha
+                  <FormLabel className="text-text-body text-sm mb-1 block">
+                    <span className="text-red-400">*</span>Confirmar a senha
                   </FormLabel>
-                  <FormMessage className="text-red-600" />
+                  <FormMessage className="text-red-400 text-xs" />
                   <FormControl>
                     <Input
-                      className="w-[50%]"
+                      className="w-full bg-dark-400 border border-dark-500 rounded-md px-4 py-2.5 text-sm text-text-high placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all"
                       type="password"
                       autoComplete="confirm_password"
                       disabled={registerUser.isPending}
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription className="text-slate-600">
+                  <p className="text-text-muted text-xs mt-1">
                     Confirme sua senha.
-                  </FormDescription>
+                  </p>
                 </FormItem>
               )}
             />
             <Button
               type="submit"
               disabled={registerUser.isPending}
-              className="bg-blue-900 text-light-850 text-md p-6  hover:bg-blue-600"
+              className="w-full bg-accent hover:bg-accent-hover text-white font-semibold rounded-md px-6 py-2.5 text-sm transition-colors cursor-pointer"
             >
               {registerUser.isPending ? (
                 <>
@@ -184,11 +184,11 @@ const SignUp = () => {
             </Button>
           </form>
         </Form>
-        <p className="text-center font-semibold pt-8 text-slate-900">
+        <p className="text-center pt-6 text-text-muted text-sm">
           Já possui cadastro?
           <Link
             href="/sign-in"
-            className="text-blue-800 hover:text-blue-600 hover:underline"
+            className="text-accent hover:text-text-high transition-colors"
           >
             &nbsp;Acesse sua conta
           </Link>

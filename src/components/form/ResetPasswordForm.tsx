@@ -55,41 +55,40 @@ function ResetPasswordForm({ isOpen, setIsOpen }: ResetPasswordFormProps) {
         form.reset();
       }}
     >
-      <DialogContent className="flex flex-col items-center bg-slate-50">
+      <DialogContent className="flex flex-col items-center bg-dark-300 border-dark-400 text-text-high">
         <DialogHeader>
-          <DialogTitle className="font-semibold text-2xl">
+          <DialogTitle className="font-semibold text-xl text-text-high">
             Trocar a senha
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-text-muted text-sm">
             Insira seu e-mail para receber as instruções para criar uma nova
             senha
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 items-center">
+        <div className="grid gap-4 items-center w-full">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-8 pt-2 text-dark400_light700"
+              className="flex flex-col space-y-5 pt-2"
             >
-              {/* E-mail */}
               <FormField
                 control={form.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem className="">
-                    <FormLabel className="text-md font-medium text-dark-500">
-                      <span className="text-red-600">*</span>&nbsp;E-mail
+                    <FormLabel className="text-text-body text-sm mb-1 block">
+                      <span className="text-red-400">*</span>&nbsp;E-mail
                     </FormLabel>
-                    <FormMessage className="text-red-600" />
+                    <FormMessage className="text-red-400 text-xs" />
                     <FormControl className="mt-1">
                       <Input
-                        className="text-dark-500"
+                        className="w-full bg-dark-400 border border-dark-500 rounded-md px-4 py-2.5 text-sm text-text-high placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all"
                         disabled={resetUserPassword.isPending}
                         type="email"
                         {...field}
                       />
                     </FormControl>
-                    <FormDescription className="text-slate-600"></FormDescription>
+                    <FormDescription className="text-text-muted text-xs"></FormDescription>
                   </FormItem>
                 )}
               />
@@ -98,7 +97,7 @@ function ResetPasswordForm({ isOpen, setIsOpen }: ResetPasswordFormProps) {
                 <Button
                   type="submit"
                   disabled={resetUserPassword.isPending}
-                  className="focus:shadow-outline flex w-full items-center justify-center rounded-lg py-5 font-semibold text-lg text-light-900 transition-all duration-300 ease-in-out bg-blue-900 hover:bg-blue-600"
+                  className="w-full bg-accent hover:bg-accent-hover text-white font-semibold rounded-md px-6 py-2.5 text-sm transition-colors cursor-pointer"
                 >
                   {resetUserPassword.isPending ? (
                     <>

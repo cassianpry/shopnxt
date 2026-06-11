@@ -65,41 +65,41 @@ function ResetPasswordForm() {
   console.log(token?.data?.checkToken);
 
   return (
-    <main className="flex flex-row mx-auto items-center justify-center h-screen w-1/3 max-xl:w-1/2">
+    <main className="min-h-screen bg-dark-100 flex items-center justify-center">
       {token.isLoading ? (
         <LoadingResetPassword />
       ) : !token.isLoading && token?.error !== null ? (
-        "Token Inválido"
+        <div className="text-red-400 text-lg font-semibold">Token Inválido</div>
       ) : (
-        <div className="container">
-          <h1 className="flex items-center text-center text-slate-700 text-3xl font-bold justify-center dark:text-light-900">
-            <GoPasskeyFill className="w-9 h-9" />
-            &nbsp;&nbsp;Trocar a senha
+        <div className="bg-dark-300 border border-dark-400 rounded-xl p-8 w-full max-w-md mx-4">
+          <h1 className="font-spaceGrotesk text-2xl font-bold text-text-high text-center mb-6 flex items-center justify-center gap-2">
+            <GoPasskeyFill className="w-7 h-7 text-accent" />
+            Trocar a senha
           </h1>
 
-          <p className="pt-10 text-red-600 text-center">
-            *<span className="text-dark400_light900">campos obrigatórios</span>
+          <p className="mb-6 text-red-400 text-xs text-center">
+            *<span className="text-text-body">campos obrigatórios</span>
           </p>
 
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col space-y-8 pt-2 justify-center text-center items-center text-dark400_light800"
+              className="flex flex-col space-y-5"
             >
               <FormField
                 control={form.control}
                 name="password"
                 render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel className="flex text-md font-medium text-left">
-                      <span className="text-red-600 ">*</span>&nbsp;Nova senha
+                  <FormItem>
+                    <FormLabel className="text-text-body text-sm mb-1 block">
+                      <span className="text-red-400">*</span>&nbsp;Nova senha
                     </FormLabel>
-                    <FormMessage className="text-red-600" />
+                    <FormMessage className="text-red-400 text-xs" />
                     <FormControl>
                       <Input
-                        className="w-[100%] dark:text-dark-500 font-semibold"
+                        className="w-full bg-dark-400 border border-dark-500 rounded-md px-4 py-2.5 text-sm text-text-high placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all"
                         type="password"
-                        placeholder="johndoe@example.com"
+                        placeholder="Nova senha"
                         autoComplete="password"
                         disabled={updatePassword.isPending}
                         {...field}
@@ -112,17 +112,17 @@ function ResetPasswordForm() {
                 control={form.control}
                 name="confirm_password"
                 render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel className="flex text-start justify-between text-md font-medium">
+                  <FormItem>
+                    <FormLabel className="flex text-text-body text-sm mb-1 justify-between">
                       <div>
-                        <span className="text-red-600">*</span>
+                        <span className="text-red-400">*</span>
                         <span>&nbsp;Confirmar senha</span>
                       </div>
                     </FormLabel>
-                    <FormMessage className="text-red-600" />
+                    <FormMessage className="text-red-400 text-xs" />
                     <FormControl>
                       <Input
-                        className="w-[100%] dark:text-dark-500 font-semibold focus:ring-0 focus:ring-offset-0"
+                        className="w-full bg-dark-400 border border-dark-500 rounded-md px-4 py-2.5 text-sm text-text-high placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all"
                         type="password"
                         autoComplete="currentPassword"
                         disabled={updatePassword.isPending}
@@ -136,7 +136,7 @@ function ResetPasswordForm() {
               <Button
                 type="submit"
                 disabled={updatePassword.isPending}
-                className="bg-blue-900 text-light-850 text-md p-6 w-full hover:bg-blue-600"
+                className="w-full bg-accent hover:bg-accent-hover text-white font-semibold rounded-md px-6 py-2.5 text-sm transition-colors cursor-pointer"
               >
                 {updatePassword.isPending ? (
                   <>

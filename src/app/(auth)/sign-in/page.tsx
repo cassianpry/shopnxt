@@ -43,38 +43,40 @@ const SignIn = () => {
     }
   };
   return (
-    <main className="flex flex-row mx-auto items-center justify-center h-screen w-1/3 max-xl:w-1/2">
-      <div className="container">
-        <h1 className="flex items-center text-center text-slate-700 text-3xl font-bold justify-center dark:text-light-900">
-          <MdPersonOutline className="w-9 h-9" />
-          Acesso do cliente
-        </h1>
+    <main className="min-h-screen bg-dark-100 flex items-center justify-center">
+      <div className="bg-dark-300 border border-dark-400 rounded-xl p-8 w-full max-w-md mx-4">
+        <div className="text-center mb-8">
+          <h1 className="font-spaceGrotesk text-2xl font-bold text-text-high flex items-center justify-center gap-2">
+            <MdPersonOutline className="w-7 h-7 text-accent" />
+            Acesso do cliente
+          </h1>
+        </div>
 
-        <p className="text-slate-500 text-lg text-center font-semibold pt-5 ">
+        <p className="text-text-body text-sm text-center mb-6">
           Você vai poder acompanhar as suas compras e realiza-las de forma
           rápida.
         </p>
-        <p className="pt-10 text-red-600 text-center">
-          *<span className="text-dark400_light900">campos obrigatórios</span>
+        <p className="mb-6 text-red-400 text-xs text-center">
+          *<span className="text-text-body">campos obrigatórios</span>
         </p>
 
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col space-y-8 pt-2 justify-center text-center items-center text-dark400_light800"
+            className="flex flex-col space-y-5"
           >
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel className="flex text-md font-medium text-left">
-                    <span className="text-red-600 ">*</span>&nbsp;E-mail
+                <FormItem>
+                  <FormLabel className="text-text-body text-sm mb-1 block">
+                    <span className="text-red-400">*</span>&nbsp;E-mail
                   </FormLabel>
-                  <FormMessage className="text-red-600" />
+                  <FormMessage className="text-red-400 text-xs" />
                   <FormControl>
                     <Input
-                      className="w-[100%] dark:text-dark-500 font-semibold"
+                      className="w-full bg-dark-400 border border-dark-500 rounded-md px-4 py-2.5 text-sm text-text-high placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all"
                       type="email"
                       placeholder="johndoe@example.com"
                       disabled={loginUser.isPending}
@@ -88,23 +90,23 @@ const SignIn = () => {
               control={form.control}
               name="password"
               render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel className="flex text-start justify-between text-md font-medium">
+                <FormItem>
+                  <FormLabel className="flex text-text-body text-sm mb-1 justify-between">
                     <div>
-                      <span className="text-red-600">*</span>
+                      <span className="text-red-400">*</span>
                       <span>&nbsp;Senha</span>
                     </div>
                     <div
-                      className="body-regular hover:text-blue-600 hover:cursor-pointer"
+                      className="text-text-muted hover:text-text-high text-sm transition-colors cursor-pointer"
                       onClick={() => setIsOpen(true)}
                     >
                       <span>Esqueceu a senha?</span>
                     </div>
                   </FormLabel>
-                  <FormMessage className="text-red-600" />
+                  <FormMessage className="text-red-400 text-xs" />
                   <FormControl>
                     <Input
-                      className="w-[100%] dark:text-dark-500 font-semibold focus:ring-0 focus:ring-offset-0"
+                      className="w-full bg-dark-400 border border-dark-500 rounded-md px-4 py-2.5 text-sm text-text-high placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all"
                       type="password"
                       autoComplete="currentPassword"
                       disabled={loginUser.isPending}
@@ -118,7 +120,7 @@ const SignIn = () => {
             <Button
               type="submit"
               disabled={loginUser.isPending}
-              className="bg-blue-900 text-light-850 text-md p-6 w-full hover:bg-blue-600"
+              className="w-full bg-accent hover:bg-accent-hover text-white font-semibold rounded-md px-6 py-2.5 text-sm transition-colors cursor-pointer"
             >
               {loginUser.isPending ? (
                 <>
@@ -134,11 +136,11 @@ const SignIn = () => {
             </Button>
           </form>
         </Form>
-        <p className="text-center font-semibold pt-8 text-slate-900 dark:text-light-900">
+        <p className="text-center pt-6 text-text-muted text-sm">
           Não possui cadastro?&nbsp;
           <Link
             href="/sign-up"
-            className="text-blue-800 hover:text-blue-600 hover:underline"
+            className="text-accent hover:text-text-high transition-colors"
           >
             Crie um rapidamente
           </Link>
