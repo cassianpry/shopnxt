@@ -4,9 +4,8 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { sidebarLinks } from "@/constants";
 import { usePathname } from "next/navigation";
-import { UserProps } from "@/types/index.d";
+import { UserProps, SidebarLink } from "@/types/index.d";
 import { MdDashboard } from "react-icons/md";
-import { Skeleton } from "../ui/skeleton";
 
 const LeftSidebar = () => {
   const { data: session, status } = useSession();
@@ -43,26 +42,25 @@ const LeftSidebar = () => {
             Dashboard
           </Link>
 
-          {sidebarLinks.map((link: any) => {
-            const isActive =
-              (pathname.includes(link.route) && link.route.length > 1) ||
-              pathname === link.route;
-            const Icon = link.icon;
-            return (
-              <Link
-                key={link.route}
-                href={link.route}
-                className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
-                  isActive
-                    ? "bg-dark-400 text-accent border-l-2 border-accent"
-                    : "text-text-body hover:text-text-high hover:bg-dark-400"
-                }`}
-              >
-                {Icon && <Icon className="w-4 h-4" />}
-                {link.label}
-              </Link>
-            );
-          })}
+          {sidebarLinks.flatMap((link: SidebarLink) =>
+            link.menus?.map((menu) => {
+              const isActive = pathname.includes(menu.href);
+              return (
+                <Link
+                  key={menu.href}
+                  href={menu.href}
+                  className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
+                    isActive
+                      ? "bg-dark-400 text-accent border-l-2 border-accent"
+                      : "text-text-body hover:text-text-high hover:bg-dark-400"
+                  }`}
+                >
+                  {menu.icon}
+                  {menu.title}
+                </Link>
+              );
+            })
+          )}
 
           <Link
             href="/dashboard/orders"

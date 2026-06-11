@@ -4,7 +4,6 @@ import React, { useContext } from "react";
 import { BsJoystick } from "react-icons/bs";
 import NavItems from "./NavItems";
 import Theme from "./Theme";
-import { useSession } from "next-auth/react";
 import UserMenu from "./UserMenu";
 import { Skeleton } from "../ui/skeleton";
 import { CartContext } from "@/context/CartContext";
