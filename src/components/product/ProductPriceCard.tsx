@@ -60,14 +60,13 @@ export function ProductPriceCard({
                   //style={{ aspectRatio: 70 / 45 }}
                 >
                   <Image
-                    className="rounded-md"
+                    className="rounded-md w-full h-full"
                     src={product.productImage}
                     priority
                     fill
                     sizes="(max-width:176px)"
                     quality={100}
                     alt=""
-                    style={{ objectFit: "contain" }}
                   />
                 </div>
                 <div className="text-sm font-normal ">

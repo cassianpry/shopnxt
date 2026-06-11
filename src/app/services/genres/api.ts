@@ -2,11 +2,7 @@ import { toast } from "@/components/ui/use-toast";
 import { FormGenreValues } from "@/types/index.d";
 
 export const getGenres = async (searchQuery: Record<string, string>) => {
-  const params = new URLSearchParams();
-  for (const [key, value] of Object.entries(searchQuery)) {
-    if (value !== undefined && value !== "") params.set(key, value);
-  }
-  const queryString = params.toString();
+  const queryString = new URLSearchParams(searchQuery).toString();
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/genre?${queryString}`
   );
