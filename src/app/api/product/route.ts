@@ -4,6 +4,10 @@ import { connectToDatabase } from "@/lib/actions/mongoose";
 import { NextRequest, NextResponse } from "next/server";
 import slugify from "slugify";
 
+function escapeRegex(str: string): string {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 export async function GET(req: NextRequest) {
   const searchQuery = new URL(
     req.url,
@@ -31,22 +35,22 @@ export async function GET(req: NextRequest) {
 
     if (searchQuery !== "undefined") {
       query.$or = [
-        { name: { $regex: searchQuery ? searchQuery : "", $options: "i" } },
+        { name: { $regex: searchQuery ? escapeRegex(searchQuery) : "", $options: "i" } },
         {
-          developer: { $regex: searchQuery ? searchQuery : "", $options: "i" },
+          developer: { $regex: searchQuery ? escapeRegex(searchQuery) : "", $options: "i" },
         },
         {
-          publisher: { $regex: searchQuery ? searchQuery : "", $options: "i" },
+          publisher: { $regex: searchQuery ? escapeRegex(searchQuery) : "", $options: "i" },
         },
         {
           description: {
-            $regex: searchQuery ? searchQuery : "",
+            $regex: searchQuery ? escapeRegex(searchQuery) : "",
             $options: "i",
           },
         },
         {
           "genres.name": {
-            $regex: searchQuery ? searchQuery : "",
+            $regex: searchQuery ? escapeRegex(searchQuery) : "",
             $options: "i",
           },
         },

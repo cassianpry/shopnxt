@@ -2,6 +2,10 @@ import User from "@/database/user.model";
 import { connectToDatabase } from "@/lib/actions/mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
+function escapeRegex(str: string): string {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 export async function GET(req: NextRequest) {
   const searchQuery = new URL(
     req.url,
@@ -28,8 +32,8 @@ export async function GET(req: NextRequest) {
 
     if (searchQuery !== "undefined") {
       query.$or = [
-        { name: { $regex: searchQuery, $options: "i" } },
-        { email: { $regex: searchQuery, $options: "i" } },
+        { name: { $regex: escapeRegex(searchQuery), $options: "i" } },
+        { email: { $regex: escapeRegex(searchQuery), $options: "i" } },
       ];
     }
     const users = await User.find(query)

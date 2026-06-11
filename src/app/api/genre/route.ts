@@ -4,6 +4,10 @@ import { NextRequest, NextResponse } from "next/server";
 import Genres from "@/database/genre.model";
 import slugify from "slugify";
 
+function escapeRegex(str: string): string {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 export async function GET(req: NextRequest) {
   const searchQuery = new URL(
     req.url,
@@ -29,8 +33,8 @@ export async function GET(req: NextRequest) {
     const query: Record<string, unknown> = {};
     if (searchQuery !== "undefined") {
       query.$or = [
-        { name: { $regex: searchQuery, $options: "i" } },
-        { slug: { $regex: searchQuery, $options: "i" } },
+        { name: { $regex: escapeRegex(searchQuery), $options: "i" } },
+        { slug: { $regex: escapeRegex(searchQuery), $options: "i" } },
       ];
     }
     const genre = await Genres.find(query)

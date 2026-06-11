@@ -3,6 +3,10 @@ import { connectToDatabase } from "@/lib/actions/mongoose";
 import { UserOrderSchema } from "@/lib/actions/validations";
 import { NextRequest, NextResponse } from "next/server";
 
+function escapeRegex(str: string): string {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 export async function GET(req: NextRequest) {
   const searchQuery = new URL(
     req.url,
@@ -31,14 +35,14 @@ export async function GET(req: NextRequest) {
 
     if (searchQuery !== "undefined") {
       query.$or = [
-        { orderNum: { $regex: searchQuery ? searchQuery : "", $options: "i" } },
+        { orderNum: { $regex: searchQuery ? escapeRegex(searchQuery) : "", $options: "i" } },
         {
           name: {
-            $regex: searchQuery ? searchQuery : "",
+            $regex: searchQuery ? escapeRegex(searchQuery) : "",
             $options: "i",
           },
           email: {
-            $regex: searchQuery ? searchQuery : "",
+            $regex: searchQuery ? escapeRegex(searchQuery) : "",
             $options: "i",
           },
         },

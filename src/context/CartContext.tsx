@@ -1,6 +1,12 @@
 import { ProductProps } from "@/types/index.d";
 import React, { createContext, useEffect, useState } from "react";
 
+function isValidCartData(data: unknown): data is ProductProps[] {
+  return Array.isArray(data) && data.every(
+    (item) => typeof item === "object" && item !== null && "_id" in item
+  );
+}
+
 interface CartContextProps {
   cartProducts: ProductProps[];
   addToCart: (products: ProductProps) => void;
@@ -52,7 +58,12 @@ function CartProvider({ children }: { children: React.ReactNode }) {
     if (ls && ls.getItem("cart")) {
       const storedCart = ls.getItem("cart");
       if (storedCart) {
-        setCartProducts(JSON.parse(storedCart));
+        try {
+          const parsed = JSON.parse(storedCart);
+          setCartProducts(isValidCartData(parsed) ? parsed : []);
+        } catch {
+          setCartProducts([]);
+        }
       }
     }
   }, [ls]);
