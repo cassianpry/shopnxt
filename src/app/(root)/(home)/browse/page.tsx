@@ -4,7 +4,7 @@ import SearchBar from "@/components/search/SearchBar";
 import { ProductProps, SearchParamsProps } from "@/types/index.d";
 import Image from "next/image";
 import Link from "next/link";
-import React, { use } from "react";
+import { use } from "react";
 
 function Browse(props: SearchParamsProps) {
   const searchParams = use(props.searchParams);
