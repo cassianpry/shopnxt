@@ -1,14 +1,9 @@
 "use client";
-import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { UseQueryResult } from "@tanstack/react-query";
+import { useRef } from "react";
 import { ProductProps } from "@/types/index.d";
-import Slider from "react-slick";
-
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import { BsChevronCompactLeft, BsChevronCompactRight } from "react-icons/bs";
+import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 
 export function ProductPriceCard({
   products,
@@ -17,103 +12,75 @@ export function ProductPriceCard({
   products: ProductProps[];
   title: string;
 }) {
-  const [windowSize, setWindowSize] = useState(window.innerWidth);
-  const screenSize = windowSize > 1024;
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowSize(window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  const settings = {
-    infinite: false,
-    speed: 200,
-    slidesToShow: screenSize ? 6 : 3,
-    slidesToScroll: screenSize ? 6 : 3,
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />,
+  const scroll = (direction: "left" | "right") => {
+    if (!scrollRef.current) return;
+    const amount = scrollRef.current.clientWidth * 0.75;
+    scrollRef.current.scrollBy({
+      left: direction === "left" ? -amount : amount,
+      behavior: "smooth",
+    });
   };
 
-  return (
-    <div className="w-3/4 m-auto">
-      <div className="mt-20">
-        {title && (
-          <h2 className="text-text-high text-2xl font-bold font-spaceGrotesk mb-6">
-            {title}
-          </h2>
-        )}
-        <Slider {...settings}>
-          {products.map((product: ProductProps) => (
-            <Link
-              href={`/products/${product.slug}`}
-              key={product._id}
-              className="flex pr-2"
-            >
-              <div className="bg-dark-300 text-text-high">
-                <div
-                  className="flex relative h-48 w-36 lg:h-72 lg:w-44 justify-center items-center hover:brightness-50"
-                  //style={{ aspectRatio: 70 / 45 }}
-                >
-                  <Image
-                    className="rounded-md w-full h-full"
-                    src={product.productImage}
-                    priority
-                    fill
-                    sizes="(max-width:176px)"
-                    quality={100}
-                    alt=""
-                  />
-                </div>
-                <div className="text-sm font-normal ">
-                  <p className="overflow-hidden break-words max-w-48">
-                    {product.name}
-                  </p>
+  const formatPrice = (value: string) =>
+    parseFloat(value).toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
 
-                  <p>
-                    {parseFloat(product.price).toLocaleString("pt-BR", {
-                      style: "currency",
-                      currency: "BRL",
-                    })}
-                  </p>
-                </div>
+  return (
+    <div className="relative group/carousel">
+      <button
+        onClick={() => scroll("left")}
+        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-dark-400/80 text-text-body hover:text-text-high hover:bg-dark-400 opacity-0 group-hover/carousel:opacity-100 transition-all duration-200 -ml-4"
+        aria-label="Anterior"
+      >
+        <MdChevronLeft className="w-6 h-6" />
+      </button>
+      <button
+        onClick={() => scroll("right")}
+        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-dark-400/80 text-text-body hover:text-text-high hover:bg-dark-400 opacity-0 group-hover/carousel:opacity-100 transition-all duration-200 -mr-4"
+        aria-label="Próximo"
+      >
+        <MdChevronRight className="w-6 h-6" />
+      </button>
+
+      <div
+        ref={scrollRef}
+        className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 scrollbar-hide"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
+        {products.map((product: ProductProps) => (
+          <Link
+            href={`/products/${product.slug}`}
+            key={product._id}
+            className="group snap-start shrink-0 w-[180px] sm:w-[200px]"
+          >
+            <div className="bg-dark-300 border border-dark-400 rounded-lg overflow-hidden transition-all duration-300 hover:border-accent/50 hover:translate-y-[-2px] hover:shadow-lg">
+              <div className="relative aspect-[16/9]">
+                <Image
+                  src={product.productImage}
+                  alt={product.name}
+                  fill
+                  className="object-cover transition-all duration-300 group-hover:brightness-50"
+                  sizes="200px"
+                />
               </div>
-            </Link>
-          ))}
-        </Slider>
+              <div className="p-3">
+                <p className="text-text-high text-sm font-medium truncate">
+                  {product.name}
+                </p>
+                <p className="text-text-high font-bold mt-1">
+                  {product.price === "0"
+                    ? "Gratuito"
+                    : formatPrice(product.price)}
+                </p>
+              </div>
+            </div>
+          </Link>
+        ))}
       </div>
-    </div>
-  );
-}
-
-function NextArrow(props: { onClick?: any }) {
-  const { onClick } = props;
-  return (
-    <div className="block text-xl text-center rounded-full p-1 transition duration-300 ease-in-out bg-dark-400 cursor-pointer absolute -top-5 transform -translate-y-1/2 right-2">
-      <BsChevronCompactRight
-        className="cursor-pointer"
-        size={11}
-        onClick={onClick}
-      />
-    </div>
-  );
-}
-
-function PrevArrow(props: { onClick?: any }) {
-  const { onClick } = props;
-  return (
-    <div className="block text-xl text-center rounded-full p-1 transition duration-300 ease-in-out bg-dark-400 cursor-pointer absolute -top-5 transform -translate-y-1/2 right-7">
-      <BsChevronCompactLeft
-        className="cursor-pointer"
-        size={11}
-        onClick={onClick}
-      />
     </div>
   );
 }
