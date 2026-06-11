@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
 
     const query: Record<string, unknown> = {};
 
-    if (searchQuery !== "undefined") {
+    if (searchQuery && searchQuery !== "undefined") {
       query.$or = [
         { orderNum: { $regex: searchQuery ? escapeRegex(searchQuery) : "", $options: "i" } },
         {
@@ -107,7 +107,11 @@ export async function POST(req: NextRequest) {
     delete (validated as any).checkAddress;
 
     await connectToDatabase();
-    const order = await Order.create(validated);
+    const order = await Order.create({
+      ...validated,
+      cartProducts: data.cartProducts ?? { items: [] },
+      totalPrice: data.totalPrice ?? 0,
+    });
     return NextResponse.json({ userId, orderId: order.orderNum });
   } catch (error) {
     console.log(error);

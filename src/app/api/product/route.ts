@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
     await connectToDatabase();
     const query: Record<string, unknown> = {};
 
-    if (searchQuery !== "undefined") {
+    if (searchQuery && searchQuery !== "undefined") {
       query.$or = [
         { name: { $regex: searchQuery ? escapeRegex(searchQuery) : "", $options: "i" } },
         {
