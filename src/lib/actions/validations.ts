@@ -3,7 +3,7 @@ import { z } from "zod";
 export const SignUpSchema = z
   .object({
     name: z
-      .string({ required_error: "Precisa ser preenchido." })
+      .string({ error: (issue) => issue.input === undefined ? "Precisa ser preenchido." : "Precisa ser uma string" })
       .min(3, { message: "Mínimo de 3 caracteres." })
       .max(25, { message: "Máximo de 25 caracteres." })
       .regex(
@@ -12,7 +12,7 @@ export const SignUpSchema = z
       ),
 
     email: z
-      .string({ required_error: "Precisa ser preenchido." })
+      .string({ error: (issue) => issue.input === undefined ? "Precisa ser preenchido." : "Precisa ser uma string" })
       .email()
       .min(5, { message: "E-mail inválido." }),
 
@@ -27,7 +27,7 @@ export const SignUpSchema = z
 
 export const SignInSchema = z.object({
   email: z
-    .string({ invalid_type_error: "E-mail inválido" })
+    .string({ error: (issue) => issue.input === undefined ? "E-mail inválido" : "Precisa ser uma string" })
     .email({ message: "E-mail inválido" })
     .min(5, { message: "E-mail inválido." }),
   password: z.string().min(5, { message: "Mínimo de 5 caracteres" }),
@@ -35,7 +35,7 @@ export const SignInSchema = z.object({
 
 export const ForgotPasswordSchema = z.object({
   email: z
-    .string({ invalid_type_error: "E-mail inválido" })
+    .string({ error: (issue) => issue.input === undefined ? "E-mail inválido" : "Precisa ser uma string" })
     .email({ message: "E-mail inválido" })
     .min(5, { message: "E-mail inválido." }),
 });
@@ -62,7 +62,7 @@ export const ProfileSchema = z.object({
     .regex(/^[A-Za-z\u00C0-\u00FF ]+$/i, "Somente letras."),
 
   email: z
-    .string({ required_error: "E-mail inválido" })
+    .string({ error: (issue) => issue.input === undefined ? "E-mail inválido" : "Precisa ser uma string" })
     .email({ message: "E-mail inválido" })
     .min(5, { message: "E-mail inválido." }),
 
@@ -76,16 +76,16 @@ export const ProfileSchema = z.object({
     .max(9, { message: "CEP Inválido" }),
 
   state: z
-    .string({ required_error: "Inválido" })
+    .string({ error: (issue) => issue.input === undefined ? "Inválido" : "Precisa ser uma string" })
     .regex(/^[A-Za-z]+$/i, "Inválido."),
 
   city: z
-    .string({ required_error: "Inválido" })
+    .string({ error: (issue) => issue.input === undefined ? "Inválido" : "Precisa ser uma string" })
     .regex(/^[\p{L}\s]+$/u, "Inválido.")
     .max(50, { message: "Cidade muito extenso" }),
 
   phone: z
-    .string({ required_error: "Inválido" })
+    .string({ error: (issue) => issue.input === undefined ? "Inválido" : "Precisa ser uma string" })
     .min(10, { message: "Numero de telefone inválido" })
     .max(11),
 });
@@ -94,7 +94,7 @@ export const GenreFormSchema = z.object({
   _id: z.string().optional(),
 
   name: z
-    .string({ required_error: "Precisa ser preenchido." })
+    .string({ error: (issue) => issue.input === undefined ? "Precisa ser preenchido." : "Precisa ser uma string" })
     .min(3, { message: "Precisa ter pelo menos 3 caracteres." })
     .max(25, { message: "Máximo de 25 caracteres." }),
 });
@@ -103,59 +103,59 @@ export const ProductFormSchema = z.object({
   _id: z.string().optional(),
 
   name: z
-    .string({ required_error: "Precisa ser preenchido." })
+    .string({ error: (issue) => issue.input === undefined ? "Precisa ser preenchido." : "Precisa ser uma string" })
     .min(3, { message: "Precisa ter pelo menos 3 caracteres." })
     .max(50, { message: "Máximo de 50 caracteres." }),
 
   description: z
-    .string({ required_error: "Precisa ser preenchido." })
+    .string({ error: (issue) => issue.input === undefined ? "Precisa ser preenchido." : "Precisa ser uma string" })
     .min(10, { message: "No mínimo de 10 caracteres." })
     .max(250, { message: "Máximo de 250 caracteres." }),
 
   shortDescription: z
-    .string({ required_error: "Precisa ser preenchido." })
+    .string({ error: (issue) => issue.input === undefined ? "Precisa ser preenchido." : "Precisa ser uma string" })
     .min(10, { message: "No mínimo de 10 caracteres." }),
 
   about: z
-    .string({ required_error: "Precisa ser preenchido." })
+    .string({ error: (issue) => issue.input === undefined ? "Precisa ser preenchido." : "Precisa ser uma string" })
     .min(10, { message: "No mínimo de 10 caracteres." }),
 
   productImage: z.any(),
 
   genres: z
-    .array(z.string({ required_error: "Precisa ser preenchido." }))
+    .array(z.string({ error: (issue) => issue.input === undefined ? "Precisa ser preenchido." : "Precisa ser uma string" }))
     .min(1, { message: "Precisa escolher pelo menos 1 gênero." }),
 
   developer: z
-    .string({ required_error: "Precisa ser preenchido." })
+    .string({ error: (issue) => issue.input === undefined ? "Precisa ser preenchido." : "Precisa ser uma string" })
     .min(3, { message: "Precisa ter pelo menos 3 caracteres." }),
 
   publisher: z
-    .string({ required_error: "Precisa ser preenchido." })
+    .string({ error: (issue) => issue.input === undefined ? "Precisa ser preenchido." : "Precisa ser uma string" })
     .min(3, { message: "Precisa ter pelo menos 3 caracteres." }),
 
   system: z
-    .string({ required_error: "Precisa ser preenchido." })
+    .string({ error: (issue) => issue.input === undefined ? "Precisa ser preenchido." : "Precisa ser uma string" })
     .min(3, { message: "Precisa ter pelo menos 3 caracteres." }),
 
   processor: z
-    .string({ required_error: "Precisa ser preenchido." })
+    .string({ error: (issue) => issue.input === undefined ? "Precisa ser preenchido." : "Precisa ser uma string" })
     .min(3, { message: "Precisa ter pelo menos 3 caracteres." }),
 
   memory: z
-    .string({ required_error: "Precisa ser preenchido." })
+    .string({ error: (issue) => issue.input === undefined ? "Precisa ser preenchido." : "Precisa ser uma string" })
     .min(1, { message: "Precisa ser preenchido." }),
 
   storage: z
-    .string({ required_error: "Precisa ser preenchido." })
+    .string({ error: (issue) => issue.input === undefined ? "Precisa ser preenchido." : "Precisa ser uma string" })
     .min(1, { message: "Precisa ser preenchido." }),
 
   graphicCard: z
-    .string({ required_error: "Precisa ser preenchido." })
+    .string({ error: (issue) => issue.input === undefined ? "Precisa ser preenchido." : "Precisa ser uma string" })
     .min(3, { message: "Mínimo de 3 caracteres." }),
 
   price: z
-    .string({ required_error: "Precisa ser preenchido." })
+    .string({ error: (issue) => issue.input === undefined ? "Precisa ser preenchido." : "Precisa ser uma string" })
     .min(1, { message: "Precisa ser preenchido." }),
 
   active: z.boolean().optional(),
@@ -171,7 +171,7 @@ export const UserOrderSchema = z.object({
     .regex(/^[A-Za-z\u00C0-\u00FF ]+$/i, "Somente letras."),
 
   email: z
-    .string({ required_error: "E-mail inválido" })
+    .string({ error: (issue) => issue.input === undefined ? "E-mail inválido" : "Precisa ser uma string" })
     .email({ message: "E-mail inválido" })
     .min(5, { message: "E-mail inválido." }),
 
@@ -183,21 +183,21 @@ export const UserOrderSchema = z.object({
     .max(9, { message: "CEP Inválido" }),
 
   state: z
-    .string({ required_error: "Inválido" })
+    .string({ error: (issue) => issue.input === undefined ? "Inválido" : "Precisa ser uma string" })
     .regex(/^[A-Za-z]+$/i, "Inválido."),
 
   city: z
-    .string({ required_error: "Inválido" })
+    .string({ error: (issue) => issue.input === undefined ? "Inválido" : "Precisa ser uma string" })
     .regex(/^[\p{L}\s]+$/u, "Inválido.")
     .max(50, { message: "Cidade muito extenso" }),
 
   phone: z
-    .string({ required_error: "Inválido" })
+    .string({ error: (issue) => issue.input === undefined ? "Inválido" : "Precisa ser uma string" })
     .min(10, { message: "Numero de telefone inválido" })
     .max(11),
 
   cardNumber: z
-    .string({ required_error: "Numero do cartão Inválido" })
+    .string({ error: (issue) => issue.input === undefined ? "Numero do cartão Inválido" : "Precisa ser uma string" })
     .length(16, { message: "Numero do cartão inválido" })
     .regex(/^[0-9]+$/i, "Apenas números."),
 
@@ -246,14 +246,14 @@ export const UserOrderSchema = z.object({
       }
     ),
   cvv: z
-    .string({ required_error: "Inválido" })
+    .string({ error: (issue) => issue.input === undefined ? "Inválido" : "Precisa ser uma string" })
     .length(3, { message: "CVV inválido" })
     .regex(/^[0-9]+$/i, "Inválido."),
 
   checkAddress: z.boolean(),
 
   billingAddress: z
-    .string({ required_error: "Inválido" })
+    .string({ error: (issue) => issue.input === undefined ? "Inválido" : "Precisa ser uma string" })
     .min(5, { message: "Endereço inválido" })
     .max(250, { message: "Endereço muito extenso" }),
 
@@ -263,11 +263,11 @@ export const UserOrderSchema = z.object({
     .max(9, { message: "CEP Inválido" }),
 
   billingState: z
-    .string({ required_error: "Inválido" })
+    .string({ error: (issue) => issue.input === undefined ? "Inválido" : "Precisa ser uma string" })
     .regex(/^[A-Za-z]+$/i, "Inválido."),
 
   billingCity: z
-    .string({ required_error: "Inválido" })
+    .string({ error: (issue) => issue.input === undefined ? "Inválido" : "Precisa ser uma string" })
     .regex(/^[\p{L}\s]+$/u, "Inválido.")
     .max(50, { message: "Limite de 50 caracteres" }),
 });
