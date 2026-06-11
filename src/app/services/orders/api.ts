@@ -2,7 +2,11 @@ import { toast } from "@/components/ui/use-toast";
 import { OrderProps } from "@/types/index.d";
 
 export const getOrders = async (searchQuery: Record<string, string>) => {
-  const queryString = new URLSearchParams(searchQuery).toString();
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(searchQuery)) {
+    if (value !== undefined && value !== "") params.set(key, value);
+  }
+  const queryString = params.toString();
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/order?${queryString}`
   );

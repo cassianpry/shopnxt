@@ -4,7 +4,11 @@ import { signIn } from "next-auth/react";
 import { NextResponse } from "next/server";
 
 export const getUsers = async (searchQuery: Record<string, string>) => {
-  const queryString = new URLSearchParams(searchQuery).toString();
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(searchQuery)) {
+    if (value !== undefined && value !== "") params.set(key, value);
+  }
+  const queryString = params.toString();
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/user?${queryString}`
   );
@@ -172,7 +176,11 @@ export const updatePasswordUser = async (values: string) => {
 };
 
 export const getToken = async (searchQuery: Record<string, string>) => {
-  const queryString = new URLSearchParams(searchQuery).toString();
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(searchQuery)) {
+    if (value !== undefined && value !== "") params.set(key, value);
+  }
+  const queryString = params.toString();
 
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/forgot-password?${queryString}`
