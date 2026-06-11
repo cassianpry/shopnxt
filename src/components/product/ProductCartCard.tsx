@@ -85,29 +85,32 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
       ) : (
         <div className="flex flex-col text-dark400_light900 rounded-md bg-gray-200 dark:bg-gray-700 m-5">
           <div className="flex items-start ml-5 mt-5">
-            <Image
-              className="rounded-sm h-[86px] w-32 "
-              src={
-                type === "wishlist"
-                  ? Array.isArray(wishList)
-                    ? wishList[index].productImage
-                    : wishList.productImage
-                  : Array.isArray(product)
-                  ? product[index].productImage
-                  : product.productImage
-              }
-              alt={
-                type === "wishlist"
-                  ? Array.isArray(wishList)
-                    ? wishList[index].name
-                    : wishList.name
-                  : Array.isArray(product)
-                  ? product[index].name
-                  : product.name
-              }
-              width={150}
-              height={30}
-            />
+            <div className="relative w-32 h-[86px] shrink-0">
+              <Image
+                className="rounded-sm"
+                src={
+                  type === "wishlist"
+                    ? Array.isArray(wishList)
+                      ? wishList[index].productImage
+                      : wishList.productImage
+                    : Array.isArray(product)
+                    ? product[index].productImage
+                    : product.productImage
+                }
+                alt={
+                  type === "wishlist"
+                    ? Array.isArray(wishList)
+                      ? wishList[index].name
+                      : wishList.name
+                    : Array.isArray(product)
+                    ? product[index].name
+                    : product.name
+                }
+                fill
+                sizes="128px"
+                style={{ objectFit: "cover" }}
+              />
+            </div>
             <div className="flex flex-col ml-3">
               <Link
                 className="text-blue-500 hover:text-blue-800 dark:hover:text-blue-300 -mt-2"

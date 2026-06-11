@@ -78,13 +78,16 @@ function ProductPage() {
           <div className="flex gap-10 max-w-[1000px]">
             <div className="flex flex-col justify-start">
               <h1 className="font-bold text-4xl pb-5">{product.data.name}</h1>
-              <Image
-                className="rounded-2xl h-full w-[1200px]"
-                src={product.data.productImage}
-                width={1000}
-                height={600}
-                alt=""
-              />
+              <div className="relative w-full h-auto min-h-[300px]">
+                <Image
+                  className="rounded-2xl"
+                  src={product.data.productImage}
+                  fill
+                  sizes="(max-width: 1200px) 100vw, 1200px"
+                  alt=""
+                  style={{ objectFit: "contain" }}
+                />
+              </div>
               <h2 className="font-normal text-lg mt-3">
                 {product.data.description}
               </h2>

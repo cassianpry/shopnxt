@@ -108,17 +108,20 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({
         >
           <div
             ref={sliderRef}
-            className="h-[200px] xl:h-[600px] lg:h-[450px] md:h-[350px]"
+            className="h-[200px] xl:h-[600px] lg:h-[450px] md:h-[350px] w-full"
           >
             <Link href={`/products/${products[currentIndex].slug}`}>
-              <Image
-                className="rounded-2xl h-full w-[1100px] brightness-50"
-                src={products[currentIndex].productImage}
-                width={1000}
-                height={600}
-                alt=""
-                priority
-              />
+              <div className="relative w-full h-full">
+                <Image
+                  className="rounded-2xl brightness-50"
+                  src={products[currentIndex].productImage}
+                  fill
+                  sizes="(max-width: 1100px) 100vw, 1100px"
+                  alt=""
+                  priority
+                  style={{ objectFit: "cover" }}
+                />
+              </div>
             </Link>
             <div
               ref={sliderRef}

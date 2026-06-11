@@ -78,14 +78,17 @@ function ProductCard({
             <div className="flex flex-grow" key={products._id}>
               <div className="flex flex-col justify-start">
                 <Link href={`/products/${products.slug}`}>
-                  <Image
-                    className="rounded-2xl h-48 lg:h-80 mb-2 transition-all duration-300 ease-in-out hover:brightness-50"
-                    src={products.productImage}
-                    width={1000}
-                    height={600}
-                    alt=""
-                    priority
-                  />
+                  <div className="relative mb-2 h-48 lg:h-80">
+                    <Image
+                      className="rounded-2xl transition-all duration-300 ease-in-out hover:brightness-50"
+                      src={products.productImage}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 1000px"
+                      alt=""
+                      priority
+                      style={{ objectFit: "cover" }}
+                    />
+                  </div>
                 </Link>
                 <p className="font-semibold">{products.name}</p>
                 {products.price === "0" ? (

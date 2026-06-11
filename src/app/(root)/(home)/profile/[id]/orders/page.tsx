@@ -66,13 +66,16 @@ const UserOrders = () => {
                 </div>
                 {order.cartProducts.map((product) => (
                   <AccordionContent key={product._id} className="flex">
-                    <Image
-                      className="max-w-24 max-h-12"
-                      src={product.productImage}
-                      width={150}
-                      height={150}
-                      alt={product.name}
-                    />
+                    <div className="relative w-24 h-12 shrink-0">
+                      <Image
+                        className="rounded-sm"
+                        src={product.productImage}
+                        fill
+                        sizes="96px"
+                        alt={product.name}
+                        style={{ objectFit: "cover" }}
+                      />
+                    </div>
                     <div className="flex flex-col justify-start">
                       <span>{product.name}</span>
                       <span>
