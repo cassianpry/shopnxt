@@ -28,7 +28,7 @@ export function ProductPriceCard({
     window.addEventListener("resize", handleResize);
 
     return () => {
-      window.addEventListener("resize", handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 

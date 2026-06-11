@@ -31,28 +31,29 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({
   setIsWishListed,
 }) => {
   const sliderRef = useRef<HTMLDivElement>(null);
+  const descriptionRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const query = useQueryClient();
 
   const nextSlide = useCallback(() => {
-    setCurrentIndex((currentIndex) =>
-      currentIndex === products.length! - 1 ? 0 : currentIndex + 1
+    setCurrentIndex((prev) =>
+      prev === products.length! - 1 ? 0 : prev + 1
     );
 
-    sliderRef.current!.classList.add("fade-anim");
-  }, [products.length]);
+    sliderRef.current?.classList.add("fade-anim");
+  }, [products]);
 
   const prevSlide = () => {
-    setCurrentIndex((currentIndex) =>
-      currentIndex === 0 ? products.length! - 1 : currentIndex - 1
+    setCurrentIndex((prev) =>
+      prev === 0 ? products.length! - 1 : prev - 1
     );
-    sliderRef.current!.classList.add("fade-anim");
+    sliderRef.current?.classList.add("fade-anim");
   };
 
   const goToSlide = (slideIndex: number) => {
     setCurrentIndex(slideIndex);
-    sliderRef.current!.classList.add("fade-anim");
+    sliderRef.current?.classList.add("fade-anim");
   };
 
   const handleMouseEnter = () => {
@@ -120,7 +121,7 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({
               />
             </Link>
             <div
-              ref={sliderRef}
+              ref={descriptionRef}
               className="absolute left-0 right-0 bottom-[5%] w-[40%] ml-10 -translate-y-10"
             >
               <div className="flex w-[55%] rounded-lg">
