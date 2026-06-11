@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { MdAutorenew, MdLogin, MdPersonOutline } from "react-icons/md";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import ResetPasswordForm from "@/components/form/ResetPasswordForm";
 import { useLoginUser } from "@/app/services/users/mutations";
 

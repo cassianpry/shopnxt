@@ -55,7 +55,7 @@ function ResetPasswordForm() {
       updatePassword.mutate(values);
     } catch (error) {
       toast({
-        className: "bg-red-600 text-light-800",
+        className: "bg-red-600 text-text-high",
         title: "Entre em contato com o suporte",
         description: error + " informe esse erro ao suporte",
       });

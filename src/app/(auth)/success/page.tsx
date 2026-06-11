@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import React from "react";
 import { MdArrowForward, MdOutlineCheckCircle } from "react-icons/md";

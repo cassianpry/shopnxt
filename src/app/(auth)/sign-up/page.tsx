@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -42,7 +41,7 @@ const SignUp = () => {
       registerUser.mutate(values);
     } catch (error) {
       toast({
-        className: "bg-red-600 text-light-800",
+        className: "bg-red-600 text-text-high",
         title: "Entre em contato com o suporte",
         description: error + " informe esse erro ao suporte",
       });
