@@ -58,7 +58,7 @@ export function ProductPriceCard({
             className="group snap-start shrink-0 w-[180px] sm:w-[200px]"
           >
             <div className="bg-dark-300 border border-dark-400 rounded-lg overflow-hidden transition-all duration-300 hover:border-accent/50 hover:translate-y-[-2px] hover:shadow-lg">
-              <div className="relative aspect-[16/9]">
+              <div className="relative aspect-[3/4]">
                 <Image
                   src={product.productImage}
                   alt={product.name}
