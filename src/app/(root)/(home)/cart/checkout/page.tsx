@@ -10,12 +10,14 @@ const Checkout = () => {
   const { data } = useSession();
 
   return (
-    <div className="text-dark400_light900">
-      {data?.user ? (
-        <UserCheckoutForm user={data.user as UserProps} />
-      ) : (
-        <Loading />
-      )}
+    <div className="bg-dark-100 min-h-screen">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 pt-24 pb-16">
+        {data?.user ? (
+          <UserCheckoutForm user={data.user as UserProps} />
+        ) : (
+          <Loading />
+        )}
+      </div>
     </div>
   );
 };

@@ -33,32 +33,33 @@ function CartPage() {
   const totalPrice = calcTotalPrice(cartProducts);
 
   return (
-    <div className="flex flex-col mt-24 sm:mt-0 text-dark400_light900">
-      <h1 className="font-bold text-4xl pb-5">Carrinho de compras</h1>
-      <div className="lg:flex gap-4 mt-5 justify-evenly">
-        <div className="gap-10">
-          <div>
+    <div className="bg-dark-100 min-h-screen">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 pt-24 pb-16">
+        <h1 className="text-text-high font-spaceGrotesk font-bold text-3xl mb-8">
+          Carrinho de compras
+        </h1>
+        <div className="lg:flex gap-8">
+          <div className="flex-1">
             {!wishlistResult.isLoading && cartProducts?.length === 0 ? (
-              <div className="flex flex-col items-center justify-center text-center">
-                <LuShoppingCart className="w-32 h-32 leading-3" />
-
-                <span className="mt-10 text-3xl font-bold">
+              <div className="flex flex-col items-center justify-center text-center py-20">
+                <LuShoppingCart className="w-24 h-24 text-text-muted mb-6" />
+                <span className="text-text-high text-2xl font-bold mb-3">
                   Seu carrinho esta vazio...
                 </span>
-                <span className="mt-10 text-lg font-normal">
+                <span className="text-text-body text-base mb-8">
                   Antes de realizar o pagamento, adicione os jogos do seu
                   interesse
                 </span>
                 <Link
                   href="/"
-                  className="focus:shadow-outline mt-16 p-3 flex items-center justify-center rounded-md font-semibold text-sm text-light-900  bg-blue-900 hover:bg-blue-600 transition-all duration-300 ease-in-out"
+                  className="btn-primary inline-flex items-center gap-2"
                 >
-                  <LuShoppingCart className="w-4 h-4 leading-3" />
-                  &nbsp;&nbsp;Ir as compras
+                  <LuShoppingCart className="w-4 h-4" />
+                  Ir as compras
                 </Link>
               </div>
             ) : (
-              <>
+              <div className="bg-dark-300 rounded-xl p-6">
                 {cartProducts?.map((prod: ProductProps, index: number) => (
                   <ProductCartCard
                     product={prod}
@@ -68,34 +69,48 @@ function CartPage() {
                     isLoading={wishlistResult.isLoading}
                   />
                 ))}
-              </>
+              </div>
             )}
           </div>
-        </div>
-        {cartProducts?.length === 0 ? (
-          ""
-        ) : (
-          <div className="flex justify-center lg:justify-start">
-            <div className="flex flex-col m-5 lg:m-0 items-start w-96 lg:w-72">
-              <h3 className="font-bold text-xl mb-5">Resumo dos jogos</h3>
-              <div className="w-full flex justify-between items center text-sm font-semibold">
-                <span>Total:&nbsp;</span>
-                <span>
-                  {totalPrice.toLocaleString("pt-BR", {
-                    style: "currency",
-                    currency: "BRL",
-                  })}
-                </span>
+          {cartProducts?.length > 0 && (
+            <div className="w-full lg:w-[380px] mt-8 lg:mt-0">
+              <div className="bg-dark-300 rounded-xl p-6 sticky top-24">
+                <h3 className="text-text-high text-lg font-bold font-spaceGrotesk mb-4">
+                  Resumo dos jogos
+                </h3>
+                <div className="text-text-body text-sm flex justify-between mb-2">
+                  <span>Subtotal</span>
+                  <span className="text-text-high">
+                    {totalPrice.toLocaleString("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                    })}
+                  </span>
+                </div>
+                <div className="text-text-body text-sm flex justify-between mb-4">
+                  <span>Frete</span>
+                  <span>Grátis</span>
+                </div>
+                <div className="border-t border-dark-500" />
+                <div className="text-text-high text-xl font-bold flex justify-between mt-4">
+                  <span>Total</span>
+                  <span>
+                    {totalPrice.toLocaleString("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                    })}
+                  </span>
+                </div>
+                <Button
+                  asChild
+                  className="bg-accent hover:bg-accent-hover text-white font-bold w-full rounded-md py-3 text-sm transition-colors mt-6"
+                >
+                  <Link href="/cart/checkout">Finalizar a compra</Link>
+                </Button>
               </div>
-              <Button
-                asChild
-                className="mt-3 w-full flex items-center justify-center rounded-md font-semibold text-xs text-light-900  bg-blue-900 hover:bg-blue-600 transition-all duration-300 ease-in-out uppercase"
-              >
-                <Link href="/cart/checkout">Finalizar a compra</Link>
-              </Button>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
