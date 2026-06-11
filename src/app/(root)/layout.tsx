@@ -16,19 +16,12 @@ const Layout = ({ children }: { children: ReactNode }) => {
     <QueryClientProvider client={queryClient}>
       <CartProvider>
         <main className="bg-dark-100 flex flex-col min-h-screen">
-          <div style={{ flex: 1 }}>
-            <Navbar user={data?.user as UserProps} status={status} />
-            <div className="container flex">
-              {/* <div className="flex min-h-screen flex-1 flex-col px-6 pb-6 pt-20 max-md:pb-14 sm:px-14"> */}
-              <div className="mx-auto w-full max-w-5x1">
-                <div className="flex min-h-screen flex-1 flex-col px-6 pt-20 max-md:pb-14 sm:px-14">
-                  {children}
-                </div>
-                <Toaster />
-              </div>
-            </div>
-            <Footer />
+          <Navbar user={data?.user as UserProps} status={status} />
+          <div className="flex-1 pt-20">
+            {children}
           </div>
+          <Footer />
+          <Toaster />
         </main>
       </CartProvider>
     </QueryClientProvider>

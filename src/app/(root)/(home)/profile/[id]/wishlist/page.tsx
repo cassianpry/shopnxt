@@ -23,9 +23,9 @@ function WishList() {
           <LoadingProductCard />
         </div>
       ) : (
-        <div className="">
-          <h1 className="text-4xl font-bold text-text-high font-spaceGrotesk">Lista de desejos</h1>
-          <Separator orientation="horizontal" className="bg-light-400" />
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 pt-24 pb-16">
+          <h1 className="text-4xl font-bold text-text-high font-spaceGrotesk mb-8">Lista de desejos</h1>
+          <Separator orientation="horizontal" className="bg-dark-400" />
           {wishlistResult?.data?.wishlist?.products.length === 0 ||
           wishlistResult?.data?.wishlist?.products.length === undefined ? (
             <div className="flex flex-col items-center justify-center text-center">

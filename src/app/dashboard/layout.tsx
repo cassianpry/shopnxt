@@ -23,7 +23,7 @@ function Layout({ children }: { children: React.ReactNode }) {
               </div>
 
               <section className="flex flex-1 flex-col px-6 pb-6 pt-6 max-md:pb-14 sm:px-14">
-                <div className="mx-auto w-full max-w-5x1">
+                <div className="mx-auto w-full max-w-[1400px]">
                   {children}
 
                   <Toaster />

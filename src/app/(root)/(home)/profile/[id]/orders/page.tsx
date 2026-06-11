@@ -27,16 +27,16 @@ const UserOrders = () => {
   console.log(orders?.data);
 
   return (
-    <div className="flex text-text-high max-w-[700px]">
+    <div className="max-w-[1400px] mx-auto px-4 sm:px-6 pt-24 pb-16">
+      <h1 className="font-bold text-4xl text-text-high mb-8">Seus pedidos</h1>
       {(data?.user && orders?.data === null) || orders?.data?.length === 0 ? (
         <div className="flex flex-col items-center justify-center text-center">
-          <span className="mt-10 text-3xl font-bold">
+          <span className="mt-10 text-3xl font-bold text-text-high">
             Você não fez nenhuma compra...
           </span>
         </div>
       ) : (
-        <div className="flex flex-col w-full">
-          <h1 className="font-bold text-4xl pb-10">Seus pedidos</h1>
+        <div className="flex flex-col w-full max-w-[700px]">
           <Accordion
             type="single"
             collapsible
@@ -46,35 +46,35 @@ const UserOrders = () => {
               <AccordionItem key={order._id} value={order._id!}>
                 <div className="flex justify-between items-center gap-5">
                   <AccordionTrigger />
-                  <div className="w-full">
+                  <div className="w-full text-text-body">
                     Nº do Pedido:&nbsp;
                     <Link
                       href={`/profile/${(data.user as UserProps)._id}/order/${
                         order.orderNum
                       }`}
-                      className="text-blue-600 hover:text-green-400"
+                      className="text-accent hover:text-text-high transition-colors"
                     >
                       {order.orderNum}
                     </Link>
                   </div>
-                  <p>
+                  <p className="text-text-body text-sm">
                     Data:&nbsp;
-                    <span className="text-green-600">
+                    <span className="text-text-high">
                       {moment(order?.createdAt).locale("pt-br").format("L")}
                     </span>
                   </p>
                 </div>
                 {order.cartProducts.map((product) => (
-                  <AccordionContent key={product._id} className="flex">
+                  <AccordionContent key={product._id} className="flex gap-4 text-text-body">
                     <Image
-                      className="max-w-24 max-h-12"
+                      className="max-w-24 max-h-12 rounded"
                       src={product.productImage}
                       width={150}
                       height={150}
                       alt={product.name}
                     />
                     <div className="flex flex-col justify-start">
-                      <span>{product.name}</span>
+                      <span className="text-text-high">{product.name}</span>
                       <span>
                         {parseFloat(product.price).toLocaleString("pt-BR", {
                           style: "currency",
