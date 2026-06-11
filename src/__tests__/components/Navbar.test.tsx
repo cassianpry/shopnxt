@@ -11,6 +11,12 @@ vi.mock("next-auth/react", () => ({
   signOut: vi.fn(),
 }));
 
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
+  usePathname: () => "/",
+  useSearchParams: () => new URLSearchParams(),
+}));
+
 vi.mock("@/components/navbar/NavItems", () => ({
   default: () => <div data-testid="nav-items" />,
 }));
@@ -25,6 +31,10 @@ vi.mock("@/components/navbar/UserMenu", () => ({
   ),
 }));
 
+vi.mock("@/components/search/SearchBar", () => ({
+  default: () => <div data-testid="search-bar" />,
+}));
+
 import Navbar from "@/components/navbar/Navbar";
 
 describe("Navbar", () => {
@@ -37,8 +47,8 @@ describe("Navbar", () => {
 
   it("shows login links when unauthenticated", () => {
     render(<Navbar user={null as any} status="unauthenticated" />);
-    expect(screen.getAllByText("login").length).toBeGreaterThan(0);
-    expect(screen.getByText("cadastre-se")).toBeInTheDocument();
+    expect(screen.getByText("Entrar")).toBeInTheDocument();
+    expect(screen.getByText("Cadastrar")).toBeInTheDocument();
   });
 
   it("shows user menu when authenticated", () => {
