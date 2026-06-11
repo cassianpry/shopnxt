@@ -89,7 +89,7 @@ function ProductPage() {
                   src={product.data.productImage}
                   width={1000}
                   height={562}
-                  alt=""
+                  alt={product.data.name}
                 />
               </div>
               <div className="w-full lg:w-[30%]">
@@ -97,13 +97,22 @@ function ProductPage() {
                   <h1 className="text-text-high text-3xl font-bold font-spaceGrotesk mb-4">
                     {product.data.name}
                   </h1>
-                  <Badge className="font-medium py-1 bg-accent text-white mb-4">
-                    {formatPrice(product.data?.price)}
-                  </Badge>
+                  <div className="mb-4">
+                    {product.data.oldPrice && (
+                      <p className="text-text-muted line-through text-xs">
+                        {formatPrice(product.data.oldPrice)}
+                      </p>
+                    )}
+                    <Badge className="font-medium py-1 bg-accent text-white">
+                      {product.data.price === "0"
+                        ? "Gratuito"
+                        : formatPrice(product.data?.price)}
+                    </Badge>
+                  </div>
                   <Button
                     asChild
                     className="bg-accent hover:bg-accent-hover text-white font-bold rounded-md px-8 py-3 w-full text-sm transition-colors mb-3"
-                    onClick={() => (existingProduct ? {} : addToCart(product.data))}
+                    onClick={() => !existingProduct && addToCart(product.data)}
                   >
                     <Link href="/cart">Compre já</Link>
                   </Button>
