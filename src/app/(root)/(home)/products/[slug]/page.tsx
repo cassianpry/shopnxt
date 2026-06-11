@@ -62,161 +62,160 @@ function ProductPage() {
     }
   }, [wishList.data?.wishlist?.products, product.data]);
 
+  const formatPrice = (value: string) =>
+    parseFloat(value).toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
+
   return (
     <>
       {product.isLoading ? (
         <div className="flex flex-col space-y-3 my-20">
-          <Skeleton className="h-4  w-[250px] bg-gray-500" />
-          <Skeleton className="h-[125px] w-[250px] rounded-xl bg-gray-500" />
+          <Skeleton className="h-4 w-[250px] bg-dark-500" />
+          <Skeleton className="h-[125px] w-[250px] rounded-xl bg-dark-500" />
           <div className="space-y-2">
-            <Skeleton className="h-4 w-[250px] bg-gray-500" />
-            <Skeleton className="h-4 w-[200px] bg-gray-500" />
+            <Skeleton className="h-4 w-[250px] bg-dark-500" />
+            <Skeleton className="h-4 w-[200px] bg-dark-500" />
           </div>
         </div>
       ) : (
-        <div className="flex gap-4 my-20 justify-evenly text-dark400_light900">
-          <div className="flex gap-10 max-w-[1000px]">
-            <div className="flex flex-col justify-start">
-              <h1 className="font-bold text-4xl pb-5">{product.data.name}</h1>
-              <Image
-                className="rounded-2xl h-full w-[1200px]"
-                src={product.data.productImage}
-                width={1000}
-                height={600}
-                alt=""
-              />
-              <h2 className="font-normal text-lg mt-3">
-                {product.data.description}
+        <div className="bg-dark-100 min-h-screen">
+          <div className="max-w-[1400px] mx-auto px-4 sm:px-6 pt-24 pb-16">
+            <div className="flex flex-col lg:flex-row gap-8">
+              <div className="w-full lg:w-[70%]">
+                <Image
+                  className="rounded-xl aspect-video object-cover w-full"
+                  src={product.data.productImage}
+                  width={1000}
+                  height={562}
+                  alt=""
+                />
+              </div>
+              <div className="w-full lg:w-[30%]">
+                <div className="bg-dark-300 rounded-xl p-6 sticky top-24">
+                  <h1 className="text-text-high text-3xl font-bold font-spaceGrotesk mb-4">
+                    {product.data.name}
+                  </h1>
+                  <Badge className="font-medium py-1 bg-accent text-white mb-4">
+                    {formatPrice(product.data?.price)}
+                  </Badge>
+                  <Button
+                    asChild
+                    className="bg-accent hover:bg-accent-hover text-white font-bold rounded-md px-8 py-3 w-full text-sm transition-colors mb-3"
+                    onClick={() => (existingProduct ? {} : addToCart(product.data))}
+                  >
+                    <Link href="/cart">Compre já</Link>
+                  </Button>
+                  {existingProduct ? (
+                    <Button
+                      asChild
+                      className="w-full border border-dark-400 mb-2 items-center justify-center rounded-md font-semibold text-xs hover:bg-dark-400 transition-all duration-300 ease-in-out uppercase text-text-high"
+                    >
+                      <Link href={{ pathname: "/cart", query: { id: userId } }}>
+                        Ir para o carrinho
+                      </Link>
+                    </Button>
+                  ) : (
+                    <Button
+                      className="w-full border border-dark-400 mb-2 items-center justify-center rounded-md font-semibold text-xs hover:bg-dark-400 transition-all duration-300 ease-in-out uppercase text-text-high"
+                      onClick={() => addToCart(product.data)}
+                    >
+                      Adicionar ao carrinho
+                    </Button>
+                  )}
+                  {isWishListed ? (
+                    <Link
+                      href={{
+                        pathname: `/profile/${userId}/wishlist`,
+                        query: { id: userId },
+                      }}
+                    >
+                      <div className="flex border border-dark-400 mb-2 px-14 py-2.5 items-center justify-center rounded-md font-semibold text-xs text-nowrap hover:bg-dark-400 transition-all duration-300 ease-in-out uppercase text-text-high">
+                        <IoMdCheckmarkCircleOutline className="w-4 h-4" />
+                        &nbsp;Na lista de desejos
+                      </div>
+                    </Link>
+                  ) : (
+                    <Button
+                      className="w-full border border-dark-400 mb-2 items-center justify-center rounded-md font-semibold text-xs hover:bg-dark-400 transition-all duration-300 ease-in-out uppercase text-text-high"
+                      onClick={() => addToWishList(userId!, productId)}
+                    >
+                      <IoMdAddCircleOutline className="w-4 h-4" />
+                      &nbsp;Lista de desejos
+                    </Button>
+                  )}
+                  <Separator className="bg-dark-400 my-3" />
+                  <div className="flex w-full justify-between text-xs mb-2">
+                    <p className="text-text-muted">Desenvolvedora</p>
+                    <p className="text-text-high">{product.data?.developer}</p>
+                  </div>
+                  <Separator className="bg-dark-400" />
+                  <div className="flex w-full justify-between text-xs my-2">
+                    <p className="text-text-muted">Editora</p>
+                    <p className="text-text-high">{product.data?.publisher}</p>
+                  </div>
+                  <Separator className="bg-dark-400" />
+                  <div className="flex w-full justify-between text-xs my-2">
+                    <p className="text-text-muted">Plataforma</p>
+                    <p className="text-text-high">{product.data?.system}</p>
+                  </div>
+                  <Separator className="bg-dark-400" />
+                  <div className="flex w-full justify-between text-xs my-2">
+                    <p className="text-text-muted">Data de lançamento</p>
+                    <p className="text-text-high">
+                      {moment(product.data?.createdAt).locale("pt-br").format("L")}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-dark-300 rounded-xl p-6 mt-8">
+              <h2 className="text-text-high text-xl font-bold font-spaceGrotesk mb-4">
+                Sobre o jogo
               </h2>
-              <div className="flex flex-between items-center gap-2 mt-10">
-                <div className="flex flex-col border-l-2 border-zinc-700">
-                  <h3 className="font-semibold">&nbsp;Gêneros:</h3>
-                  <p className="capitalize font-normal text-sm">
-                    &nbsp;
-                    {product.data.genres.map((genre: GenreProps) => (
-                      <span key={genre._id}>{genre.name}&nbsp;</span>
-                    ))}
-                  </p>
-                </div>
-                <div className="flex flex-col border-l-2 border-zinc-700 mt-5">
-                  <p>Todo: Multiplayer, Single Player, etc...</p>
-                </div>
-              </div>
-              <div className="flex flex-col gap-2 ">
-                <ParseHTML data={product.data.about} />
-              </div>
-              <div className="mt-10 dark:bg-gray-800 bg-gray-200 p-5">
-                <h3 className="font-semibold text-sm pb-5">
-                  Requisitos mínimos
-                </h3>
-                <Separator orientation="horizontal" className="bg-gray-500" />
-                <p className="text-xs pt-5 font-medium">
-                  Sistema Operacional:&nbsp;
-                  <span className="text-gray-400">{product.data.system}</span>
-                </p>
-                <p className="text-xs pt-5 font-medium">
-                  Processador:&nbsp;
-                  <span className="text-gray-400">
-                    {product.data.processor}
-                  </span>
-                </p>
-                <p className="text-xs pt-5 font-medium">
-                  Memória:&nbsp;
-                  <span className="text-gray-400">
-                    {product.data.memory}&nbsp;GB
-                  </span>
-                </p>
-                <p className="text-xs pt-5 font-medium">
-                  Armazenamento:&nbsp;
-                  <span className="text-gray-400">
-                    {product.data.storage}&nbsp;GB de HD ou SSD
-                  </span>
-                </p>
-                <p className="text-xs pt-5 font-medium">
-                  Placa Gráfica:&nbsp;
-                  <span className="text-gray-400">
-                    {product.data.graphicCard}&nbsp;
-                  </span>
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col w-full max-w-64 items-start mt-52">
-            <p className="font-medium">{product.data?.name}</p>
-            <Badge className="font-medium py-1 bg-blue-900 text-light-900 mb-1">
-              {parseFloat(product.data?.price).toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              })}
-            </Badge>
-            {existingProduct ? (
-              <Button
-                asChild
-                className="w-full border-[1px] mb-1 items-center justify-center rounded-md font-semibold text-xs  hover:bg-gray-300 dark:hover:bg-gray-500 transition-all duration-300 ease-in-out uppercase"
-              >
-                <Link href={{ pathname: "/cart", query: { id: userId } }}>
-                  Ir para o carrinho
-                </Link>
-              </Button>
-            ) : (
-              <Button
-                className="w-full border-[1px] mb-1 items-center justify-center rounded-md font-semibold text-xs  hover:bg-gray-300 dark:hover:bg-gray-500 transition-all duration-300 ease-in-out uppercase"
-                onClick={() => addToCart(product.data)}
-              >
-                Adicionar ao carrinho
-              </Button>
-            )}
-            {isWishListed ? (
-              <Link
-                href={{
-                  pathname: `/profile/${userId}/wishlist`,
-                  query: { id: userId },
-                }}
-              >
-                <div className="flex border-[1px] mb-1 px-14 py-2.5 items-center justify-center rounded-md font-semibold text-xs text-nowrap  hover:bg-gray-300 dark:hover:bg-gray-500 transition-all duration-300 ease-in-out uppercase">
-                  <IoMdCheckmarkCircleOutline className="w-4 h-4" />
-                  &nbsp;Na lista de desejos
-                </div>
-              </Link>
-            ) : (
-              <Button
-                className="w-full border-[1px] mb-1 items-center justify-center rounded-md font-semibold text-xs  hover:bg-gray-300 dark:hover:bg-gray-500 transition-all duration-300 ease-in-out uppercase"
-                onClick={() => addToWishList(userId!, productId)}
-              >
-                <IoMdAddCircleOutline className="w-4 h-4" />
-                &nbsp;Lista de desejos
-              </Button>
-            )}
-
-            <Button
-              asChild
-              className="focus:shadow-outline mb-3 w-full flex items-center justify-center rounded-md font-semibold text-xs text-light-900  bg-blue-900 hover:bg-blue-600 transition-all duration-300 ease-in-out uppercase"
-              onClick={() => (existingProduct ? {} : addToCart(product.data))}
-            >
-              <Link href="/cart">Compre já</Link>
-            </Button>
-            <div className="flex w-full justify-between text-xs mb-2">
-              <p>Desenvolvedora</p>
-              <p className="text-gray-500">{product.data?.developer}</p>
-            </div>
-            <Separator orientation="horizontal" className="bg-gray-500" />
-            <div className="flex w-full justify-between text-xs my-2">
-              <p>Editora</p>
-              <p className="text-gray-500">{product.data?.publisher}</p>
-            </div>
-            <Separator orientation="horizontal" className="bg-gray-500" />
-            <div className="flex w-full justify-between text-xs my-2">
-              <p>Plataforma</p>
-              <p className="text-gray-500">{product.data?.system}</p>
-            </div>
-            <Separator orientation="horizontal" className="bg-gray-500" />
-            <div className="flex w-full justify-between text-xs my-2">
-              <p>Data de lançamento</p>
-              <p className="text-gray-500">
-                {moment(product.data?.createdAt).locale("pt-br").format("L")}
+              <p className="text-text-body leading-relaxed mb-4">
+                {product.data.description}
               </p>
+              <ParseHTML data={product.data.about} />
             </div>
-            <Separator orientation="horizontal" className="bg-gray-500" />
+            <div className="bg-dark-300 rounded-xl p-6 mt-6">
+              <h3 className="text-text-high text-lg font-bold font-spaceGrotesk mb-4">
+                Requisitos mínimos
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <p className="text-text-muted text-sm">Sistema Operacional</p>
+                  <p className="text-text-high text-sm">{product.data.system}</p>
+                </div>
+                <div>
+                  <p className="text-text-muted text-sm">Processador</p>
+                  <p className="text-text-high text-sm">{product.data.processor}</p>
+                </div>
+                <div>
+                  <p className="text-text-muted text-sm">Memória</p>
+                  <p className="text-text-high text-sm">{product.data.memory} GB</p>
+                </div>
+                <div>
+                  <p className="text-text-muted text-sm">Armazenamento</p>
+                  <p className="text-text-high text-sm">{product.data.storage} GB de HD ou SSD</p>
+                </div>
+                <div>
+                  <p className="text-text-muted text-sm">Placa Gráfica</p>
+                  <p className="text-text-high text-sm">{product.data.graphicCard}</p>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2 mt-6">
+              {product.data.genres.map((genre: GenreProps) => (
+                <span
+                  key={genre._id}
+                  className="bg-dark-400 text-text-body text-xs rounded-full px-3 py-1"
+                >
+                  {genre.name}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       )}

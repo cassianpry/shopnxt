@@ -36,7 +36,7 @@ const ParseHTML = ({ data }: ParseHTMLProps) => {
     Prism.highlightAll();
   }, []);
   return (
-    <div className="markdown w-full min-w-full text-dark-500 dark:text-light-900">
+    <div className="markdown w-full min-w-full text-text-high">
       {parse(DOMPurify.sanitize(data))}
     </div>
   );

@@ -5,10 +5,10 @@ import React from "react";
 function NewProduct() {
   return (
     <div>
-      <h1 className="h1-bold mt-20 text-dark100_light900">
+      <h1 className="text-text-high text-2xl font-bold font-spaceGrotesk mt-20">
         Cadastro de produtos
       </h1>
-      <Separator orientation="horizontal" className="bg-light-400" />
+      <Separator orientation="horizontal" className="bg-dark-400" />
       <div className="flex justify-start gap-3 mt-5">
         <ProductForm />
       </div>

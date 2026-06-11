@@ -30,8 +30,8 @@ function Products(props: SearchParamsProps) {
 
   return (
     <div>
-      <h1 className="h1-bold text-dark100_light900 pt-12">Produtos</h1>
-      <Separator orientation="horizontal" className="bg-light-400" />
+      <h1 className="text-text-high text-2xl font-bold font-spaceGrotesk pt-12">Produtos</h1>
+      <Separator orientation="horizontal" className="bg-dark-400" />
 
       <div className="w-full">
         <div className="items-center py-4">
@@ -41,7 +41,7 @@ function Products(props: SearchParamsProps) {
             <Link href="/dashboard/products/new">
               <Button
                 type="button"
-                className="focus:shadow-outline flex items-center justify-center rounded-lg py-7 font-semibold text-lg tracking-wide text-light-900 transition-all duration-300 ease-in-out bg-blue-900 hover:bg-blue-600"
+                className="focus:shadow-outline flex items-center justify-center rounded-lg py-7 font-semibold text-lg tracking-wide text-white transition-all duration-300 ease-in-out bg-accent hover:bg-accent-hover"
               >
                 <MdAddCircleOutline className="h-5 w-5" />
                 <span className="ml-3">Novo produto</span>
@@ -50,10 +50,10 @@ function Products(props: SearchParamsProps) {
           </div>
 
           {products?.data?.products?.length > 0 && !products.isFetching ? (
-            <div className="flex mx-auto border rounded-md mt-1 text-dark400_light900">
+            <div className="flex mx-auto border rounded-md mt-1 text-text-high">
               <Table>
                 <TableHeader>
-                  <TableRow className="text-light-700 bg-blue-900">
+                  <TableRow className="text-text-high bg-accent">
                     <TableHead>Nome</TableHead>
                     <TableHead className="max-xl:hidden">
                       Breve Descrição
@@ -81,25 +81,25 @@ function Products(props: SearchParamsProps) {
               </Table>
             </div>
           ) : products?.data?.products?.length === 0 && !products.isFetching ? (
-            <div className="text-light400_light500 pt-10">
+            <div className="text-text-muted pt-10">
               Nenhum produto cadastrado.
             </div>
           ) : (
             <div>
-              <h1 className="h1-bold text-dark100_light900"></h1>
+              <h1 className="text-text-high text-2xl font-bold font-spaceGrotesk"></h1>
               <div className="my-12 pt-5 flex flex-wrap gap-5 items-center space-x-4">
                 <div className="flex flex-col space-y-2 justify-center items-center gap-3">
-                  <Skeleton className="h-4 w-[350px] bg-gray-500" />
-                  <Skeleton className="h-4 w-[350px] bg-gray-500" />
-                  <Skeleton className="h-4 w-[350px] bg-gray-500" />
-                  <Skeleton className="h-4 w-[350px] bg-gray-500" />
-                  <Skeleton className="h-4 w-[350px] bg-gray-500" />
+                  <Skeleton className="h-4 w-[350px] bg-dark-500" />
+                  <Skeleton className="h-4 w-[350px] bg-dark-500" />
+                  <Skeleton className="h-4 w-[350px] bg-dark-500" />
+                  <Skeleton className="h-4 w-[350px] bg-dark-500" />
+                  <Skeleton className="h-4 w-[350px] bg-dark-500" />
                 </div>
               </div>
             </div>
           )}
 
-          <div className="flex items-center justify-between space-x-2 py-4 text-dark300_light700">
+          <div className="flex items-center justify-between space-x-2 py-4 text-text-body">
             <div className="flex-1 text-sm text-muted-foreground">
               {searchParams.query !== undefined &&
               products?.data?.products !== undefined ? (

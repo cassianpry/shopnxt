@@ -83,7 +83,7 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
       {isLoading ? (
         <LoadingProductCard />
       ) : (
-        <div className="flex flex-col text-dark400_light900 rounded-md bg-gray-200 dark:bg-gray-700 m-5">
+        <div className="flex flex-col text-text-high rounded-md bg-dark-300 m-5">
           <div className="flex items-start ml-5 mt-5">
             <Image
               className="rounded-sm h-[86px] w-32 "
@@ -110,7 +110,7 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
             />
             <div className="flex flex-col ml-3">
               <Link
-                className="text-blue-500 hover:text-blue-800 dark:hover:text-blue-300 -mt-2"
+                className="text-link -mt-2"
                 href={`/products/${
                   type === "wishlist"
                     ? Array.isArray(wishList)
@@ -163,14 +163,14 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
               {isCartListed ? (
                 <Button
                   disabled={true}
-                  className="mb-1 items-center justify-center rounded-md font-semibold text-xs bg-blue-900 hover:bg-blue-600 transition-all duration-300 ease-in-out text-light-900"
+                  className="mb-1 items-center justify-center rounded-md font-semibold text-xs bg-accent hover:bg-accent-hover transition-all duration-300 ease-in-out text-white"
                 >
                   <LuShoppingCart className="w-4 h-4 leading-3" />
                   &nbsp;&nbsp;No Carrinho
                 </Button>
               ) : (
                 <Button
-                  className="mb-1 items-center justify-center rounded-md font-semibold text-xs bg-blue-900 hover:bg-blue-600 transition-all duration-300 ease-in-out text-light-900"
+                  className="mb-1 items-center justify-center rounded-md font-semibold text-xs bg-accent hover:bg-accent-hover transition-all duration-300 ease-in-out text-white"
                   disabled={addWishList.isPending}
                   onClick={() => addToCart(wishList)}
                 >
@@ -184,7 +184,7 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
                 </Button>
               )}
               <Button
-                className="flex justify-between items-center rounded-md text-xs transition-all duration-300 ease-in-out bg-red-900 hover:bg-red-600 text-light-900"
+                className="flex justify-between items-center rounded-md text-xs transition-all duration-300 ease-in-out bg-red-900 hover:bg-red-600 text-white"
                 onClick={() => {
                   removeFromWishList(userId, wishList?._id!);
                 }}
@@ -198,7 +198,7 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
               {isWishListed ? (
                 <>
                   <Button
-                    className="flex text-dark400_light900 justify-between items-center rounded-md text-xs border transition-all duration-300 ease-in-out hover:border-red-600 border-gray-600"
+                    className="flex text-text-high justify-between items-center rounded-md text-xs border transition-all duration-300 ease-in-out hover:border-red-600 border-dark-400"
                     onClick={() => removeFromCart(index)}
                   >
                     <MdOutlineDeleteForever className="w-4 h-4 mr-1" />
@@ -208,14 +208,14 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
               ) : (
                 <>
                   <Button
-                    className="rounded-md font-semibold text-sm text-light-900  bg-blue-900 hover:bg-blue-600 transition-all duration-300 ease-in-out"
+                    className="rounded-md font-semibold text-sm text-white bg-accent hover:bg-accent-hover transition-all duration-300 ease-in-out"
                     //@ts-ignore
                     onClick={() => addToWishList(userId, product?._id!)}
                   >
                     Adicionar à lista de desejos
                   </Button>
                   <Button
-                    className="flex text-dark400_light900 justify-between items-center rounded-md text-xs border transition-all duration-300 ease-in-out hover:border-red-600 border-gray-600"
+                    className="flex text-text-high justify-between items-center rounded-md text-xs border transition-all duration-300 ease-in-out hover:border-red-600 border-dark-400"
                     onClick={() => removeFromCart(index)}
                   >
                     <MdOutlineDeleteForever className="w-4 h-4 mr-1" />

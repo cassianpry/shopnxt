@@ -16,13 +16,13 @@ interface ProductRowProps {
 function ProductRow({ product, isLoading, isFetching }: ProductRowProps) {
   const renderTableCell = (className: string, content: React.ReactNode) => (
     <TableCell className={`${className}`}>
-      {isFetching ? <Skeleton className="h-3 w-auto bg-gray-500" /> : content}
+      {isFetching ? <Skeleton className="h-3 w-auto bg-dark-500" /> : content}
     </TableCell>
   );
   return (
     <TableRow
       key={product._id}
-      className="hover:background-light700_dark400 truncate"
+      className="hover:bg-dark-400 truncate"
     >
       {renderTableCell(
         "capitalize whitespace-nowrap overflow-hidden text-ellipsis max-w-52",
@@ -51,7 +51,7 @@ function ProductRow({ product, isLoading, isFetching }: ProductRowProps) {
 
       <TableCell className="capitalize">
         {isLoading || isFetching ? (
-          <Skeleton className="h-3 w-auto bg-gray-500" />
+          <Skeleton className="h-3 w-auto bg-dark-500" />
         ) : (
           <span
             className={`${
@@ -64,7 +64,7 @@ function ProductRow({ product, isLoading, isFetching }: ProductRowProps) {
       </TableCell>
       <TableCell className=" flex text-right justify-center gap-2">
         {isLoading || isFetching ? (
-          <Skeleton className="h-5 w-5 bg-gray-500" />
+          <Skeleton className="h-5 w-5 bg-dark-500" />
         ) : (
           <Link
             href={{
@@ -78,7 +78,7 @@ function ProductRow({ product, isLoading, isFetching }: ProductRowProps) {
           </Link>
         )}
         {isLoading || isFetching ? (
-          <Skeleton className="h-5 w-5 bg-gray-500" />
+          <Skeleton className="h-5 w-5 bg-dark-500" />
         ) : (
           <div className="p-0.5 rounded-full hover:bg-slate-400 justify-center cursor-pointer">
             <MdDeleteForever
