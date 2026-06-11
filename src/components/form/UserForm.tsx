@@ -53,7 +53,7 @@ function UserForm({ isOpen, setIsOpen, user }: FormUserProps) {
       } catch (error) {
         console.log(error);
         toast({
-          className: "bg-red-600 text-light-800",
+          className: "bg-red-600 text-white",
           title: "Erro ao criar",
           description: `Algo deu errado, tente novamente! ${error}`,
         });
@@ -67,7 +67,7 @@ function UserForm({ isOpen, setIsOpen, user }: FormUserProps) {
       } catch (error) {
         console.log(error);
         toast({
-          className: "bg-red-600 text-light-800",
+          className: "bg-red-600 text-white",
           title: "Erro ao criar",
           description: `Algo deu errado, tente novamente! ${error}`,
         });
@@ -133,12 +133,12 @@ function UserForm({ isOpen, setIsOpen, user }: FormUserProps) {
         form.reset();
       }}
     >
-      <DialogContent className="flex flex-col items-center bg-slate-50">
+      <DialogContent className="flex flex-col items-center bg-dark-300 text-text-body">
         <DialogHeader>
-          <DialogTitle className="font-semibold text-2xl">
+          <DialogTitle className="text-text-high text-2xl font-semibold">
             {user?.data ? "Alterar usuário" : "Cadastrar usuário"}
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-text-muted">
             {user?.data
               ? "Faça alterações no usuário."
               : "Cadastre um novo usuário"}
@@ -146,7 +146,7 @@ function UserForm({ isOpen, setIsOpen, user }: FormUserProps) {
         </DialogHeader>
         <p className="mt-5 text-red-600">
           *
-          <span className="text-slate-800">
+          <span className="text-text-body">
             &nbsp;todos os campos são obrigatórios
           </span>
         </p>
@@ -155,7 +155,7 @@ function UserForm({ isOpen, setIsOpen, user }: FormUserProps) {
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-8 pt-2 text-dark400_light700"
+                className="space-y-8 pt-2 text-text-body"
               >
                 {/* Name */}
                 <FormField
@@ -163,19 +163,19 @@ function UserForm({ isOpen, setIsOpen, user }: FormUserProps) {
                   name="name"
                   render={({ field }) => (
                     <FormItem className="">
-                      <FormLabel className="text-md font-medium text-dark-500">
+                      <FormLabel className="text-md font-medium text-text-body">
                         <span className="text-red-600">*</span>&nbsp;Nome
                       </FormLabel>
                       <FormMessage className="text-red-600" />
                       <FormControl>
                         <Input
-                          className="text-dark-500"
+                          className="input-egs"
                           type="text"
                           disabled={user.isPending}
                           {...field}
                         />
                       </FormControl>
-                      <FormDescription className="text-slate-600">
+                      <FormDescription className="text-text-muted">
                         Entre 3 a 50 caracteres.
                       </FormDescription>
                     </FormItem>
@@ -187,19 +187,19 @@ function UserForm({ isOpen, setIsOpen, user }: FormUserProps) {
                   name="email"
                   render={({ field }) => (
                     <FormItem className="">
-                      <FormLabel className="text-md font-medium text-dark-500">
+                      <FormLabel className="text-md font-medium text-text-body">
                         <span className="text-red-600">*</span>&nbsp;E-mail
                       </FormLabel>
                       <FormMessage className="text-red-600" />
                       <FormControl>
                         <Input
-                          className="text-dark-500"
+                          className="input-egs"
                           type="email"
                           disabled={user.isPending}
                           {...field}
                         />
                       </FormControl>
-                      <FormDescription className="text-slate-600"></FormDescription>
+                      <FormDescription className="text-text-muted"></FormDescription>
                     </FormItem>
                   )}
                 />
@@ -210,19 +210,19 @@ function UserForm({ isOpen, setIsOpen, user }: FormUserProps) {
                   name="address"
                   render={({ field }) => (
                     <FormItem className="">
-                      <FormLabel className="text-md font-medium text-dark-500">
+                      <FormLabel className="text-md font-medium text-text-body">
                         <span className="text-red-600">*</span>&nbsp;Endereço
                       </FormLabel>
                       <FormMessage className="text-red-600" />
                       <FormControl>
                         <Input
-                          className="text-dark-500"
+                          className="input-egs"
                           type="text"
                           disabled={user.isPending}
                           {...field}
                         />
                       </FormControl>
-                      <FormDescription className="text-slate-600"></FormDescription>
+                      <FormDescription className="text-text-muted"></FormDescription>
                     </FormItem>
                   )}
                 />
@@ -233,19 +233,19 @@ function UserForm({ isOpen, setIsOpen, user }: FormUserProps) {
                     name="postalCode"
                     render={({ field }) => (
                       <FormItem className="">
-                        <FormLabel className="text-md font-medium text-dark-500">
+                        <FormLabel className="text-md font-medium text-text-body">
                           <span className="text-red-600">*</span>&nbsp;CEP
                         </FormLabel>
                         <FormMessage className="text-red-600" />
                         <FormControl>
                           <Input
-                            className="text-dark-500 w-24"
+                            className="input-egs w-24"
                             type="text"
                             disabled={user.isPending}
                             {...field}
                           />
                         </FormControl>
-                        <FormDescription className="text-slate-600"></FormDescription>
+                        <FormDescription className="text-text-muted"></FormDescription>
                       </FormItem>
                     )}
                   />
@@ -255,19 +255,19 @@ function UserForm({ isOpen, setIsOpen, user }: FormUserProps) {
                     name="state"
                     render={({ field }) => (
                       <FormItem className="">
-                        <FormLabel className="text-md font-medium text-dark-500">
+                        <FormLabel className="text-md font-medium text-text-body">
                           <span className="text-red-600">*</span>&nbsp;UF
                         </FormLabel>
                         <FormMessage className="text-red-600" />
                         <FormControl>
                           <Input
-                            className="text-dark-500 w-14"
+                            className="input-egs w-14"
                             type="text"
                             disabled={user.isPending}
                             {...field}
                           />
                         </FormControl>
-                        <FormDescription className="text-slate-600"></FormDescription>
+                        <FormDescription className="text-text-muted"></FormDescription>
                       </FormItem>
                     )}
                   />
@@ -277,19 +277,19 @@ function UserForm({ isOpen, setIsOpen, user }: FormUserProps) {
                     name="city"
                     render={({ field }) => (
                       <FormItem className="">
-                        <FormLabel className="text-md font-medium text-dark-500">
+                        <FormLabel className="text-md font-medium text-text-body">
                           <span className="text-red-600">*</span>&nbsp;Cidade
                         </FormLabel>
                         <FormMessage className="text-red-600" />
                         <FormControl>
                           <Input
-                            className="text-dark-500 w-56"
+                            className="input-egs w-56"
                             type="text"
                             disabled={user.isPending}
                             {...field}
                           />
                         </FormControl>
-                        <FormDescription className="text-slate-600"></FormDescription>
+                        <FormDescription className="text-text-muted"></FormDescription>
                       </FormItem>
                     )}
                   />
@@ -300,19 +300,19 @@ function UserForm({ isOpen, setIsOpen, user }: FormUserProps) {
                   name="phone"
                   render={({ field }) => (
                     <FormItem className="">
-                      <FormLabel className="text-md font-medium text-dark-500">
+                      <FormLabel className="text-md font-medium text-text-body">
                         <span className="text-red-600">*</span>&nbsp;Telefone
                       </FormLabel>
                       <FormMessage className="text-red-600" />
                       <FormControl>
                         <Input
-                          className="text-dark-500 w-32"
+                          className="input-egs w-32"
                           type="text"
                           disabled={user.isPending}
                           {...field}
                         />
                       </FormControl>
-                      <FormDescription className="text-slate-600"></FormDescription>
+                      <FormDescription className="text-text-muted"></FormDescription>
                     </FormItem>
                   )}
                 />
@@ -322,23 +322,23 @@ function UserForm({ isOpen, setIsOpen, user }: FormUserProps) {
                   name="role"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-dark-500">Função</FormLabel>
+                      <FormLabel className="text-text-body">Função</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         value={field.value}
                       >
-                        <SelectTrigger className="text-dark-500 bg-light-850">
+                        <SelectTrigger className="input-egs">
                           <SelectValue
-                            className="text-dark-500 bg-light-850"
+                            className="text-text-body"
                             placeholder="Selecione a função"
                           />
                         </SelectTrigger>
 
-                        <SelectContent className="bg-light-850">
+                        <SelectContent className="bg-dark-300 border border-dark-400 text-text-body">
                           {roles.map((r) => (
                             <SelectItem
                               key={r.name}
-                              className="hover:bg-light-700"
+                              className="hover:bg-dark-400 focus:bg-dark-400"
                               value={r.value}
                             >
                               {r.name}
@@ -356,19 +356,19 @@ function UserForm({ isOpen, setIsOpen, user }: FormUserProps) {
                   <Button
                     type="submit"
                     disabled={user.isPending}
-                    className="focus:shadow-outline mt-5 flex w-[200px] items-center justify-center rounded-lg py-7 font-semibold text-lg tracking-wide text-light-900 transition-all duration-300 ease-in-out bg-blue-900 hover:bg-blue-600"
+                    className="btn-primary w-[200px] py-3"
                   >
                     {user.isPending === true ? (
                       <>
                         <FiRefreshCw className="h-5 w-5 animate-spin" />
-                        <span className="ml-3">
+                        <span className="ml-2">
                           {user?.data ? "Alterando..." : "Cadastrando..."}
                         </span>
                       </>
                     ) : (
                       <>
                         <MdSave className="h-5 w-5" />
-                        <span className="ml-3">
+                        <span className="ml-2">
                           {user?.data ? "Alterar" : "Cadastrar"}
                         </span>
                       </>
@@ -377,11 +377,11 @@ function UserForm({ isOpen, setIsOpen, user }: FormUserProps) {
                   <Button
                     type="button"
                     disabled={user.isPending}
-                    className="focus:shadow-outline mt-5 flex w-[200px] items-center justify-center rounded-lg py-7 font-semibold text-lg tracking-wide text-light-900 transition-all duration-300 ease-in-out bg-red-900 hover:bg-red-600"
+                    className="bg-red-600 hover:bg-red-700 text-white font-medium rounded-md px-4 py-2 text-sm"
                     onClick={() => form.reset()}
                   >
                     <MdCancel className="h-5 w-5" />
-                    <span className="ml-3">Cancelar</span>
+                    <span className="ml-2">Cancelar</span>
                   </Button>
                 </div>
               </form>

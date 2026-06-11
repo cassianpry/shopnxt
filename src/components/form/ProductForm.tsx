@@ -104,7 +104,7 @@ const ProductForm = () => {
       }
     } catch (error) {
       toast({
-        className: "bg-red-600 text-light-800",
+        className: "bg-red-600 text-white",
         title: "Entre em contato com o suporte",
         description: error + " informe esse erro ao suporte",
       });
@@ -127,7 +127,7 @@ const ProductForm = () => {
       const res = await response.json();
       if (response.ok === false) {
         toast({
-          className: "bg-yellow-600 text-light-800",
+          className: "bg-yellow-600 text-white",
           title: "Erro ao hospedar a imagem",
           description: `Tipo de imagem invalido!! Apenas imagens são aceitas. ${res}`,
           duration: 5000,
@@ -136,7 +136,7 @@ const ProductForm = () => {
         return response.status;
       } else {
         toast({
-          className: "bg-green-600 text-light-800",
+          className: "bg-green-600 text-white",
           title: "Transferência de Imagem",
           description: "Imagem hospedada com sucesso",
         });
@@ -192,7 +192,7 @@ const ProductForm = () => {
     <div className="w-full mx-auto max-w-7xl container">
       <p className="my-5 text-red-600">
         *
-        <span className="text-slate-800 dark:text-slate-300">
+        <span className="text-text-body">
           &nbsp;todos os campos são obrigatórios
         </span>
       </p>
@@ -200,7 +200,7 @@ const ProductForm = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 pt-2 text-dark400_light700  w-[50%]"
+          className="space-y-8 pt-2 text-text-body w-[50%]"
         >
           {imagePreview ? (
             <Image
@@ -231,7 +231,7 @@ const ProductForm = () => {
                 <FormMessage className="text-red-600" />
                 <FormControl>
                   <Input
-                    className="background-light800_dark300"
+                    className="input-egs"
                     type="file"
                     disabled={
                       createNewProduct.isPending ||
@@ -246,7 +246,7 @@ const ProductForm = () => {
                     }}
                   />
                 </FormControl>
-                <FormDescription className="text-slate-600 dark:text-slate-400"></FormDescription>
+                <FormDescription className="text-text-muted"></FormDescription>
               </FormItem>
             )}
           />
@@ -263,7 +263,7 @@ const ProductForm = () => {
                 <FormMessage className="text-red-600" />
                 <FormControl>
                   <Input
-                    className="background-light800_dark300"
+                    className="input-egs"
                     type="text"
                     placeholder="Nome do produto. ex: Street Fighter II"
                     disabled={
@@ -274,7 +274,7 @@ const ProductForm = () => {
                     {...field}
                   />
                 </FormControl>
-                <FormDescription className="text-slate-600 dark:text-slate-400">
+                <FormDescription className="text-text-muted">
                   Entre 3 a 50 caracteres.
                 </FormDescription>
               </FormItem>
@@ -293,7 +293,7 @@ const ProductForm = () => {
                 <FormMessage className="text-red-600" />
                 <FormControl>
                   <Input
-                    className="background-light800_dark300"
+                    className="input-egs"
                     disabled={
                       createNewProduct.isPending ||
                       updateExistingProduct.isPending ||
@@ -302,7 +302,7 @@ const ProductForm = () => {
                     {...field}
                   />
                 </FormControl>
-                <FormDescription className="text-slate-600 dark:text-slate-400">
+                <FormDescription className="text-text-muted">
                   Uma breve descrição do jogo..
                 </FormDescription>
               </FormItem>
@@ -321,7 +321,7 @@ const ProductForm = () => {
                 <FormMessage className="text-red-600" />
                 <FormControl>
                   <Textarea
-                    className="no-focus paragraph-regular background-light800_dark300 light-border-2 min-h-[200px] border"
+                    className="no-focus paragraph-regular input-egs light-border-2 min-h-[200px] border"
                     {...field}
                     disabled={
                       createNewProduct.isPending ||
@@ -330,7 +330,7 @@ const ProductForm = () => {
                     }
                   />
                 </FormControl>
-                <FormDescription className="text-slate-600 dark:text-slate-400">
+                <FormDescription className="text-text-muted">
                   Descrição completa do jogo..
                 </FormDescription>
               </FormItem>
@@ -342,7 +342,7 @@ const ProductForm = () => {
             name="about"
             render={({ field }) => (
               <FormItem className="flex w-full flex-col">
-                <FormLabel className="paragraph-semibold text-dark400_light800">
+                <FormLabel className="font-semibold text-text-body">
                   <span className="text-red-600">*</span>&nbsp;Sobre o jogo
                 </FormLabel>
                 <FormControl className="mt-3.5">
@@ -387,7 +387,7 @@ const ProductForm = () => {
                     }}
                   />
                 </FormControl>
-                <FormDescription className="text-slate-600 dark:text-slate-400">
+                <FormDescription className="text-text-muted">
                   Inclua tudo relacionado ao jogo (história, enredo, premiações,
                   etc...)
                 </FormDescription>
@@ -407,7 +407,7 @@ const ProductForm = () => {
                   <span className="text-red-600">*</span>
                   &nbsp;Gênero&nbsp;-&nbsp;
                   {product.data ? (
-                    <span className="text-slate-300">
+                    <span className="text-text-muted">
                       Atuais:&nbsp;
                       {product.data?.genres?.map(
                         (genre: { _id: React.Key; name: string }) => (
@@ -420,7 +420,7 @@ const ProductForm = () => {
                   )}
                 </FormLabel>
                 <MultiSelect
-                  className="background-light800_dark300 text-dark400_light700"
+                  className="bg-dark-400 border border-dark-500 rounded-md text-text-body"
                   placeholder={"Selecione o(s) gênero(s)..."}
                   //@ts-ignore
                   selected={field.value}
@@ -431,7 +431,7 @@ const ProductForm = () => {
 
                 <FormMessage className="text-red-600" />
 
-                <FormDescription className="text-slate-600 dark:text-slate-400">
+                <FormDescription className="text-text-muted">
                   Selecione o gênero do jogo.
                 </FormDescription>
               </FormItem>
@@ -451,7 +451,7 @@ const ProductForm = () => {
                   <FormMessage className="text-red-600" />
                   <FormControl>
                     <Input
-                      className="background-light800_dark300"
+                      className="input-egs"
                       placeholder="Capcom"
                       type="text"
                       disabled={
@@ -462,7 +462,7 @@ const ProductForm = () => {
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription className="text-slate-600 dark:text-slate-400"></FormDescription>
+                  <FormDescription className="text-text-muted"></FormDescription>
                 </FormItem>
               )}
             />
@@ -478,7 +478,7 @@ const ProductForm = () => {
                   <FormMessage className="text-red-600" />
                   <FormControl>
                     <Input
-                      className="background-light800_dark300"
+                      className="input-egs"
                       placeholder="Capcom"
                       type="text"
                       disabled={
@@ -489,7 +489,7 @@ const ProductForm = () => {
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription className="text-slate-600 dark:text-slate-400"></FormDescription>
+                  <FormDescription className="text-text-muted"></FormDescription>
                 </FormItem>
               )}
             />
@@ -508,7 +508,7 @@ const ProductForm = () => {
                   <FormMessage className="text-red-600" />
                   <FormControl>
                     <Input
-                      className="max-xl:w-[480px] background-light800_dark300"
+                      className="max-xl:w-[480px] input-egs"
                       placeholder="Windows Linux MacOS"
                       type="text"
                       disabled={
@@ -519,7 +519,7 @@ const ProductForm = () => {
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription className="text-slate-600 dark:text-slate-400"></FormDescription>
+                  <FormDescription className="text-text-muted"></FormDescription>
                 </FormItem>
               )}
             />
@@ -535,7 +535,7 @@ const ProductForm = () => {
                   <FormMessage className="text-red-600" />
                   <FormControl>
                     <Input
-                      className="max-xl:w-[480px] background-light800_dark300"
+                      className="max-xl:w-[480px] input-egs"
                       placeholder="Intel/AMD"
                       type="text"
                       disabled={
@@ -546,7 +546,7 @@ const ProductForm = () => {
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription className="text-slate-600 dark:text-slate-400"></FormDescription>
+                  <FormDescription className="text-text-muted"></FormDescription>
                 </FormItem>
               )}
             />
@@ -566,7 +566,7 @@ const ProductForm = () => {
                     <div className="flex items-center">
                       <FormControl>
                         <Input
-                          className="w-[25%] background-light800_dark300"
+                          className="w-[25%] input-egs"
                           placeholder="16"
                           type="text"
                           disabled={
@@ -579,7 +579,7 @@ const ProductForm = () => {
                       </FormControl>
                       <span>&nbsp;GB</span>
                     </div>
-                    <FormDescription className="text-slate-600 dark:text-slate-400"></FormDescription>
+                    <FormDescription className="text-text-muted"></FormDescription>
                   </FormItem>
                 )}
               />
@@ -597,7 +597,7 @@ const ProductForm = () => {
                     <div className="flex items-center">
                       <FormControl>
                         <Input
-                          className="w-[30%] background-light800_dark300"
+                          className="w-[30%] input-egs"
                           placeholder="240"
                           type="text"
                           disabled={
@@ -610,7 +610,7 @@ const ProductForm = () => {
                       </FormControl>
                       <span>&nbsp;GB</span>
                     </div>
-                    <FormDescription className="text-slate-600 dark:text-slate-400"></FormDescription>
+                    <FormDescription className="text-text-muted"></FormDescription>
                   </FormItem>
                 )}
               />
@@ -629,7 +629,7 @@ const ProductForm = () => {
                   <FormMessage className="text-red-600" />
                   <FormControl>
                     <Input
-                      className="background-light800_dark300"
+                      className="input-egs"
                       placeholder="Nvidia GeForce GTX 960 / AMD Radeon 580RX"
                       type="text"
                       disabled={
@@ -640,7 +640,7 @@ const ProductForm = () => {
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription className="text-slate-600 dark:text-slate-400"></FormDescription>
+                  <FormDescription className="text-text-muted"></FormDescription>
                 </FormItem>
               )}
             />
@@ -657,7 +657,7 @@ const ProductForm = () => {
                   <FormMessage className="text-red-600" />
                   <FormControl>
                     <Input
-                      className="background-light800_dark300 w-20"
+                      className="input-egs w-20"
                       placeholder="R$ 200,00"
                       type="text"
                       disabled={
@@ -668,7 +668,7 @@ const ProductForm = () => {
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription className="text-slate-600 dark:text-slate-400"></FormDescription>
+                  <FormDescription className="text-text-muted"></FormDescription>
                 </FormItem>
               )}
             />
@@ -699,7 +699,7 @@ const ProductForm = () => {
               updateExistingProduct.isPending ||
               uploading
             }
-            className="bg-blue-900 text-light-850 text-md p-6 hover:bg-blue-600"
+            className="btn-primary text-md p-6 w-full"
           >
             {createNewProduct.isPending ||
             updateExistingProduct.isPending ||

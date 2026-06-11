@@ -45,7 +45,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
       updateUser.mutate(data);
     } catch (error) {
       toast({
-        className: "bg-red-600 text-light-800",
+        className: "bg-red-600 text-white",
         title: "Entre em contato com o suporte",
         description: error + " informe esse erro ao suporte",
       });
@@ -53,7 +53,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
   };
 
   return (
-    <div className="flex max-w-[500px] items-center justify-center mx-auto text-dark400_light900">
+    <div className="flex max-w-[500px] items-center justify-center mx-auto text-text-body">
       <form
         className="flex w-full flex-col items-start justify-start gap-5 mt-10"
         onSubmit={handleSubmit(onSubmit)}
@@ -61,7 +61,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
         <div className="flex flex-col w-full gap-1">
           <Label>Nome:</Label>
           <Input
-            className="background-light800_dark300"
+            className="input-egs"
             type="text"
             placeholder="John Doe"
             disabled={updateUser.isPending}
@@ -74,7 +74,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
         <div className="flex flex-col w-full gap-1">
           <Label>E-mail:</Label>
           <Input
-            className="background-light800_dark300"
+            className="input-egs"
             type="email"
             placeholder="john.doe@example.com"
             disabled={updateUser.isPending}
@@ -87,7 +87,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
         <div className="flex flex-col w-full gap-1">
           <Label>Endereço:</Label>
           <Input
-            className="background-light800_dark300 capitalize"
+            className="input-egs capitalize"
             type="text"
             placeholder="Av. Paulista, 1234"
             disabled={updateUser.isPending}
@@ -102,7 +102,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
         <div className="flex flex-col w-full gap-1">
           <Label>CEP:</Label>
           <Input
-            className="background-light800_dark300"
+            className="input-egs"
             type="text"
             placeholder="12345-123"
             disabled={updateUser.isPending}
@@ -117,7 +117,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
         <div className="flex flex-col w-full gap-1">
           <Label>Estado:</Label>
           <Input
-            className="background-light800_dark300 uppercase"
+            className="input-egs uppercase"
             type="text"
             placeholder="SP"
             disabled={updateUser.isPending}
@@ -130,7 +130,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
         <div className="flex flex-col w-full gap-1">
           <Label>Cidade:</Label>
           <Input
-            className="background-light800_dark300 capitalize"
+            className="input-egs capitalize"
             type="text"
             placeholder="São Paulo"
             disabled={updateUser.isPending}
@@ -143,7 +143,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
         <div className="flex flex-col w-full gap-1">
           <Label>Telefone:</Label>
           <Input
-            className="background-light800_dark300"
+            className="input-egs"
             type="text"
             placeholder="(11)9123-4567"
             disabled={updateUser.isPending}
@@ -157,7 +157,7 @@ const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
         <Button
           type="submit"
           disabled={updateUser.isPending}
-          className="bg-blue-900 text-light-850 text-md p-6 w-full hover:bg-blue-600 mt-8"
+          className="btn-primary text-md p-6 w-full mt-8"
         >
           {updateUser.isPending ? (
             <>

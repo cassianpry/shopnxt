@@ -70,14 +70,14 @@ const Genres = (props: SearchParamsProps) => {
   if (newGenres.isLoading) {
     return (
       <section>
-        <h1 className="h1-bold text-dark100_light900"></h1>
+        <h1 className="text-text-high text-2xl font-bold font-spaceGrotesk mb-6"></h1>
         <div className="my-12 pt-5 flex flex-wrap gap-5 items-center space-x-4">
           <div className="flex flex-col space-y-2 justify-center items-center gap-3">
-            <Skeleton className="h-4 w-[350px] bg-gray-500" />
-            <Skeleton className="h-4 w-[350px] bg-gray-500" />
-            <Skeleton className="h-4 w-[350px] bg-gray-500" />
-            <Skeleton className="h-4 w-[350px] bg-gray-500" />
-            <Skeleton className="h-4 w-[350px] bg-gray-500" />
+            <Skeleton className="h-4 w-[350px] bg-dark-400" />
+            <Skeleton className="h-4 w-[350px] bg-dark-400" />
+            <Skeleton className="h-4 w-[350px] bg-dark-400" />
+            <Skeleton className="h-4 w-[350px] bg-dark-400" />
+            <Skeleton className="h-4 w-[350px] bg-dark-400" />
           </div>
         </div>
       </section>
@@ -85,65 +85,65 @@ const Genres = (props: SearchParamsProps) => {
   }
 
   return (
-    <div className="text-dark100_light900">
-      <h1 className="h1-bold pt-12">Gêneros</h1>
-      <Separator orientation="horizontal" className="bg-light-400" />
+    <div>
+      <h1 className="text-text-high text-2xl font-bold font-spaceGrotesk mb-6">Gêneros</h1>
+      <Separator orientation="horizontal" className="bg-dark-400" />
       <div className="w-full">
         <div className="items-center py-4">
           <div className="flex justify-start gap-3 pb-4">
             <SearchBar route="/dashboard/genres" />
             <Button
               type="button"
-              className="focus:shadow-outline flex items-center justify-center rounded-lg py-7 font-semibold text-lg tracking-wide text-light-900 transition-all duration-300 ease-in-out bg-blue-900 hover:bg-blue-600"
+              className="btn-primary py-3"
               onClick={() => setIsNew(true)}
             >
               <MdAddCircleOutline className="h-5 w-5" />
-              <span className="ml-3">Novo gênero</span>
+              <span className="ml-2">Novo gênero</span>
             </Button>
           </div>
 
           {newGenres.data.genre !== undefined ? (
-            <div className="border rounded-md mt-1 text-dark400_light900">
+            <div className="bg-dark-300 rounded-xl border border-dark-400 overflow-hidden">
               <Table>
                 <TableHeader>
-                  <TableRow className="text-dark400_light900">
-                    <TableHead className="w-[100px]">_id</TableHead>
-                    <TableHead>Slug</TableHead>
-                    <TableHead>Nome</TableHead>
-                    <TableHead className="text-center">Ações</TableHead>
+                  <TableRow className="bg-dark-400 text-text-high text-sm font-medium">
+                    <TableHead className="w-[100px] text-text-high">_id</TableHead>
+                    <TableHead className="text-text-high">Slug</TableHead>
+                    <TableHead className="text-text-high">Nome</TableHead>
+                    <TableHead className="text-center text-text-high">Ações</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {(newGenres as GenresProps).data?.genre?.map((genre) => (
                     <TableRow
                       key={genre._id}
-                      className="hover:background-light700_dark400"
+                      className="border-b border-dark-400 text-text-body text-sm hover:bg-dark-400"
                     >
                       <TableCell className="font-medium">
                         {newGenres.isFetching ? (
-                          <Skeleton className="h-3 w-auto bg-gray-500" />
+                          <Skeleton className="h-3 w-auto bg-dark-400" />
                         ) : (
                           genre._id
                         )}
                       </TableCell>
                       <TableCell>
                         {newGenres.isFetching ? (
-                          <Skeleton className="h-3 w-auto bg-gray-500" />
+                          <Skeleton className="h-3 w-auto bg-dark-400" />
                         ) : (
                           genre.slug
                         )}
                       </TableCell>
                       <TableCell className="capitalize">
                         {newGenres.isFetching ? (
-                          <Skeleton className="h-3 w-auto bg-gray-500" />
+                          <Skeleton className="h-3 w-auto bg-dark-400" />
                         ) : (
                           genre.name
                         )}
                       </TableCell>
-                      <TableCell className=" flex text-right justify-center gap-2">
-                        <div className="p-0.5 rounded-full  hover:bg-slate-400 cursor-pointer justify-between">
+                      <TableCell className="flex text-right justify-center gap-2">
+                        <div className="p-0.5 rounded-full hover:bg-dark-600 cursor-pointer justify-between">
                           {newGenres.isFetching ? (
-                            <Skeleton className="h-5 w-5 rounded-md bg-gray-500" />
+                            <Skeleton className="h-5 w-5 rounded-md bg-dark-400" />
                           ) : (
                             <MdEdit
                               className="w-5 h-5 text-yellow-500"
@@ -151,15 +151,15 @@ const Genres = (props: SearchParamsProps) => {
                             />
                           )}
                         </div>
-                        <div className="p-0.5 rounded-full  hover:bg-slate-400 cursor-pointer justify-center">
+                        <div className="p-0.5 rounded-full hover:bg-dark-600 cursor-pointer justify-center">
                           {newGenres.isFetching ? (
-                            <Skeleton className="h-5 w-5 rounded-md bg-gray-500" />
+                            <Skeleton className="h-5 w-5 rounded-md bg-dark-400" />
                           ) : (
                             <MdDeleteForever
                               className="w-5 h-5 text-red-500"
                               onClick={() =>
                                 toast({
-                                  className: "bg-red-600 text-light-800",
+                                  className: "bg-red-600 text-white",
                                   duration: 1500,
                                   variant: "destructive",
                                   title: "Excluir gênero.",
@@ -176,12 +176,12 @@ const Genres = (props: SearchParamsProps) => {
               </Table>
             </div>
           ) : (
-            <div className="text-light400_light500 pt-10">
+            <div className="text-text-muted pt-10">
               Nenhum gênero cadastrado.
             </div>
           )}
           <div className="flex items-center justify-end space-x-2 py-4">
-            <div className="flex-1 text-sm text-muted-foreground">
+            <div className="flex-1 text-sm text-text-body">
               {searchParams.query !== undefined &&
               newGenres.data.genre !== undefined ? (
                 <>

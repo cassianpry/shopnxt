@@ -49,7 +49,7 @@ function GenreForm({ isOpen, setIsOpen, genre }: FormGenreProps) {
     } catch (error) {
       console.log(error);
       toast({
-        className: "bg-red-600 text-light-800",
+        className: "bg-red-600 text-white",
         title: "Erro ao criar",
         description: `Algo deu errado ao tentar criar a categoria! ${error}`,
       });
@@ -71,10 +71,10 @@ function GenreForm({ isOpen, setIsOpen, genre }: FormGenreProps) {
         setIsOpen(false);
       }}
     >
-      <DialogContent className="flex flex-col items-center sm:max-w-[425px] bg-slate-50">
+      <DialogContent className="flex flex-col items-center sm:max-w-[425px] bg-dark-300 text-text-body">
         <DialogHeader>
-          <DialogTitle>Alterar a categoria</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-text-high">Alterar a categoria</DialogTitle>
+          <DialogDescription className="text-text-muted">
             Altere o nome da categoria. Clique em alterar quando terminar.
           </DialogDescription>
         </DialogHeader>
@@ -106,7 +106,7 @@ function GenreForm({ isOpen, setIsOpen, genre }: FormGenreProps) {
                   <Button
                     type="submit"
                     disabled={newGenre.isPending}
-                    className="focus:shadow-outline mt-5 flex w-full items-center justify-center rounded-lg py-7 font-semibold text-lg tracking-wide text-light-900 transition-all duration-300 ease-in-out bg-blue-900"
+                    className="btn-primary mt-5 w-full py-3"
                   >
                     {newGenre.isPending ? (
                       <FiRefreshCw className="h-5 w-5 animate-spin" />
@@ -114,7 +114,7 @@ function GenreForm({ isOpen, setIsOpen, genre }: FormGenreProps) {
                       <MdSave className="h-5 w-5" />
                     )}
 
-                    <span className="ml-3">Alterar</span>
+                    <span className="ml-2">Alterar</span>
                   </Button>
                 </div>
               </form>

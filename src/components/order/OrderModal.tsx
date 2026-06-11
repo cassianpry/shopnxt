@@ -25,14 +25,14 @@ const OrderModal = ({ isOpen, setIsOpen, orderId }: OrderModalProps) => {
   if (order.isLoading) {
     return (
       <section>
-        <h1 className="h1-bold text-dark100_light900"></h1>
+        <h1 className="text-text-high text-2xl font-bold font-spaceGrotesk mb-6"></h1>
         <div className="my-12 pt-5 flex flex-wrap gap-5 items-center space-x-4">
           <div className="flex flex-col space-y-2 justify-center items-center gap-3">
-            <Skeleton className="h-4 w-[350px] bg-gray-500" />
-            <Skeleton className="h-4 w-[350px] bg-gray-500" />
-            <Skeleton className="h-4 w-[350px] bg-gray-500" />
-            <Skeleton className="h-4 w-[350px] bg-gray-500" />
-            <Skeleton className="h-4 w-[350px] bg-gray-500" />
+            <Skeleton className="h-4 w-[350px] bg-dark-400" />
+            <Skeleton className="h-4 w-[350px] bg-dark-400" />
+            <Skeleton className="h-4 w-[350px] bg-dark-400" />
+            <Skeleton className="h-4 w-[350px] bg-dark-400" />
+            <Skeleton className="h-4 w-[350px] bg-dark-400" />
           </div>
         </div>
       </section>
@@ -43,11 +43,11 @@ const OrderModal = ({ isOpen, setIsOpen, orderId }: OrderModalProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="flex flex-col items-start sm:max-w-[725px] bg-slate-50">
+      <DialogContent className="flex flex-col items-start sm:max-w-[725px] bg-dark-300 text-text-body">
         <DialogHeader>
-          <DialogTitle>
+          <DialogTitle className="text-text-high">
             Nº da Venda:&nbsp;
-            <span className="text-blue-600">{order?.data?.orderNum}</span>
+            <span className="text-accent">{order?.data?.orderNum}</span>
           </DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-4 py-4">
@@ -157,10 +157,10 @@ const OrderModal = ({ isOpen, setIsOpen, orderId }: OrderModalProps) => {
                     </div>
                   </div>
                 </div>
-                <Separator
-                  orientation="horizontal"
-                  className="bg-gray-200 mt-5"
-                />
+          <Separator
+            orientation="horizontal"
+            className="bg-dark-400 mt-5"
+          />
               </AccordionContent>
               {order?.data?.cartProducts?.map((product: ProductProps) => (
                 <AccordionContent key={product._id} className="flex">

@@ -17,7 +17,7 @@ const AdminDashboard = (props: SearchParamsProps) => {
   const users = useUsers({ searchQuery: searchParams.query });
 
   return (
-    <div className="mt-20 text-dark100_light900">
+    <div>
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
         {orders?.isLoading}
         <QuantitySales

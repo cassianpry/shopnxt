@@ -16,18 +16,18 @@ const TotalSales: React.FC<TotalSalesProps> = ({ orders, isLoading }) => {
   const totalGrowPercentage = growPercentage(orders);
 
   return (
-    <div className="rounded-xl border dark:border-gray-700 background-light800_dark300 shadow">
-      <div className="flex flex-row items-center justify-between space-y-0 m-3 md:gap-10">
-        <h3 className="tracking-tight body-semibold">Total geral de vendas</h3>
-        <BiDollar className="h-4 w-4 base-regular" />
+    <div className="bg-dark-300 border border-dark-400 rounded-xl p-6">
+      <div className="flex flex-row items-center justify-between space-y-0 mb-4">
+        <h3 className="text-text-muted text-sm">Total geral de vendas</h3>
+        <BiDollar className="h-5 w-5 text-accent" />
       </div>
-      <div className="m-3">
+      <div>
         {isLoading ? (
           <div className="pt-1">
-            <Skeleton className="h-4 w-[50px] bg-gray-500" />{" "}
+            <Skeleton className="h-4 w-[50px] bg-dark-400" />{" "}
           </div>
         ) : (
-          <p>
+          <p className="text-text-high text-3xl font-bold">
             +
             {totalOrdersValue.toLocaleString("pt-BR", {
               style: "currency",
@@ -38,10 +38,10 @@ const TotalSales: React.FC<TotalSalesProps> = ({ orders, isLoading }) => {
 
         {isLoading ? (
           <div className="pt-1">
-            <Skeleton className="h-4 w-[50px] bg-gray-500" />
+            <Skeleton className="h-4 w-[50px] bg-dark-400" />
           </div>
         ) : (
-          <p className="small-regular text-gray-500">
+          <p className="text-xs text-text-muted">
             +{totalGrowPercentage.toFixed(2)}% desde o ultimo mês.
           </p>
         )}

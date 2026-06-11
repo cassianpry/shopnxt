@@ -55,7 +55,7 @@ function NewGenreForm({ isNew, setIsNew }: NewGenreFormProps) {
     } catch (err) {
       console.log(err);
       toast({
-        className: "bg-red-600 text-light-800",
+        className: "bg-red-600 text-white",
         title: "Erro ao criar",
         description: `Algo deu errado ao tentar alterar a gênero! ${err}`,
       });
@@ -65,10 +65,10 @@ function NewGenreForm({ isNew, setIsNew }: NewGenreFormProps) {
   };
   return (
     <Dialog open={isNew} onOpenChange={setIsNew}>
-      <DialogContent className="flex flex-col items-center sm:max-w-[425px] bg-slate-50">
+      <DialogContent className="flex flex-col items-center sm:max-w-[425px] bg-dark-300 text-text-body">
         <DialogHeader>
-          <DialogTitle>Cadastrar o gênero</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-text-high">Cadastrar o gênero</DialogTitle>
+          <DialogDescription className="text-text-muted">
             Cadastre um novo gênero. Clique em cadastrar quando terminar.
           </DialogDescription>
         </DialogHeader>
@@ -94,7 +94,7 @@ function NewGenreForm({ isNew, setIsNew }: NewGenreFormProps) {
               <Button
                 type="submit"
                 disabled={createNewGenre.isPending}
-                className="focus:shadow-outline mt-5 flex w-full items-center justify-center rounded-lg py-7 font-semibold text-lg tracking-wide text-light-900 transition-all duration-300 ease-in-out bg-blue-900"
+                className="btn-primary mt-5 w-full py-3"
               >
                 {createNewGenre.isPending ? (
                   <FiRefreshCw className="h-5 w-5 animate-spin" />

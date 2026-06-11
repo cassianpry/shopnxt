@@ -49,7 +49,7 @@ const Pagination = ({ pageNumber, isNext, total }: PaginationProps) => {
   };
 
   return (
-    <div className="flex justify-center items-center gap-2 text-dark400_light900">
+    <div className="flex justify-center items-center gap-2 text-text-body">
       {(!isNext && result.currentPage === 1) || result.error ? (
         <></>
       ) : (
@@ -57,23 +57,23 @@ const Pagination = ({ pageNumber, isNext, total }: PaginationProps) => {
           <Button
             disabled={result.currentPage === 1}
             onClick={() => handleNavigation("prev", result.currentPage)}
-            className="flex items-center justify-center rounded-md font-semibold hover:bg-gray-300 dark:hover:bg-gray-500 transition-all duration-300 ease-in-out"
+            className="flex items-center justify-center rounded-md text-text-body hover:bg-dark-400 transition-all duration-300 ease-in-out"
           >
             <BsChevronCompactLeft className="w-4 h-4" />
             Anterior
           </Button>
           {result.newTotalPages?.map((page) => (
-            <div key={page} className="body-medium text-dark200_light800">
+            <div key={page} className="text-sm text-text-body">
               {page === result.currentPage ? (
                 <Button
                   disabled={!isNext || page === result.currentPage}
-                  className={`flex items-center justify-center rounded-md  bg-blue-900 text-light-700 px-4`}
+                  className={`flex items-center justify-center rounded-md bg-accent text-white px-4`}
                 >
                   {pageNumber}
                 </Button>
               ) : (
                 <Button
-                  className="flex items-center justify-center rounded-md  hover:bg-blue-900 hover:text-light-700 px-4"
+                  className="flex items-center justify-center rounded-md bg-dark-400 text-text-body hover:bg-accent hover:text-white px-4"
                   onClick={() => handleNavigation("page", page)}
                 >
                   {page}
@@ -84,7 +84,7 @@ const Pagination = ({ pageNumber, isNext, total }: PaginationProps) => {
           <Button
             disabled={!isNext}
             onClick={() => handleNavigation("next", result.currentPage)}
-            className="flex items-center justify-center rounded-md font-semibold hover:bg-gray-300 dark:hover:bg-gray-500 transition-all duration-300 ease-in-out"
+            className="flex items-center justify-center rounded-md text-text-body hover:bg-dark-400 transition-all duration-300 ease-in-out"
           >
             Próximo
             <BsChevronCompactRight className="w-4 h-4" />
