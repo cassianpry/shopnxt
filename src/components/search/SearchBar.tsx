@@ -10,7 +10,7 @@ interface SearchBarProps {
   isLoading?: boolean;
 }
 
-const SearchBarInner: React.FC<SearchBarProps> = ({ route }) => {
+const SearchBarInner: React.FC<SearchBarProps> = ({ className, route }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -59,7 +59,7 @@ const SearchBarInner: React.FC<SearchBarProps> = ({ route }) => {
         placeholder="Buscar jogos..."
         value={search}
         onChange={handleChange}
-        className="w-40 lg:w-56 bg-dark-400 border border-dark-500 rounded-full px-3 py-1.5 pl-9 text-sm text-text-high placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all"
+        className={`${className || "w-40 lg:w-56"} bg-dark-400 border border-dark-500 rounded-full px-3 py-1.5 pl-9 text-sm text-text-high placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all`}
       />
       <MdSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
     </div>

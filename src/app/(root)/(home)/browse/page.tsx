@@ -18,7 +18,7 @@ function Browse(props: SearchParamsProps) {
             <h3 className="text-text-high font-medium text-sm mb-3 uppercase tracking-wider">
               Buscar
             </h3>
-            <SearchBar route="/browse" />
+            <SearchBar route="/browse" className="w-full" />
           </div>
 
           <div className="bg-dark-300 rounded-lg p-4 mb-4">
