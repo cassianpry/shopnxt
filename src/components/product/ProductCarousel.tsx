@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import Link from "next/link";
@@ -12,10 +12,11 @@ import { ProductProps } from "@/types/index.d";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCreateWishList } from "@/app/services/wishlist/mutation";
 import LoadingProductCarousel from "../loadings/LoadingProductCarousel";
+import ThumbnailItem from "./ThumbnailItem";
 
 interface ProductCarouselProps {
   userId?: string;
-  products: ProductProps;
+  products: ProductProps[];
   wishList?: ProductProps[];
   isLoading?: boolean;
   isWishListed: string[];
@@ -25,35 +26,29 @@ interface ProductCarouselProps {
 export const ProductCarousel: React.FC<ProductCarouselProps> = ({
   userId,
   products,
-  wishList,
   isLoading,
   isWishListed,
   setIsWishListed,
 }) => {
-  const sliderRef = useRef<HTMLDivElement>(null);
-  const descriptionRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [progress, setProgress] = useState(0);
   const query = useQueryClient();
 
-  const nextSlide = useCallback(() => {
+  const nextSlide = () => {
     setCurrentIndex((prev) =>
       prev === products.length! - 1 ? 0 : prev + 1
     );
-
-    sliderRef.current?.classList.add("fade-anim");
-  }, [products]);
+  };
 
   const prevSlide = () => {
     setCurrentIndex((prev) =>
       prev === 0 ? products.length! - 1 : prev - 1
     );
-    sliderRef.current?.classList.add("fade-anim");
   };
 
   const goToSlide = (slideIndex: number) => {
     setCurrentIndex(slideIndex);
-    sliderRef.current?.classList.add("fade-anim");
   };
 
   const handleMouseEnter = () => {
@@ -64,25 +59,27 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({
     setIsHovered(false);
   };
 
-  const handleAnimationEnd = () => {
-    sliderRef.current!.classList.remove("fade-anim");
-  };
-
   useEffect(() => {
-    let slideInterval: number;
-    if (!isHovered) {
-      slideInterval = window.setInterval(nextSlide, 8000);
-    }
-    // const slideInterval = setInterval(nextSlide, 8000);
+    if (isHovered) return;
 
-    const currentSliderRef = sliderRef.current;
-    currentSliderRef?.addEventListener("animationend", handleAnimationEnd);
+    const duration = 5000;
+    const startTime = Date.now();
+
+    const interval = window.setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      const pct = Math.min((elapsed / duration) * 100, 100);
+      setProgress(pct);
+    }, 50);
+
+    const slideTimeout = window.setTimeout(() => {
+      setCurrentIndex((prev) => (prev === products.length! - 1 ? 0 : prev + 1));
+    }, duration);
 
     return () => {
-      clearInterval(slideInterval);
-      currentSliderRef?.removeEventListener("animationend", handleAnimationEnd);
+      clearInterval(interval);
+      clearTimeout(slideTimeout);
     };
-  }, [wishList, products, currentIndex, nextSlide, setIsWishListed, isHovered]);
+  }, [currentIndex, isHovered, products.length]);
 
   const addWishList = useCreateWishList();
 
@@ -96,49 +93,41 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({
     }
   };
 
+  if (!products || products.length === 0) return null;
+
   return (
     <>
       {isLoading ? (
         <LoadingProductCarousel />
       ) : (
         <div
-          className="max-w-[1100px] m-auto relative text-text-high group"
+          className="flex gap-0 max-w-[1400px] mx-auto relative h-[400px] lg:h-[500px] rounded-xl overflow-hidden group"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          <div
-            ref={sliderRef}
-            className="h-[200px] xl:h-[600px] lg:h-[450px] md:h-[350px]"
-          >
+          {/* Left panel: main banner */}
+          <div className="flex-1 relative overflow-hidden">
             <Link href={`/products/${products[currentIndex].slug}`}>
               <Image
-                className="rounded-2xl h-full w-[1100px] brightness-50"
+                className="h-full w-full object-cover brightness-[0.6] transition-all duration-500"
                 src={products[currentIndex].productImage}
                 width={1000}
-                height={600}
-                alt=""
+                height={562}
+                alt={products[currentIndex].name}
                 priority
               />
             </Link>
-            <div
-              ref={descriptionRef}
-              className="absolute left-0 right-0 bottom-[5%] w-[40%] ml-10 -translate-y-10"
-            >
-              <div className="flex w-[55%] rounded-lg">
-                <span className="text-text-high m-1">
-                  {products[currentIndex].shortDescription}
-                </span>
-              </div>
-              <div className="flex justify-start items-center mt-3 gap-2">
-                <Button
-                  asChild
-                  className="bg-accent hover:bg-accent-hover text-white font-semibold rounded-md px-6 py-3 text-sm transition-colors uppercase"
-                >
-                  <Link href={`/products/${products[currentIndex].slug}`}>
-                    Compre já
-                  </Link>
+            <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-dark-900/80 to-transparent">
+              <h2 className="text-text-high text-2xl sm:text-3xl lg:text-4xl font-bold font-spaceGrotesk mb-2">
+                {products[currentIndex].name}
+              </h2>
+              <p className="text-text-body text-sm sm:text-base max-w-xl mb-4 line-clamp-2">
+                {products[currentIndex].shortDescription}
+              </p>
+              <div className="flex gap-3">
+                <Button asChild className="bg-accent hover:bg-accent-hover text-white font-semibold rounded-md px-6 py-2 text-sm transition-colors">
+                  <Link href={`/products/${products[currentIndex].slug}`}>Compre já</Link>
                 </Button>
-
                 {isWishListed.includes(products[currentIndex].slug!) ? (
                   <Link
                     href={{
@@ -146,16 +135,14 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({
                       query: { id: userId },
                     }}
                   >
-                    <Button className="items-center justify-center text-sm font-medium tracking-wide text-text-body hover:text-text-high transition-all duration-300 ease-in-out hover:bg-dark-400">
-                      <IoMdCheckmarkCircleOutline className="h-5 w-5" />
-                      <span className="uppercase">
-                        &nbsp;Na lista de desejos
-                      </span>
+                    <Button className="border border-dark-500 text-text-body hover:text-text-high rounded-md px-4 py-2 text-sm transition-colors">
+                      <IoMdCheckmarkCircleOutline className="w-4 h-4 mr-1" />
+                      Na lista
                     </Button>
                   </Link>
                 ) : (
                   <Button
-                    className="items-center justify-center text-sm font-medium tracking-wide text-text-body hover:text-text-high transition-all duration-300 ease-in-out hover:bg-dark-400"
+                    className="border border-dark-500 text-text-body hover:text-text-high rounded-md px-4 py-2 text-sm transition-colors"
                     onClick={() =>
                       addToWishList(
                         userId!,
@@ -164,56 +151,51 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({
                       )
                     }
                   >
-                    <IoMdAddCircleOutline className="w-5 h-5" />
-                    &nbsp; Lista de desejos
+                    <IoMdAddCircleOutline className="w-4 h-4 mr-1" />
+                    Lista de desejos
                   </Button>
                 )}
               </div>
             </div>
-          </div>
-
-          {/* Left Arrow */}
-          <div
-            className={`hidden group-hover:block absolute top-1/2 transform -translate-y-1/2 left-1 text-xl text-center text-text-high rounded-full p-1 transition duration-300 ease-in-out bg-dark-400 cursor-pointer ${
-              isHovered ? "opacity-35" : "opacity-0"
-            }`}
-          >
-            <BsChevronCompactLeft
-              className="cursor-pointer"
-              size={15}
+            {/* Prev/Next arrows */}
+            <button
               onClick={prevSlide}
-            />
+              className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-dark-400/60 hover:bg-dark-400 flex items-center justify-center text-text-high opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <BsChevronCompactLeft className="w-5 h-5" />
+            </button>
+            <button
+              onClick={nextSlide}
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-dark-400/60 hover:bg-dark-400 flex items-center justify-center text-text-high opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <BsChevronCompactRight className="w-5 h-5" />
+            </button>
           </div>
 
-          {/* Right Arrow */}
-          <div
-            className={`hidden group-hover:block absolute top-1/2 transform -translate-y-1/2 right-1 text-xl text-center text-text-high rounded-full p-1 transition duration-300 ease-in-out bg-dark-400 cursor-pointer ${
-              isHovered ? "opacity-35" : "opacity-0"
-            }`}
-          >
-            <BsChevronCompactRight
-              className="cursor-pointer"
-              size={15}
-              onClick={nextSlide}
-            />
-          </div>
-          <div className="flex top-4 justify-center py-2">
-            {products.map((slide: any, slideIndex: number) => (
-              <div
-                key={slideIndex}
-                onClick={() => goToSlide(slideIndex)}
-                className="flex text-2xl cursor-pointer justify-center mx-1"
-              >
-                <Image
-                  className={`${
-                    currentIndex === slideIndex ? "opacity-100" : "opacity-50"
-                  }`}
-                  src={slide.productImage}
-                  width={70}
-                  height={60}
-                  alt={slide.name}
+          {/* Right panel: vertical thumbnail strip */}
+          <div className="hidden lg:block w-[200px] shrink-0 bg-dark-300 overflow-y-auto">
+            <div className="flex flex-col">
+              {products.map((product: ProductProps, index: number) => (
+                <ThumbnailItem
+                  key={product._id}
+                  product={product}
+                  isActive={index === currentIndex}
+                  progress={progress}
+                  onClick={() => goToSlide(index)}
                 />
-              </div>
+              ))}
+            </div>
+          </div>
+          {/* Mobile dots */}
+          <div className="flex lg:hidden justify-center gap-2 mt-4">
+            {products.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={`w-2 h-2 rounded-full transition-colors ${
+                  index === currentIndex ? "bg-accent" : "bg-dark-500"
+                }`}
+              />
             ))}
           </div>
         </div>

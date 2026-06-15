@@ -52,46 +52,31 @@ function LandingPage(props: SearchParamsProps) {
         <LoadingHome />
       ) : (
         <>
-          <section className="min-h-[70vh] bg-dark-100 flex items-center">
-            <div className="max-w-[1400px] mx-auto px-4 sm:px-6 w-full">
-              <div className="max-w-2xl">
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-spaceGrotesk text-text-high">
-                  Descubra o mundo dos jogos em{" "}
-                  <span className="text-accent">BitWorld</span>
-                </h1>
-                <p className="text-text-body text-lg sm:text-xl max-w-xl mt-4">
-                  Explore nossa coleção de jogos digitais e encontre seu
-                  próximo título favorito.
-                </p>
-                <div className="flex flex-row gap-4 mt-8">
-                  <Link
-                    href="/browse"
-                    className="bg-accent hover:bg-accent-hover text-white font-semibold rounded-md px-6 py-3 text-sm transition-colors"
-                  >
-                    Explorar jogos
-                  </Link>
-                  <Link
-                    href="/about"
-                    className="border border-dark-500 text-text-body hover:text-text-high hover:bg-dark-400 rounded-md px-6 py-3 text-sm transition-colors"
-                  >
-                    Saiba mais
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </section>
-
           {products.data?.products?.length > 0 && (
             <>
-              <section className="bg-dark-200 py-12 sm:py-16">
-                <ProductCarousel
-                  products={activeProducts.slice(0, 5)}
-                  wishList={wishlistProducts?.data?.wishlist?.products}
-                  userId={userId}
-                  isLoading={products.isLoading}
-                  isWishListed={isWishListed}
-                  setIsWishListed={setIsWishListed}
-                />
+              <section className="bg-dark-200 min-h-screen flex items-center pt-20">
+                <div className="max-w-[1400px] mx-auto px-4 sm:px-6 w-full">
+                  <div className="max-w-2xl mb-8 mt-8">
+                    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-spaceGrotesk text-text-high">
+                      Descubra o mundo dos jogos em{" "}
+                      <span className="text-accent">BitWorld</span>
+                    </h1>
+                    <p className="text-text-body text-lg sm:text-xl max-w-xl mt-4">
+                      Explore nossa coleção de jogos digitais e encontre seu
+                      próximo título favorito.
+                    </p>
+                  </div>
+                  <div className="rounded-xl overflow-hidden">
+                    <ProductCarousel
+                      products={activeProducts.slice(0, 5)}
+                      wishList={wishlistProducts?.data?.wishlist?.products}
+                      userId={userId}
+                      isLoading={products.isLoading}
+                      isWishListed={isWishListed}
+                      setIsWishListed={setIsWishListed}
+                    />
+                  </div>
+                </div>
               </section>
               <section className="bg-dark-100 py-12 sm:py-16">
                 <div className="max-w-[1400px] mx-auto px-4 sm:px-6">
