@@ -18,6 +18,25 @@ import { POST as registerUser } from "@/app/api/register/route";
 import { GET as verifyToken, PUT as resetPassword } from "@/app/api/forgot-password/route";
 import { POST as requestReset } from "@/app/api/forgot-password/[id]/route";
 
+import GameKey from "@/database/gamekey.model";
+import Library from "@/database/library.model";
+import Review from "@/database/review.model";
+import Coupon from "@/database/coupon.model";
+import Cart from "@/database/cart.model";
+import {
+  GET as getCart,
+  POST as postToCart,
+} from "@/app/api/cart/route";
+import {
+  GET as getProductReviews,
+} from "@/app/api/product/[id]/reviews/route";
+import {
+  POST as createReview,
+} from "@/app/api/review/route";
+import {
+  POST as validateCoupon,
+} from "@/app/api/coupon/validate/route";
+
 import { Product } from "@/database/product.model";
 import User from "@/database/user.model";
 import Order from "@/database/order.model";
@@ -108,6 +127,8 @@ async function createTestAdmin() {
 }
 
 async function createTestGenre(name = "Action") {
+  const existing = await Genres.findOne({ name });
+  if (existing) return existing;
   return Genres.create({ name, slug: name.toLowerCase() });
 }
 
@@ -128,7 +149,7 @@ async function createTestProduct(overrides: Record<string, unknown> = {}) {
     memory: "8GB",
     storage: "50GB",
     graphicCard: "GTX 1060",
-    price: "29.99",
+    price: 29.99,
     active: true,
     ...overrides,
   });
@@ -311,7 +332,7 @@ describe("POST /api/product", () => {
         memory: "16GB",
         storage: "100GB",
         graphicCard: "RTX 3080",
-        price: "49.99",
+        price: 49.99,
         active: true,
       },
     });
@@ -346,7 +367,7 @@ describe("POST /api/product", () => {
         memory: "16GB",
         storage: "100GB",
         graphicCard: "RTX 3080",
-        price: "49.99",
+        price: 49.99,
         active: true,
       },
     });
@@ -387,7 +408,7 @@ describe("PUT /api/product/[id]", () => {
         memory: "32GB",
         storage: "200GB",
         graphicCard: "RTX 4090",
-        price: "59.99",
+        price: 59.99,
         active: true,
       },
     });
@@ -516,7 +537,7 @@ describe("GET /api/order", () => {
       billingPostalCode: "12345-678",
       billingState: "SP",
       billingCity: "São Paulo",
-      cartProducts: { items: [] },
+      items: [],
       totalPrice: 100,
     });
     await Order.create({
@@ -531,7 +552,7 @@ describe("GET /api/order", () => {
       billingPostalCode: "12345-678",
       billingState: "SP",
       billingCity: "São Paulo",
-      cartProducts: { items: [] },
+      items: [],
       totalPrice: 200,
     });
     const req = createNextRequest({ searchParams: { page: "1", pageSize: "10" } });
@@ -561,7 +582,7 @@ describe("POST /api/order", () => {
           billingState: "SP",
           billingCity: "São Paulo",
         },
-        cartProducts: { items: [] },
+        items: [],
         totalPrice: 50,
       },
     });
@@ -593,7 +614,7 @@ describe("GET /api/order/[id]", () => {
       billingPostalCode: "12345-678",
       billingState: "SP",
       billingCity: "São Paulo",
-      cartProducts: { items: [] },
+      items: [],
       totalPrice: 100,
     });
     vi.mocked(getServerSession).mockResolvedValue({
@@ -621,7 +642,7 @@ describe("GET /api/order/[id]", () => {
       billingPostalCode: "12345-678",
       billingState: "SP",
       billingCity: "São Paulo",
-      cartProducts: { items: [] },
+      items: [],
       totalPrice: 100,
     });
     vi.mocked(getServerSession).mockResolvedValue({
@@ -647,7 +668,7 @@ describe("GET /api/order/[id]", () => {
       billingPostalCode: "12345-678",
       billingState: "SP",
       billingCity: "São Paulo",
-      cartProducts: { items: [] },
+      items: [],
       totalPrice: 100,
     });
     vi.mocked(getServerSession).mockResolvedValue({
@@ -782,7 +803,7 @@ describe("GET /api/forgot-password", () => {
     await ResetPassword.create({
       userId: user._id.toString(),
       token: rawToken,
-      user: [{ _id: user._id, email: user.email }],
+      user: { _id: user._id, email: user.email },
       resetAt: Date.now(),
     });
     const req = createNextRequest({ searchParams: { token: rawToken } });
@@ -816,6 +837,129 @@ describe("PUT /api/forgot-password", () => {
       body: { userId: "someid", password: "123", confirm_password: "123" },
     });
     const res = await resetPassword(req);
+    expect(res.status).toBe(400);
+  });
+});
+
+// ─── CART ─────────────────────────────────────────────────────────────────────
+
+describe("POST /api/cart", () => {
+  it("adds a product to cart", async () => {
+    const { getServerSession } = await import("next-auth");
+    const user = await createTestUser();
+    const product = await createTestProduct();
+    vi.mocked(getServerSession).mockResolvedValue({
+      user: { _id: user._id.toString(), email: user.email, name: user.name, role: "user" },
+      expires: new Date(Date.now() + 86400).toISOString(),
+    });
+
+    const req = createNextRequest({
+      method: "POST",
+      body: { productId: product._id.toString() },
+    });
+    const res = await postToCart(req);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.items).toHaveLength(1);
+  });
+
+  it("rejects unauthenticated request", async () => {
+    const { getServerSession } = await import("next-auth");
+    vi.mocked(getServerSession).mockResolvedValue(null);
+
+    const req = createNextRequest({
+      method: "POST",
+      body: { productId: new mongoose.Types.ObjectId().toString() },
+    });
+    const res = await postToCart(req);
+    expect(res.status).toBe(401);
+  });
+});
+
+// ─── COUPON ───────────────────────────────────────────────────────────────────
+
+describe("POST /api/coupon/validate", () => {
+  it("validates a valid coupon", async () => {
+    await Coupon.create({
+      code: "SAVE10",
+      discountType: "percentage",
+      discountValue: 10,
+      active: true,
+    });
+    const req = createNextRequest({
+      method: "POST",
+      body: { code: "SAVE10", cartTotal: 100 },
+    });
+    const res = await validateCoupon(req);
+    const body = await res.json();
+    expect(body.valid).toBe(true);
+    expect(body.coupon.discountAmount).toBe(10);
+  });
+
+  it("rejects expired coupon", async () => {
+    await Coupon.create({
+      code: "EXPIRED",
+      discountType: "fixed",
+      discountValue: 20,
+      active: true,
+      validUntil: new Date("2020-01-01"),
+    });
+    const req = createNextRequest({
+      method: "POST",
+      body: { code: "EXPIRED", cartTotal: 100 },
+    });
+    const res = await validateCoupon(req);
+    const body = await res.json();
+    expect(body.valid).toBe(false);
+  });
+
+  it("rejects non-existent coupon", async () => {
+    const req = createNextRequest({
+      method: "POST",
+      body: { code: "NONEXISTENT", cartTotal: 100 },
+    });
+    const res = await validateCoupon(req);
+    const body = await res.json();
+    expect(body.valid).toBe(false);
+  });
+});
+
+// ─── REVIEW ───────────────────────────────────────────────────────────────────
+
+describe("POST /api/review", () => {
+  it("creates a review", async () => {
+    const { getServerSession } = await import("next-auth");
+    const user = await createTestUser();
+    const product = await createTestProduct();
+    vi.mocked(getServerSession).mockResolvedValue({
+      user: { _id: user._id.toString(), email: user.email, name: user.name, role: "user" },
+      expires: new Date(Date.now() + 86400).toISOString(),
+    });
+
+    const req = createNextRequest({
+      method: "POST",
+      body: { productId: product._id.toString(), rating: 5, title: "Great", body: "Loved it" },
+    });
+    const res = await createReview(req);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.rating).toBe(5);
+  });
+
+  it("rejects invalid rating", async () => {
+    const { getServerSession } = await import("next-auth");
+    const user = await createTestUser();
+    const product = await createTestProduct();
+    vi.mocked(getServerSession).mockResolvedValue({
+      user: { _id: user._id.toString(), email: user.email, name: user.name, role: "user" },
+      expires: new Date(Date.now() + 86400).toISOString(),
+    });
+
+    const req = createNextRequest({
+      method: "POST",
+      body: { productId: product._id.toString(), rating: 6 },
+    });
+    const res = await createReview(req);
     expect(res.status).toBe(400);
   });
 });

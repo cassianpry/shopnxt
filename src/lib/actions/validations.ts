@@ -155,10 +155,8 @@ export const ProductFormSchema = z.object({
     .min(3, { message: "Mínimo de 3 caracteres." }),
 
   price: z
-    .string({ error: (issue) => issue.input === undefined ? "Precisa ser preenchido." : "Precisa ser uma string" })
-    .min(1, { message: "Precisa ser preenchido." })
-    .regex(/^\d+(\.\d{1,2})?$/, { message: "Preço deve ser um número válido (ex: 29.99)." })
-    .transform(Number),
+    .number({ error: (issue) => issue.input === undefined ? "Precisa ser preenchido." : "Precisa ser um número" })
+    .nonnegative({ message: "Preço não pode ser negativo." }),
 
   active: z.boolean().optional(),
 });
