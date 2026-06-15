@@ -1,0 +1,35 @@
+import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/authOptions";
+import { connectToDatabase } from "@/lib/actions/mongoose";
+import Review from "@/database/review.model";
+
+interface ContextProps {
+  params: Promise<{ id: string }>;
+}
+
+export async function DELETE(req: NextRequest, context: ContextProps) {
+  try {
+    const session = await getServerSession(authOptions);
+    const sessionUser = session?.user as { _id?: string } | null;
+    if (!sessionUser?._id) {
+      return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+    }
+
+    const { id } = await context.params;
+    await connectToDatabase();
+
+    const review = await Review.findOneAndDelete({
+      _id: id,
+      user: sessionUser._id,
+    });
+
+    if (!review) {
+      return NextResponse.json({ error: "Review not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ message: "Review deleted" });
+  } catch (error) {
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}
