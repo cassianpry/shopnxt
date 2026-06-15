@@ -5,6 +5,7 @@ import { authOptions } from "@/lib/authOptions";
 import { getServerSession } from "next-auth";
 import type { Session } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
+import mongoose from "mongoose";
 
 interface contextProps {
   params: Promise<{
@@ -20,24 +21,24 @@ export async function GET(req: NextRequest, context: contextProps) {
 
     const session = (await getServerSession(authOptions)) as Session | null;
     const sessionEmail = session?.user?.email;
-    const isAdmin = (session?.user as { role?: string })?.role === "admin";
+    const sessionUser = session?.user as { _id?: string; role?: string } | null;
+    const isAdmin = sessionUser?.role === "admin";
 
-    const order = await Order.findOne({ orderNum: params.id });
+    // Search by orderNum or _id
+    const order = await Order.findOne({
+      $or: [
+        { orderNum: params.id },
+        { _id: mongoose.isValidObjectId(params.id) ? params.id : new mongoose.Types.ObjectId() }
+      ]
+    })
+      .populate("items.product")
+      .populate("user", "name email");
 
     if (order) {
-      if (!isAdmin && order.email !== sessionEmail) {
+      if (!isAdmin && order.email !== sessionEmail && String(order.user?._id) !== String(sessionUser?._id)) {
         return NextResponse.json({ error: "Não autorizado" }, { status: 403 });
       }
       return NextResponse.json(order);
-    }
-
-    const orderById = await Order.findOne({ _id: params.id });
-
-    if (orderById) {
-      if (!isAdmin && orderById.email !== sessionEmail) {
-        return NextResponse.json({ error: "Não autorizado" }, { status: 403 });
-      }
-      return NextResponse.json(orderById);
     }
 
     const user = await User.findById(params.id);
@@ -45,13 +46,13 @@ export async function GET(req: NextRequest, context: contextProps) {
       if (!isAdmin && user.email !== sessionEmail) {
         return NextResponse.json({ error: "Não autorizado" }, { status: 403 });
       }
-      const orders = await Order.find({ email: user.email });
-      if (orders) {
-        return NextResponse.json(orders);
-      } else {
-        return NextResponse.json(null);
-      }
+      const orders = await Order.find({ user: user._id })
+        .populate("items.product")
+        .populate("user", "name email");
+      return NextResponse.json(orders);
     }
+
+    return NextResponse.json(null, { status: 404 });
   } catch (error) {
     return NextResponse.json((error as Error).message, { status: 500 });
   }
