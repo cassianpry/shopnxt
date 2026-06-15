@@ -21,10 +21,14 @@ const ProductSchema = new Schema(
     memory: { type: String, required: true },
     storage: { type: String, required: true },
     graphicCard: { type: String, required: true },
-    price: { type: String, required: true },
+    price: { type: Number, required: true },
     active: { type: Boolean, required: true, default: false },
   },
   { timestamps: true }
 );
+
+ProductSchema.index({ createdAt: -1 });
+ProductSchema.index({ price: 1 });
+ProductSchema.index({ "genres._id": 1 });
 
 export const Product = models?.Product || model("Product", ProductSchema);

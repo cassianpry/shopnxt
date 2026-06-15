@@ -156,7 +156,9 @@ export const ProductFormSchema = z.object({
 
   price: z
     .string({ error: (issue) => issue.input === undefined ? "Precisa ser preenchido." : "Precisa ser uma string" })
-    .min(1, { message: "Precisa ser preenchido." }),
+    .min(1, { message: "Precisa ser preenchido." })
+    .regex(/^\d+(\.\d{1,2})?$/, { message: "Preço deve ser um número válido (ex: 29.99)." })
+    .transform(Number),
 
   active: z.boolean().optional(),
 });

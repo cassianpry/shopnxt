@@ -16,6 +16,8 @@ const UserSchema = new Schema(
   { timestamps: true }
 );
 
+UserSchema.index({ role: 1 });
+
 const User = models?.User || model("User", UserSchema);
 
 export default User;

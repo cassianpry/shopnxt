@@ -6,7 +6,7 @@ interface IGenre {
 }
 
 const GenresSchema = new Schema<IGenre>(
-  { name: { type: String, required: true }, slug: { type: String, required: true } },
+  { name: { type: String, required: true }, slug: { type: String, required: true, unique: true } },
   { timestamps: true }
 );
 

@@ -64,7 +64,7 @@ describe("Product Model", () => {
       memory: "8GB",
       storage: "50GB",
       graphicCard: "GTX 1060",
-      price: "29.99",
+      price: 29.99,
       active: true,
     });
     expect(product.slug).toBe("test-game");
@@ -113,9 +113,9 @@ describe("ResetPassword Model", () => {
   it("creates a reset password entry", async () => {
     const user = await User.create({ name: "Reset User", email: "reset@email.com" });
     const entry = await ResetPassword.create({
-      userId: user._id.toString(),
+      userId: user._id,
       token: "some-token",
-      user: [{ _id: user._id, email: user.email }],
+      user: { _id: user._id, email: user.email },
     });
     const expectedHash = crypto.createHash("sha256").update("some-token").digest("hex");
     expect(entry.token).toBe(expectedHash);

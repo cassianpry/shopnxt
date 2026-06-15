@@ -33,6 +33,9 @@ OrderSchema.pre("save", function () {
   }
 });
 
+OrderSchema.index({ email: 1 });
+OrderSchema.index({ status: 1 });
+
 const Order = models?.Order || model("Order", OrderSchema);
 
 export default Order;

@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     const resetData = await ResetPassword.create({
       userId: existingUser._id,
       token: rawToken,
-      user: [{ _id: existingUser._id, email: existingUser.email }],
+      user: { _id: existingUser._id, email: existingUser.email },
       resetAt: Date.now(),
     });
 

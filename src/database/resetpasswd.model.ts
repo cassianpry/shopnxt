@@ -3,17 +3,12 @@ import crypto from "crypto";
 
 const ResetPasswordSchema = new Schema(
   {
-    userId: { type: String, required: true },
+    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     token: { type: String, required: true },
-    user: [
-      {
-        _id: {
-          type: Schema.Types.ObjectId,
-          ref: "User",
-        },
-        email: { type: String },
-      },
-    ],
+    user: {
+      _id: { type: Schema.Types.ObjectId, ref: "User" },
+      email: { type: String },
+    },
     resetAt: { type: Date, default: null },
   },
   { timestamps: true }
