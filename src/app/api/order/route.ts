@@ -1,6 +1,10 @@
 import Order from "@/database/order.model";
+import Coupon from "@/database/coupon.model";
+import Cart from "@/database/cart.model";
 import { connectToDatabase } from "@/lib/actions/mongoose";
 import { UserOrderSchema } from "@/lib/actions/validations";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/authOptions";
 import { NextRequest, NextResponse } from "next/server";
 
 function escapeRegex(str: string): string {
@@ -107,12 +111,71 @@ export async function POST(req: NextRequest) {
     delete (validated as any).checkAddress;
 
     await connectToDatabase();
+
+    const session = await getServerSession(authOptions);
+    const sessionUser = session?.user as { _id?: string; email?: string } | null;
+
+    let discountAmount = 0;
+    let appliedCoupon = null;
+
+    if (data.couponCode) {
+      const coupon = await Coupon.findOne({ code: data.couponCode, active: true });
+      if (!coupon) {
+        return NextResponse.json({ error: "Invalid coupon" }, { status: 400 });
+      }
+
+      const now = new Date();
+      if (coupon.validFrom && now < coupon.validFrom) {
+        return NextResponse.json({ error: "Coupon not yet valid" }, { status: 400 });
+      }
+      if (coupon.validUntil && now > coupon.validUntil) {
+        return NextResponse.json({ error: "Coupon expired" }, { status: 400 });
+      }
+      if (coupon.usageLimit && coupon.usedCount >= coupon.usageLimit) {
+        return NextResponse.json({ error: "Coupon usage limit reached" }, { status: 400 });
+      }
+      if (data.totalPrice < coupon.minPurchase) {
+        return NextResponse.json({ error: "Minimum purchase not met" }, { status: 400 });
+      }
+
+      discountAmount =
+        coupon.discountType === "percentage"
+          ? (data.totalPrice * coupon.discountValue) / 100
+          : Math.min(coupon.discountValue, data.totalPrice);
+
+      appliedCoupon = coupon._id;
+    }
+
+    // Map frontend cartProducts (ProductProps[]) to schema items array
+    const items = data.cartProducts?.map((item: any) => ({
+      product: item._id,
+      name: item.name,
+      price: typeof item.price === "string" ? parseFloat(item.price) : item.price,
+      quantity: 1,
+    })) ?? [];
+
     const order = await Order.create({
       ...validated,
-      cartProducts: data.cartProducts ?? { items: [] },
-      totalPrice: data.totalPrice ?? 0,
+      user: sessionUser?._id || null,
+      items,
+      totalPrice: (data.totalPrice ?? 0) - discountAmount,
+      coupon: appliedCoupon,
+      discountAmount,
+      status: "pending",
     });
-    return NextResponse.json({ userId, orderId: order.orderNum });
+
+    if (appliedCoupon) {
+      await Coupon.findByIdAndUpdate(appliedCoupon, { $inc: { usedCount: 1 } });
+    }
+
+    if (items.length > 0 && sessionUser?._id) {
+      await Cart.findOneAndUpdate(
+        { user: sessionUser._id },
+        { $set: { items: [] } }
+      );
+    }
+
+    return NextResponse.json({ userId, orderId: order.orderNum, orderStatus: order.status });
   } catch (error) {
     console.log(error);
     return NextResponse.json(
