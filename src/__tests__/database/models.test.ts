@@ -8,6 +8,11 @@ import Order from "@/database/order.model";
 import Genres from "@/database/genre.model";
 import WishList from "@/database/wishlist.model";
 import ResetPassword from "@/database/resetpasswd.model";
+import GameKey from "@/database/gamekey.model";
+import Library from "@/database/library.model";
+import Review from "@/database/review.model";
+import Coupon from "@/database/coupon.model";
+import Cart from "@/database/cart.model";
 
 let mongoServer: MongoMemoryServer;
 
@@ -119,5 +124,130 @@ describe("ResetPassword Model", () => {
     });
     const expectedHash = crypto.createHash("sha256").update("some-token").digest("hex");
     expect(entry.token).toBe(expectedHash);
+  });
+});
+
+describe("GameKey Model", () => {
+  it("creates a game key with available status", async () => {
+    const product = await Product.create({
+      name: "Key Game", slug: "key-game", productImage: "img.jpg",
+      description: "desc", shortDescription: "short", about: "about",
+      genres: [], developer: "Dev", publisher: "Pub",
+      system: "Win", processor: "i5", memory: "8GB", storage: "50GB",
+      graphicCard: "GTX", price: 29.99, active: true,
+    });
+    const key = await GameKey.create({
+      product: product._id,
+      key: "XXXXX-XXXXX-XXXXX",
+    });
+    expect(key.status).toBe("available");
+    expect(key.key).toBe("XXXXX-XXXXX-XXXXX");
+  });
+
+  it("enforces unique key", async () => {
+    const product = await Product.create({
+      name: "Key Game 2", slug: "key-game-2", productImage: "img.jpg",
+      description: "desc", shortDescription: "short", about: "about",
+      genres: [], developer: "Dev", publisher: "Pub",
+      system: "Win", processor: "i5", memory: "8GB", storage: "50GB",
+      graphicCard: "GTX", price: 29.99, active: true,
+    });
+    await GameKey.create({ product: product._id, key: "DUPLICATE-KEY" });
+    await expect(
+      GameKey.create({ product: product._id, key: "DUPLICATE-KEY" })
+    ).rejects.toThrow();
+  });
+});
+
+describe("Library Model", () => {
+  it("creates a library entry for a user", async () => {
+    const user = await User.create({ name: "Lib User", email: "lib@email.com" });
+    const product = await Product.create({
+      name: "Lib Game", slug: "lib-game", productImage: "img.jpg",
+      description: "desc", shortDescription: "short", about: "about",
+      genres: [], developer: "Dev", publisher: "Pub",
+      system: "Win", processor: "i5", memory: "8GB", storage: "50GB",
+      graphicCard: "GTX", price: 29.99, active: true,
+    });
+    const library = await Library.create({
+      user: user._id,
+      products: [{ product: product._id, keys: ["KEY-123"], orderNum: "12345" }],
+    });
+    expect(library.products).toHaveLength(1);
+    expect(library.products[0].keys[0]).toBe("KEY-123");
+  });
+});
+
+describe("Review Model", () => {
+  it("creates a review with rating", async () => {
+    const user = await User.create({ name: "Rev User", email: "rev@email.com" });
+    const product = await Product.create({
+      name: "Rev Game", slug: "rev-game", productImage: "img.jpg",
+      description: "desc", shortDescription: "short", about: "about",
+      genres: [], developer: "Dev", publisher: "Pub",
+      system: "Win", processor: "i5", memory: "8GB", storage: "50GB",
+      graphicCard: "GTX", price: 29.99, active: true,
+    });
+    const review = await Review.create({
+      user: user._id,
+      product: product._id,
+      rating: 5,
+      title: "Great game",
+      body: "Really enjoyed it",
+    });
+    expect(review.rating).toBe(5);
+  });
+
+  it("enforces one review per user per product", async () => {
+    const user = await User.create({ name: "Rev User 2", email: "rev2@email.com" });
+    const product = await Product.create({
+      name: "Rev Game 2", slug: "rev-game-2", productImage: "img.jpg",
+      description: "desc", shortDescription: "short", about: "about",
+      genres: [], developer: "Dev", publisher: "Pub",
+      system: "Win", processor: "i5", memory: "8GB", storage: "50GB",
+      graphicCard: "GTX", price: 29.99, active: true,
+    });
+    await Review.create({ user: user._id, product: product._id, rating: 4 });
+    await expect(
+      Review.create({ user: user._id, product: product._id, rating: 3 })
+    ).rejects.toThrow();
+  });
+});
+
+describe("Coupon Model", () => {
+  it("creates a percentage coupon", async () => {
+    const coupon = await Coupon.create({
+      code: "SAVE10",
+      discountType: "percentage",
+      discountValue: 10,
+    });
+    expect(coupon.code).toBe("SAVE10");
+    expect(coupon.usedCount).toBe(0);
+  });
+
+  it("enforces unique coupon code", async () => {
+    await Coupon.create({ code: "UNIQUE", discountType: "fixed", discountValue: 5 });
+    await expect(
+      Coupon.create({ code: "UNIQUE", discountType: "fixed", discountValue: 10 })
+    ).rejects.toThrow();
+  });
+});
+
+describe("Cart Model", () => {
+  it("creates a cart for a user", async () => {
+    const user = await User.create({ name: "Cart User", email: "cart@email.com" });
+    const product = await Product.create({
+      name: "Cart Game", slug: "cart-game", productImage: "img.jpg",
+      description: "desc", shortDescription: "short", about: "about",
+      genres: [], developer: "Dev", publisher: "Pub",
+      system: "Win", processor: "i5", memory: "8GB", storage: "50GB",
+      graphicCard: "GTX", price: 29.99, active: true,
+    });
+    const cart = await Cart.create({
+      user: user._id,
+      items: [{ product: product._id, price: 29.99 }],
+    });
+    expect(cart.items).toHaveLength(1);
+    expect(cart.items[0].price).toBe(29.99);
   });
 });
