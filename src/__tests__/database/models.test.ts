@@ -78,7 +78,7 @@ describe("Product Model", () => {
 });
 
 describe("Order Model", () => {
-  it("creates an order with auto-generated orderNum", async () => {
+  it("creates an order with auto-generated orderNum and default status", async () => {
     const order = await Order.create({
       name: "Buyer",
       email: "buyer@email.com",
@@ -91,11 +91,11 @@ describe("Order Model", () => {
       billingPostalCode: "12345-678",
       billingState: "SP",
       billingCity: "São Paulo",
-      cartProducts: { items: [] },
+      items: [],
       totalPrice: 100,
     });
     expect(order.orderNum).toBeDefined();
-    expect(order.orderNum.length).toBeGreaterThan(0);
+    expect(order.status).toBe("pending");
   });
 });
 
