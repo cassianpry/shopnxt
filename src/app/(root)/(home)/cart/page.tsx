@@ -25,7 +25,7 @@ function CartPage() {
   const calcTotalPrice = (products: ProductProps[]) => {
     let total = 0;
     products?.forEach((product) => {
-      total += parseFloat(product.price);
+      total += Number(product.price);
     });
     return total;
   };

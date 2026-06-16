@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  allowedDevOrigins: ['192.168.15.3'],
   images: {
     remotePatterns: [
       {
@@ -44,7 +45,8 @@ const nextConfig = {
           },
           {
             key: "Content-Security-Policy",
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.tiny.cloud https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data: blob: https://res.cloudinary.com https://media.steampowered.com https://swiperjs.com; font-src 'self' data:; connect-src 'self' https://api.cloudinary.com; frame-src 'self' https://*.tiny.cloud",
+            value:
+              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.tiny.cloud https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data: blob: https://res.cloudinary.com https://media.steampowered.com https://swiperjs.com; font-src 'self' data:; connect-src 'self' https://api.cloudinary.com; frame-src 'self' https://*.tiny.cloud",
           },
         ],
       },

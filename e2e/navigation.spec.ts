@@ -3,8 +3,9 @@ import { test, expect } from "@playwright/test";
 test.describe("Navigation", () => {
   test("homepage loads with expected content", async ({ page }) => {
     await page.goto("/");
+    await page.waitForLoadState("networkidle");
     await expect(
-      page.getByRole("heading", { name: /descobrir/i })
+      page.getByRole("heading", { name: /Descubra/i })
     ).toBeVisible();
   });
 

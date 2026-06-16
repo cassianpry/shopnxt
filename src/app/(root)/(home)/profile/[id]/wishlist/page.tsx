@@ -7,9 +7,17 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { CartContext } from "@/context/CartContext";
 import { ProductProps } from "@/types/index.d";
 import { useParams } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 
 function WishList() {
+  const { status } = useSession();
+
+  if (status === "unauthenticated") {
+    return redirect("/sign-in");
+  }
+
   const params = useParams<{ id: string }>();
   const wishlistResult = useWishListUser(params.id.toString());
   const [loading, setLoading] = useState(true);

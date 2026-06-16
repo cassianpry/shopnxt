@@ -1,9 +1,7 @@
 import User from "@/database/user.model";
 import WishList from "@/database/wishlist.model";
 import { connectToDatabase } from "@/lib/actions/mongoose";
-import { authOptions } from "@/lib/authOptions";
-import { getServerSession } from "next-auth";
-import type { Session } from "next-auth";
+import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
 interface contextProps {
@@ -21,9 +19,9 @@ export async function GET(req: NextRequest, context: contextProps) {
     try {
       await connectToDatabase();
 
-      const session = (await getServerSession(authOptions)) as Session | null;
-      const sessionUser = session?.user as { _id?: string } | undefined;
-      if (!sessionUser || sessionUser._id !== params.id) {
+      const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+      const tokenUser = token?.user as { _id?: string } | undefined;
+      if (!tokenUser || tokenUser._id !== params.id) {
         return NextResponse.json({ error: "Não autorizado" }, { status: 403 });
       }
 
@@ -57,9 +55,9 @@ export async function DELETE(req: NextRequest, context: contextProps) {
     try {
       await connectToDatabase();
 
-      const session = (await getServerSession(authOptions)) as Session | null;
-      const sessionUser = session?.user as { _id?: string } | undefined;
-      if (!sessionUser || sessionUser._id !== params.id) {
+      const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+      const tokenUser = token?.user as { _id?: string } | undefined;
+      if (!tokenUser || tokenUser._id !== params.id) {
         return NextResponse.json({ error: "Não autorizado" }, { status: 403 });
       }
 

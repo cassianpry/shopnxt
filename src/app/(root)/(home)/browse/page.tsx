@@ -109,7 +109,7 @@ function Browse(props: SearchParamsProps) {
                           <p className="text-text-high font-bold mt-1">Gratuito</p>
                         ) : (
                           <p className="text-text-high font-bold mt-1">
-                            {parseFloat(product.price).toLocaleString("pt-BR", {
+                            {Number(product.price).toLocaleString("pt-BR", {
                               style: "currency",
                               currency: "BRL",
                             })}

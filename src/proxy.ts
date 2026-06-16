@@ -19,10 +19,18 @@ export const proxy = (withAuth as any)(
     const url = req.nextUrl.pathname;
     const token: JWT | null = (req as any).nextauth?.token ?? null;
 
-    const isPublicApi = PUBLIC_API_ROUTES.some((route) =>
+    const isFullyPublic = PUBLIC_API_ROUTES.some((route) =>
       url.startsWith(route),
     );
-    if (url.startsWith("/api") && isPublicApi) {
+    if (isFullyPublic) {
+      return;
+    }
+
+    const isPublicRead = PUBLIC_READ_API_ROUTES.some((route) =>
+      url.startsWith(route),
+    );
+
+    if (url.startsWith("/api") && isPublicRead && req.method === "GET") {
       return;
     }
 
@@ -40,19 +48,11 @@ export const proxy = (withAuth as any)(
 
     if (
       url.startsWith("/api") &&
-      !PUBLIC_READ_API_ROUTES.some((r) => url.startsWith(r)) &&
+      isPublicRead &&
+      req.method !== "GET" &&
       userRole !== "admin"
     ) {
-      const method = req.method;
-      const isReadRoute = PUBLIC_READ_API_ROUTES.some((r) =>
-        url.startsWith(r),
-      );
-      if (!isReadRoute) {
-        return NextResponse.redirect(new URL("/", req.url));
-      }
-      if (isReadRoute && method !== "GET") {
-        return NextResponse.redirect(new URL("/", req.url));
-      }
+      return NextResponse.redirect(new URL("/", req.url));
     }
   },
   {

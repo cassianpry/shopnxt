@@ -17,15 +17,18 @@ export const createWishList = async ({
     body: JSON.stringify({ user, product }),
     headers: { "Content-Type": "application/json" },
   });
+
+  if (response.redirected && response.url.includes("/sign-in")) {
+    window.location.href = "/sign-in";
+    return;
+  }
+
   const res = await response.json();
   if (!response.ok) {
-    return await response.json().then((error) => {
-      console.log(error);
-    });
+    console.log(res);
   } else if (res.Error === "Usuário não encontrado") {
     console.log(res.Error);
     window.location.href = "/sign-in";
-  } else {
   }
 };
 

@@ -22,7 +22,7 @@ test.describe("Authentication", () => {
 
   test("shows validation errors on empty form", async ({ page }) => {
     await page.goto("/sign-in");
-    await page.getByRole("button", { name: /acessar a sua conta/i }).click();
-    await expect(page.getByText(/precisa ser preenchido/i).first()).toBeVisible();
+    await page.getByRole("button", { name: /Acessar a sua conta/i }).click();
+    await expect(page.getByText(/E-mail inválido/i).first()).toBeVisible();
   });
 });

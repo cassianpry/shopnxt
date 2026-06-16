@@ -64,7 +64,7 @@ const UserOrders = () => {
                     </span>
                   </p>
                 </div>
-                {order.cartProducts.map((product) => (
+                {order.items.map((product) => (
                   <AccordionContent key={product._id} className="flex gap-4 text-text-body">
                     <Image
                       className="max-w-24 max-h-12 rounded"
@@ -76,7 +76,7 @@ const UserOrders = () => {
                     <div className="flex flex-col justify-start">
                       <span className="text-text-high">{product.name}</span>
                       <span>
-                        {parseFloat(product.price).toLocaleString("pt-BR", {
+                        {Number(product.price).toLocaleString("pt-BR", {
                           style: "currency",
                           currency: "BRL",
                         })}

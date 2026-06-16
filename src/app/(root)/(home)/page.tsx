@@ -19,7 +19,9 @@ interface userSessionProps {
 
 function LandingPage(props: SearchParamsProps) {
   const searchParams = use(props.searchParams);
-  const products = useProducts({ searchQuery: searchParams.query });
+  const products = useProducts(
+    searchParams.query ? { searchQuery: searchParams.query } : {}
+  );
   const { data, status } = useSession();
   const [isWishListed, setIsWishListed] = useState<string[]>([]);
 

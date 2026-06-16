@@ -8,9 +8,7 @@ test.describe("Products", () => {
 
   test("search field is present on homepage", async ({ page }) => {
     await page.goto("/");
-    const searchInput = page.getByPlaceholder(/search/i);
-    const count = await searchInput.count();
-    expect(count).toBeGreaterThan(0);
+    const searchInput = page.getByPlaceholder(/Buscar jogos/i);
     await expect(searchInput.first()).toBeVisible();
   });
 });

@@ -67,6 +67,7 @@ export const authOptions: AuthOptions = {
       }
     },
     async jwt({ token }) {
+      await connectToDatabase();
       const userByEmail = await User.findOne({ email: token.email }).lean();
       if (userByEmail) {
         token.user = {
