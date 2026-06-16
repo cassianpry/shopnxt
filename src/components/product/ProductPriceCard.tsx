@@ -4,13 +4,20 @@ import Link from "next/link";
 import { useRef } from "react";
 import { ProductProps } from "@/types/index.d";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
+import { WishlistHeartButton } from "./WishlistHeartButton";
 
 export function ProductPriceCard({
   products,
   title,
+  userId,
+  isWishListed,
+  setIsWishListed,
 }: {
   products: ProductProps[];
   title: string;
+  userId?: string;
+  isWishListed: string[];
+  setIsWishListed: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -57,7 +64,7 @@ export function ProductPriceCard({
             key={product._id}
             className="group snap-start shrink-0 w-[180px] sm:w-[200px]"
           >
-            <div className="bg-dark-300 border border-dark-400 rounded-lg overflow-hidden transition-all duration-300 hover:border-accent/50 hover:translate-y-[-2px] hover:shadow-lg">
+            <div className="bg-dark-300 border border-dark-400 rounded-lg relative overflow-hidden transition-all duration-300 hover:border-accent/50 hover:translate-y-[-2px] hover:shadow-lg">
               <div className="relative aspect-[3/4]">
                 <Image
                   src={product.productImage}
@@ -67,6 +74,15 @@ export function ProductPriceCard({
                   sizes="200px"
                 />
               </div>
+              <WishlistHeartButton
+                productId={product._id!}
+                slug={product.slug!}
+                isWishListed={isWishListed.includes(product.slug!)}
+                userId={userId}
+                onToggle={(slug) =>
+                  setIsWishListed((prev) => [...prev, slug])
+                }
+              />
               <div className="p-3">
                 <p className="text-text-high text-sm font-medium truncate">
                   {product.name}

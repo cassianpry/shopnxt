@@ -93,7 +93,7 @@ function LandingPage(props: SearchParamsProps) {
                       Ver todos
                     </Link>
                   </div>
-                  <ProductPriceCard products={activeProducts} title="" />
+                  <ProductPriceCard products={activeProducts} title="" userId={userId} isWishListed={isWishListed} setIsWishListed={setIsWishListed} />
                 </div>
               </section>
               <section className="bg-dark-200 py-12 sm:py-16">
