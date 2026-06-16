@@ -80,7 +80,7 @@ export function ProductPriceCard({
                 isWishListed={isWishListed.includes(product.slug!)}
                 userId={userId}
                 onToggle={(slug) =>
-                  setIsWishListed((prev) => [...prev, slug])
+                  setIsWishListed([...isWishListed, slug])
                 }
               />
               <div className="p-3">

@@ -38,6 +38,11 @@ vi.mock("@tanstack/react-query", () => ({
   }),
 }));
 
+// Mock NextAuth session
+vi.mock("next-auth/react", () => ({
+  useSession: () => ({ data: null, status: "authenticated" }),
+}));
+
 // Mock Wishlist Mutations
 const mockMutate = vi.fn();
 vi.mock("@/app/services/wishlist/mutation", () => ({

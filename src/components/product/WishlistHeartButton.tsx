@@ -36,10 +36,8 @@ export function WishlistHeartButton({
       return;
     }
 
-    addWishList.mutate(
-      { user: userId, product: productId },
-      { onSuccess: () => onToggle(slug) }
-    );
+    addWishList.mutate({ user: userId, product: productId });
+    onToggle(slug);
   };
 
   const isLoading = status === "loading";
@@ -52,7 +50,7 @@ export function WishlistHeartButton({
         isLoading ? "cursor-not-allowed" : "cursor-pointer"
       }`}
       aria-label={
-        isWishListed ? "Ver lista de desejos" : "Adicionar aos favoritos"
+        isWishListed ? "Na lista de desejos" : "Adicionar à lista de desejos"
       }
     >
       {isWishListed ? (
