@@ -167,7 +167,7 @@ const OrderModal = ({ isOpen, setIsOpen, orderId }: OrderModalProps) => {
                   <div className="flex flex-col justify-start">
                     <span className="font-semibold">{product.name}</span>
                     <span>
-                      {parseFloat(product.price).toLocaleString("pt-BR", {
+                      {Number(product.price).toLocaleString("pt-BR", {
                         style: "currency",
                         currency: "BRL",
                       })}

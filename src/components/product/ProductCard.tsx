@@ -57,16 +57,16 @@ function ProductCard({
     setNewProducts([products[index1], products[index2]]);
   }, [products]);
 
-  const formatPrice = (value: string) => {
-    return parseFloat(value).toLocaleString("pt-BR", {
+  const formatPrice = (value: number | string) => {
+    return Number(value).toLocaleString("pt-BR", {
       style: "currency",
       currency: "BRL",
     });
   };
 
-  const calculateDiscount = (oldPrice: string, price: string) => {
-    const old = parseFloat(oldPrice);
-    const current = parseFloat(price);
+  const calculateDiscount = (oldPrice: number | string, price: number | string) => {
+    const old = Number(oldPrice);
+    const current = Number(price);
     if (old > current) {
       return Math.round(((old - current) / old) * 100);
     }

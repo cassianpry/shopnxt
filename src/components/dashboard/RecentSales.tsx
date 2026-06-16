@@ -1,4 +1,4 @@
-import { OrderProps, ProductProps } from "@/types/index.d";
+import { OrderItemProps, OrderProps } from "@/types/index.d";
 import React from "react";
 import { Skeleton } from "../ui/skeleton";
 
@@ -41,10 +41,10 @@ const RecentSales: React.FC<RecentSalesProps> = ({ orders, isLoading }) => {
                     <Skeleton className="h-4 w-14 bg-dark-400" />
                   ) : (
                     <p>
-                      {order.cartProducts
-                        .reduce(
-                          (total: number, product: ProductProps) =>
-                            total + parseFloat(product.price),
+                      {order.items
+                        ?.reduce(
+                          (total: number, product: OrderItemProps) =>
+                            total + product.price,
                           0
                         )
                         .toLocaleString("pt-BR", {

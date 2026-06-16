@@ -128,14 +128,14 @@ export const calculateTotalMonthOrders = (orders: OrderProps[]): number => {
 
   //Calculate total value of order (actual month)
   const totalOrdersValue = currentMonthOrders?.reduce(
-    (total, order) => total + order?.totalPrice,
+    (total, order) => total + (order?.totalPrice ?? 0),
     0
   );
   return totalOrdersValue;
 };
 
 const calculateTotal = (orders: OrderProps[]): number => {
-  const total = orders?.reduce((total, order) => total + order?.totalPrice, 0);
+  const total = orders?.reduce((total, order) => total + (order?.totalPrice ?? 0), 0);
   return total;
 };
 

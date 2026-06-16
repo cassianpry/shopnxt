@@ -74,7 +74,7 @@ const ProductForm = () => {
       memory: "",
       storage: "",
       graphicCard: "",
-      price: "",
+      price: 0,
       active: true,
     },
   });

@@ -52,7 +52,7 @@ describe("Navbar", () => {
   });
 
   it("shows user menu when authenticated", () => {
-    const user = { _id: "1", name: "Test User", email: "test@test.com" };
+    const user = { _id: "1", name: "Test User", email: "test@test.com", role: "user" };
     render(<Navbar user={user} status="authenticated" />);
     expect(screen.getByTestId("user-menu")).toBeInTheDocument();
     expect(screen.getByText("Olá, Test User")).toBeInTheDocument();

@@ -97,14 +97,11 @@ function createNextRequest({
       baseUrl.searchParams.set(k, v)
     );
   }
-  const init: RequestInit & { headers?: Headers } = {
+  return new NextRequest(baseUrl.toString(), {
     method,
     headers: new Headers({ "Content-Type": "application/json" }),
-  };
-  if (body !== undefined) {
-    init.body = JSON.stringify(body);
-  }
-  return new NextRequest(baseUrl.toString(), init);
+    ...(body !== undefined && { body: JSON.stringify(body) }),
+  });
 }
 
 async function createTestUser(overrides: Record<string, unknown> = {}) {

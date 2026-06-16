@@ -64,7 +64,7 @@ const UserOrders = () => {
                     </span>
                   </p>
                 </div>
-                {order.items.map((product) => (
+                {order.items?.map((product) => (
                   <AccordionContent key={product._id} className="flex gap-4 text-text-body">
                     <Image
                       className="max-w-24 max-h-12 rounded"

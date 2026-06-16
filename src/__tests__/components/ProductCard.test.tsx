@@ -32,6 +32,20 @@ vi.mock("@/app/services/wishlist/mutation", () => ({
 import ProductCard from "@/components/product/ProductCard";
 
 describe("ProductCard", () => {
+  const baseProduct = {
+    description: "Full description",
+    about: "About this game",
+    genres: [{ _id: "g1", name: "Action" }],
+    developer: "Dev Studio",
+    publisher: "Pub Studio",
+    system: "Windows",
+    processor: "Intel",
+    memory: "8GB",
+    storage: "50GB",
+    graphicCard: "RTX 2060",
+    active: true,
+  };
+
   const mockProducts = [
     {
       _id: "123",
@@ -40,6 +54,7 @@ describe("ProductCard", () => {
       productImage: "https://example.com/img.jpg",
       price: "29.99",
       shortDescription: "A short description",
+      ...baseProduct,
     },
     {
       _id: "456",
@@ -48,6 +63,7 @@ describe("ProductCard", () => {
       productImage: "https://example.com/img2.jpg",
       price: "49.99",
       shortDescription: "Another description",
+      ...baseProduct,
     },
   ];
 

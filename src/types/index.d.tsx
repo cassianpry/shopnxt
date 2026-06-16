@@ -55,6 +55,7 @@ export interface ProductProps {
   storage: string;
   graphicCard: string;
   price: number | string;
+  oldPrice?: number | string;
   active: boolean;
   createdAt?: string;
   updatedAt?: string;
@@ -89,10 +90,12 @@ export interface FormUserProps {
 }
 
 export interface OrderItemProps {
+  _id: string;
   product: string;
   name: string;
   price: number;
   quantity: number;
+  productImage: string;
 }
 
 export interface OrderProps {
@@ -110,9 +113,12 @@ export interface OrderProps {
   billingPostalCode: string;
   billingState: string;
   billingCity: string;
-  items: OrderItemProps[];
-  totalPrice: number;
-  status: "pending" | "paid" | "fulfilled" | "cancelled" | "refunded";
+  items?: OrderItemProps[];
+  cartProducts?: ProductProps[];
+  totalPrice?: number;
+  status?: "pending" | "paid" | "fulfilled" | "cancelled" | "refunded";
+  userId?: string;
+  orderId?: string;
   paymentMethod?: string;
   transactionId?: string;
   paidAt?: string;

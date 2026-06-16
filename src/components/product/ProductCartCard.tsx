@@ -20,7 +20,7 @@ interface ProductCartCardProps {
   product: ProductProps | ProductProps[];
   isLoading?: boolean;
   type?: string;
-  wishList: ProductProps;
+  wishList: ProductProps | ProductProps[];
   index?: number;
 }
 
@@ -63,17 +63,21 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
   };
   useEffect(() => {
     if (type === "wishlist" && !isLoading) {
-      const cartCheck = product?.some(
-        (cartProd: ProductProps) => cartProd.slug === wishList.slug
-      );
+      const cartCheck = Array.isArray(product) && !Array.isArray(wishList)
+        ? product.some(
+            (cartProd: ProductProps) => cartProd.slug === wishList.slug
+          )
+        : false;
       setCartListed(cartCheck);
     }
     if (!isLoading && type !== "wishlist") {
-      const wishListCheck = wishList?.some(
-        (wishListProduct: ProductProps) =>
-          wishListProduct.slug ===
-          (Array.isArray(product) ? product[index].slug : product.slug)
-      );
+      const wishListCheck = Array.isArray(wishList)
+        ? wishList.some(
+            (wishListProduct: ProductProps) =>
+              wishListProduct.slug ===
+              (Array.isArray(product) ? product[index].slug : product.slug)
+          )
+        : false;
       setWishListed(wishListCheck);
     }
   }, [index, isLoading, product, type, wishList]);
@@ -133,7 +137,7 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
               </Link>
               <div className="flex flex-col mt-7">
                 <span className="font-normal text-sm">
-                  {parseFloat(
+                  {Number(
                     type === "wishlist"
                       ? Array.isArray(wishList)
                         ? wishList[index].price
@@ -172,7 +176,7 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
                 <Button
                   className="mb-1 items-center justify-center rounded-md font-semibold text-xs bg-accent hover:bg-accent-hover transition-all duration-300 ease-in-out text-white"
                   disabled={addWishList.isPending}
-                  onClick={() => addToCart(wishList)}
+                  onClick={() => addToCart(wishList as ProductProps)}
                 >
                   {addWishList.isPending === true ? (
                     <>
@@ -186,7 +190,7 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
               <Button
                 className="flex justify-between items-center rounded-md text-xs transition-all duration-300 ease-in-out bg-red-900 hover:bg-red-600 text-white"
                 onClick={() => {
-                  removeFromWishList(userId, wishList?._id!);
+                  removeFromWishList(userId, (wishList as ProductProps)._id!);
                 }}
               >
                 <MdOutlineDeleteForever className="w-4 h-4 mr-1" />

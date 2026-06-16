@@ -42,7 +42,7 @@ function ProductRow({ product, isLoading, isFetching }: ProductRowProps) {
       {renderTableCell(
         "",
         product.price !== "0"
-          ? parseFloat(product.price).toLocaleString("pt-BR", {
+          ? Number(product.price).toLocaleString("pt-BR", {
               style: "currency",
               currency: "BRL",
             })

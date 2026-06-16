@@ -30,8 +30,8 @@ export function ProductPriceCard({
     });
   };
 
-  const formatPrice = (value: string) =>
-    parseFloat(value).toLocaleString("pt-BR", {
+  const formatPrice = (value: number | string) =>
+    Number(value).toLocaleString("pt-BR", {
       style: "currency",
       currency: "BRL",
     });

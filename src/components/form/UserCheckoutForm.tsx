@@ -59,7 +59,7 @@ function UserCheckoutForm({ user }: ProfileFormProps) {
   const calcTotalPrice = (products: ProductProps[]) => {
     let total = 0;
     products?.forEach((product) => {
-      total += parseFloat(product.price);
+      total += Number(product.price);
     });
     return total;
   };
@@ -329,21 +329,21 @@ function UserCheckoutForm({ user }: ProfileFormProps) {
 
                                 form.setValue(
                                   "billingAddress",
-                                  fieldIsChecked ? user.address : ""
+                                  fieldIsChecked ? user.address ?? "" : ""
                                 );
 
                                 form.setValue(
                                   "billingPostalCode",
-                                  fieldIsChecked ? user.postalCode : ""
+                                  fieldIsChecked ? user.postalCode ?? "" : ""
                                 );
 
                                 form.setValue(
                                   "billingState",
-                                  fieldIsChecked ? user.state : ""
+                                  fieldIsChecked ? user.state ?? "" : ""
                                 );
                                 form.setValue(
                                   "billingCity",
-                                  fieldIsChecked ? user.city : ""
+                                  fieldIsChecked ? user.city ?? "" : ""
                                 );
                               }}
                             />
@@ -564,7 +564,7 @@ function UserCheckoutForm({ user }: ProfileFormProps) {
                             <div className="flex flex-col justify-start">
                               <span className="text-text-high">{product.name}</span>
                               <span className="text-text-body">
-                                {parseFloat(product.price).toLocaleString(
+                                {Number(product.price).toLocaleString(
                                   "pt-BR",
                                   {
                                     style: "currency",
