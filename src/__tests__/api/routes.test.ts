@@ -50,6 +50,9 @@ beforeAll(async () => {
   vi.mock("next-auth", () => ({
     getServerSession: vi.fn(),
   }));
+  vi.mock("next-auth/jwt", () => ({
+    getToken: vi.fn(),
+  }));
   vi.mock("nodemailer", () => {
     const sendMail = vi.fn().mockResolvedValue({ messageId: "mock-id" });
     return {
@@ -61,6 +64,7 @@ beforeAll(async () => {
   });
 
   process.env.BASE_URL = "http://localhost:3000";
+  process.env.NEXTAUTH_SECRET = "test-secret";
 
   mongoServer = await MongoMemoryServer.create();
   await mongoose.connect(mongoServer.getUri());
@@ -707,8 +711,8 @@ describe("POST /api/wishlist", () => {
 
 describe("GET /api/wishlist/[id]", () => {
   it("rejects unauthenticated request", async () => {
-    const { getServerSession } = await import("next-auth");
-    vi.mocked(getServerSession).mockResolvedValue(null);
+    const { getToken } = await import("next-auth/jwt");
+    vi.mocked(getToken).mockResolvedValue(null);
 
     const user = await createTestUser();
     const req = createNextRequest();
@@ -717,13 +721,18 @@ describe("GET /api/wishlist/[id]", () => {
   });
 
   it("returns wishlist for authorized user", async () => {
-    const { getServerSession } = await import("next-auth");
+    const { getToken } = await import("next-auth/jwt");
     const user = await createTestUser();
     const product = await createTestProduct();
     await WishList.create({ user: user._id, products: [product._id] });
-    vi.mocked(getServerSession).mockResolvedValue({
+    vi.mocked(getToken).mockResolvedValue({
       user: { _id: user._id.toString(), email: user.email, name: user.name, role: "user" },
-      expires: new Date(Date.now() + 86400).toISOString(),
+      name: user.name,
+      email: user.email,
+      sub: user._id.toString(),
+      iat: Math.floor(Date.now() / 1000),
+      exp: Math.floor(Date.now() / 1000) + 86400,
+      jti: "mock-jti",
     });
     const req = createNextRequest();
     const res = await getWishlist(req, { params: Promise.resolve({ id: user._id.toString() }) });
@@ -735,13 +744,18 @@ describe("GET /api/wishlist/[id]", () => {
 
 describe("DELETE /api/wishlist/[id]", () => {
   it("removes a product from wishlist", async () => {
-    const { getServerSession } = await import("next-auth");
+    const { getToken } = await import("next-auth/jwt");
     const user = await createTestUser();
     const product = await createTestProduct();
     await WishList.create({ user: user._id, products: [product._id] });
-    vi.mocked(getServerSession).mockResolvedValue({
+    vi.mocked(getToken).mockResolvedValue({
       user: { _id: user._id.toString(), email: user.email, name: user.name, role: "user" },
-      expires: new Date(Date.now() + 86400).toISOString(),
+      name: user.name,
+      email: user.email,
+      sub: user._id.toString(),
+      iat: Math.floor(Date.now() / 1000),
+      exp: Math.floor(Date.now() / 1000) + 86400,
+      jti: "mock-jti",
     });
     const req = createNextRequest({
       method: "DELETE",

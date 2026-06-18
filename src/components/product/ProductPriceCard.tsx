@@ -8,13 +8,11 @@ import { WishlistHeartButton } from "./WishlistHeartButton";
 
 export function ProductPriceCard({
   products,
-  title,
   userId,
   isWishListed,
   setIsWishListed,
 }: {
   products: ProductProps[];
-  title: string;
   userId?: string;
   isWishListed: string[];
   setIsWishListed: React.Dispatch<React.SetStateAction<string[]>>;

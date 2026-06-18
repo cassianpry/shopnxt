@@ -1,8 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { getProduct, getProductBySlug, getProducts } from "./api";
+import { ProductProps } from "@/types/index.d";
+
+interface ProductsResponse {
+  products: ProductProps[];
+  totalProducts?: number;
+  isNext?: boolean;
+}
 
 export function useProducts(searchQuery: Record<string, string>) {
-  return useQuery({
+  return useQuery<ProductsResponse>({
     queryKey: ["products", searchQuery],
     queryFn: () => getProducts(searchQuery),
   });

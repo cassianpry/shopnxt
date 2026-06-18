@@ -3,10 +3,7 @@ import { GenreFormSchema } from "@/lib/actions/validations";
 import { NextRequest, NextResponse } from "next/server";
 import Genres from "@/database/genre.model";
 import slugify from "slugify";
-
-function escapeRegex(str: string): string {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
+import { escapeRegex, errorMessage, serverError } from "@/lib/api/shared";
 
 export async function GET(req: NextRequest) {
   const searchQuery = new URL(
@@ -48,7 +45,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ genre, isNext, totalGenres });
   } catch (error) {
-    return NextResponse.json((error as Error).message, { status: 500 });
+    return errorMessage(error);
   }
 }
 
@@ -83,9 +80,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: "Categoria Criada", genre });
   } catch (error) {
     console.log(error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return serverError(error);
   }
 }

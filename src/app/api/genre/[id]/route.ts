@@ -3,14 +3,10 @@ import { connectToDatabase } from "@/lib/actions/mongoose";
 import { GenreFormSchema } from "@/lib/actions/validations";
 import { NextRequest, NextResponse } from "next/server";
 import slugify from "slugify";
+import type { RouteParams } from "@/lib/api/shared";
+import { serverError } from "@/lib/api/shared";
 
-interface contextProps {
-  params: Promise<{
-    id: string;
-  }>;
-}
-
-export async function GET(req: NextRequest, context: contextProps) {
+export async function GET(req: NextRequest, context: RouteParams<"id">) {
   const params = await context.params;
   try {
     await connectToDatabase();
@@ -20,14 +16,11 @@ export async function GET(req: NextRequest, context: contextProps) {
     return NextResponse.json(category);
   } catch (error) {
     console.log(error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return serverError(error);
   }
 }
 
-export async function PUT(req: NextRequest, context: contextProps) {
+export async function PUT(req: NextRequest, context: RouteParams<"id">) {
   const params = await context.params;
 
   try {
@@ -57,9 +50,6 @@ export async function PUT(req: NextRequest, context: contextProps) {
     return NextResponse.json(genre);
   } catch (error) {
     console.log(error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return serverError(error);
   }
 }

@@ -12,13 +12,26 @@ interface CredentialsProps {
   password: string;
 }
 
+type AuthorizeRequest = {
+  body?: Record<string, unknown>;
+  query?: Record<string, unknown>;
+  headers?: Record<string, unknown>;
+  method?: string;
+};
+
 export const authOptions: AuthOptions = {
   session: { strategy: "jwt" },
   providers: [
     CredentialsProvider({
-      //@ts-ignore
-      async authorize(credentials: CredentialsProps, req: any) {
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials: Record<string, string> | undefined, req: AuthorizeRequest) {
         connectToDatabase();
+        if (!credentials) {
+          throw new Error("E-mail ou Password inválidos.");
+        }
         const { email, password } = credentials;
         const user = await User.findOne({ email });
         if (!user) {

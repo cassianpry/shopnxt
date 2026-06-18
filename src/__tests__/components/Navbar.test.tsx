@@ -36,24 +36,29 @@ vi.mock("@/components/search/SearchBar", () => ({
 }));
 
 import Navbar from "@/components/navbar/Navbar";
+import CartProvider from "@/context/CartContext";
+
+function renderWithProviders(ui: React.ReactElement) {
+  return render(<CartProvider>{ui}</CartProvider>);
+}
 
 describe("Navbar", () => {
   it("renders navigation element", () => {
-    render(
-      <Navbar user={null as any} status="unauthenticated" />
+    renderWithProviders(
+      <Navbar user={null} status="unauthenticated" />
     );
     expect(screen.getByRole("navigation")).toBeInTheDocument();
   });
 
   it("shows login links when unauthenticated", () => {
-    render(<Navbar user={null as any} status="unauthenticated" />);
+    renderWithProviders(<Navbar user={null} status="unauthenticated" />);
     expect(screen.getByText("Entrar")).toBeInTheDocument();
     expect(screen.getByText("Cadastrar")).toBeInTheDocument();
   });
 
   it("shows user menu when authenticated", () => {
     const user = { _id: "1", name: "Test User", email: "test@test.com", role: "user" };
-    render(<Navbar user={user} status="authenticated" />);
+    renderWithProviders(<Navbar user={user} status="authenticated" />);
     expect(screen.getByTestId("user-menu")).toBeInTheDocument();
     expect(screen.getByText("Olá, Test User")).toBeInTheDocument();
   });

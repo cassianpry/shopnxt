@@ -73,7 +73,7 @@ export function useResetPassword() {
   const queryClient = useQueryClient();
   const router = useRouter();
   return useMutation({
-    mutationFn: (values: any) => resetPasswordUser(values),
+    mutationFn: (values: { email: string }) => resetPasswordUser(values.email),
     onError: (error) => {
       console.log("Error=>", error);
     },
@@ -91,7 +91,7 @@ export function useResetPassword() {
 export function useUpdatePassword() {
   const router = useRouter();
   return useMutation({
-    mutationFn: (values: any) => updatePasswordUser(values),
+    mutationFn: (values: { password: string; confirm_password: string; userId?: string }) => updatePasswordUser(values as unknown as string),
     onError: (error) => {
       console.log("Error=>", error);
     },

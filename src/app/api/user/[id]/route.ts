@@ -4,14 +4,9 @@ import { authOptions } from "@/lib/authOptions";
 import { getServerSession } from "next-auth";
 import type { Session } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
+import type { RouteParams, SessionUser } from "@/lib/api/shared";
 
-interface contextProps {
-  params: Promise<{
-    id: string;
-  }>;
-}
-
-export async function GET(req: NextRequest, context: contextProps) {
+export async function GET(req: NextRequest, context: RouteParams<"id">) {
   const params = await context.params;
 
   try {
@@ -30,7 +25,7 @@ export async function GET(req: NextRequest, context: contextProps) {
   }
 }
 
-export async function PUT(req: NextRequest, context: contextProps) {
+export async function PUT(req: NextRequest, context: RouteParams<"id">) {
   const data = await req.json();
   const params = await context.params;
 
@@ -42,7 +37,7 @@ export async function PUT(req: NextRequest, context: contextProps) {
       return NextResponse.json({ error: "Não autenticado" }, { status: 401 });
     }
 
-    const sessionUser = session.user as { _id?: string; role?: string };
+    const sessionUser = session.user as SessionUser;
     if (sessionUser._id !== params.id && sessionUser.role !== "admin") {
       return NextResponse.json({ error: "Não autorizado" }, { status: 403 });
     }

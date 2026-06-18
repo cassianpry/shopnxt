@@ -9,7 +9,7 @@ import {
 
 import { redirect, useParams } from "next/navigation";
 import { useOrder } from "@/app/services/orders/queries";
-import { OrderProps, UserProps } from "@/types/index.d";
+import { OrderProps, isUserProps } from "@/types/index.d";
 import Image from "next/image";
 import moment from "moment";
 import { useSession } from "next-auth/react";
@@ -49,7 +49,7 @@ const UserOrders = () => {
                   <div className="w-full text-text-body">
                     Nº do Pedido:&nbsp;
                     <Link
-                      href={`/profile/${(data.user as UserProps)._id}/order/${
+                      href={`/profile/${isUserProps(data.user) ? data.user._id : ""}/order/${
                         order.orderNum
                       }`}
                       className="text-accent hover:text-text-high transition-colors"

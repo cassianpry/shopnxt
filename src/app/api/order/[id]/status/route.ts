@@ -5,15 +5,14 @@ import { connectToDatabase } from "@/lib/actions/mongoose";
 import Order from "@/database/order.model";
 import GameKey from "@/database/gamekey.model";
 import Library from "@/database/library.model";
+import type { OrderItemProps } from "@/types/index.d";
+import type { RouteParams, SessionUser } from "@/lib/api/shared";
+import { serverError } from "@/lib/api/shared";
 
-interface ContextProps {
-  params: Promise<{ id: string }>;
-}
-
-export async function PATCH(req: NextRequest, context: ContextProps) {
+export async function PATCH(req: NextRequest, context: RouteParams<"id">) {
   try {
     const session = await getServerSession(authOptions);
-    const sessionUser = session?.user as { role?: string } | null;
+    const sessionUser = session?.user as SessionUser | null;
     const isAdmin = sessionUser?.role === "admin";
     if (!isAdmin) {
       return NextResponse.json({ error: "Não autorizado" }, { status: 403 });
@@ -35,7 +34,7 @@ export async function PATCH(req: NextRequest, context: ContextProps) {
 
     if (status === "fulfilled") {
       const availableKeys = await GameKey.find({
-        product: { $in: order.items.map((i: any) => i.product) },
+        product: { $in: order.items.map((i: OrderItemProps) => i.product) },
         status: "available",
       });
 
@@ -51,7 +50,7 @@ export async function PATCH(req: NextRequest, context: ContextProps) {
     if (status === "paid") order.paidAt = new Date();
     if (status === "fulfilled") {
       const keysToAssign = await GameKey.find({
-        product: { $in: order.items.map((i: any) => i.product) },
+        product: { $in: order.items.map((i: OrderItemProps) => i.product) },
         status: "available",
       }).limit(order.items.length);
 
@@ -67,7 +66,7 @@ export async function PATCH(req: NextRequest, context: ContextProps) {
           {
             $push: {
               products: {
-                $each: order.items.map((item: any, index: number) => ({
+                $each: order.items.map((item: OrderItemProps, index: number) => ({
                   product: item.product,
                   keys: keysToAssign[index] ? [keysToAssign[index].key] : [],
                   purchasedAt: new Date(),
@@ -84,6 +83,6 @@ export async function PATCH(req: NextRequest, context: ContextProps) {
     await order.save();
     return NextResponse.json(order);
   } catch (error) {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return serverError(error);
   }
 }

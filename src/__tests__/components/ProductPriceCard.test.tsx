@@ -76,9 +76,8 @@ describe("ProductPriceCard", () => {
 
   const defaultProps = {
     products: mockProducts,
-    title: "Jogos em Destaque",
     userId: "user123",
-    isWishListed: ["destaque-game-2"], // Game 2 is already wishlisted
+    isWishListed: ["destaque-game-2"],
     setIsWishListed: vi.fn(),
   };
 

@@ -3,14 +3,10 @@ import WishList from "@/database/wishlist.model";
 import { connectToDatabase } from "@/lib/actions/mongoose";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
+import type { RouteParams, SessionUser } from "@/lib/api/shared";
+import { errorMessage } from "@/lib/api/shared";
 
-interface contextProps {
-  params: Promise<{
-    id: string;
-  }>;
-}
-
-export async function GET(req: NextRequest, context: contextProps) {
+export async function GET(req: NextRequest, context: RouteParams<"id">) {
   const params = await context.params;
 
   if (params.id === "undefined" || params.id == "") {
@@ -20,7 +16,7 @@ export async function GET(req: NextRequest, context: contextProps) {
       await connectToDatabase();
 
       const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-      const tokenUser = token?.user as { _id?: string } | undefined;
+      const tokenUser = token?.user as Pick<SessionUser, "_id"> | undefined;
       if (!tokenUser || tokenUser._id !== params.id) {
         return NextResponse.json({ error: "Não autorizado" }, { status: 403 });
       }
@@ -41,12 +37,12 @@ export async function GET(req: NextRequest, context: contextProps) {
       return NextResponse.json({ wishlist });
     } catch (error) {
       console.log("Wishlist GET==>", error);
-      return NextResponse.json((error as Error).message, { status: 500 });
+      return errorMessage(error);
     }
   }
 }
 
-export async function DELETE(req: NextRequest, context: contextProps) {
+export async function DELETE(req: NextRequest, context: RouteParams<"id">) {
   const params = await context.params;
   const data = await req.json();
   if (params.id === "undefined") {
@@ -56,7 +52,7 @@ export async function DELETE(req: NextRequest, context: contextProps) {
       await connectToDatabase();
 
       const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-      const tokenUser = token?.user as { _id?: string } | undefined;
+      const tokenUser = token?.user as Pick<SessionUser, "_id"> | undefined;
       if (!tokenUser || tokenUser._id !== params.id) {
         return NextResponse.json({ error: "Não autorizado" }, { status: 403 });
       }
@@ -68,7 +64,7 @@ export async function DELETE(req: NextRequest, context: contextProps) {
       return NextResponse.json({ wishListProductDelete });
     } catch (error) {
       console.log(error);
-      return NextResponse.json((error as Error).message, { status: 500 });
+      return errorMessage(error);
     }
   }
 }

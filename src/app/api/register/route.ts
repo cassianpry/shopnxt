@@ -2,9 +2,9 @@ import bcrypt from "bcrypt";
 import User from "@/database/user.model";
 import { connectToDatabase } from "@/lib/actions/mongoose";
 import { SignUpSchema } from "@/lib/actions/validations";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: any) {
+export async function POST(req: NextRequest) {
   const body = await req.json();
   try {
     const parsed = SignUpSchema.safeParse(body);

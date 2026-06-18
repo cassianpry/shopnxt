@@ -3,15 +3,13 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 import { connectToDatabase } from "@/lib/actions/mongoose";
 import Cart from "@/database/cart.model";
+import type { RouteParams, SessionUser } from "@/lib/api/shared";
+import { serverError } from "@/lib/api/shared";
 
-interface ContextProps {
-  params: Promise<{ productId: string }>;
-}
-
-export async function PATCH(req: NextRequest, context: ContextProps) {
+export async function PATCH(req: NextRequest, context: RouteParams<"productId">) {
   try {
     const session = await getServerSession(authOptions);
-    const sessionUser = session?.user as { _id?: string } | null;
+    const sessionUser = session?.user as SessionUser | null;
     if (!sessionUser?._id) {
       return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
     }
@@ -31,14 +29,14 @@ export async function PATCH(req: NextRequest, context: ContextProps) {
 
     return NextResponse.json(cart);
   } catch (error) {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return serverError(error);
   }
 }
 
-export async function DELETE(req: NextRequest, context: ContextProps) {
+export async function DELETE(req: NextRequest, context: RouteParams<"productId">) {
   try {
     const session = await getServerSession(authOptions);
-    const sessionUser = session?.user as { _id?: string } | null;
+    const sessionUser = session?.user as SessionUser | null;
     if (!sessionUser?._id) {
       return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
     }
@@ -58,6 +56,6 @@ export async function DELETE(req: NextRequest, context: ContextProps) {
 
     return NextResponse.json(cart);
   } catch (error) {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return serverError(error);
   }
 }

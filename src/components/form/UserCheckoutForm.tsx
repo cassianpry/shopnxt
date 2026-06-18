@@ -1,7 +1,6 @@
 "use client";
 import { UserOrderSchema } from "@/lib/actions/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import {
@@ -18,7 +17,7 @@ import { toast } from "../ui/use-toast";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
 import { useCreateOrder } from "@/app/services/orders/mutations";
-import { CartContext } from "@/context/CartContext";
+import { useCart } from "@/context/CartContext";
 import { ProductProps, UserProps } from "@/types/index.d";
 import Image from "next/image";
 import { Separator } from "../ui/separator";
@@ -26,13 +25,15 @@ import { MdAutorenew } from "react-icons/md";
 import { useRouter } from "next/navigation";
 
 interface ProfileFormProps {
-  user: UserProps;
+  user: UserProps | null;
 }
 
 function UserCheckoutForm({ user }: ProfileFormProps) {
   const router = useRouter();
   const createOrder = useCreateOrder();
-  const { cartProducts, clearCart } = useContext(CartContext);
+  const { cartProducts, clearCart } = useCart();
+
+  if (!user) return null;
 
   const form = useForm<z.infer<typeof UserOrderSchema>>({
     resolver: zodResolver(UserOrderSchema),
@@ -320,11 +321,7 @@ function UserCheckoutForm({ user }: ProfileFormProps) {
                             <Checkbox
                               checked={checkboxValue}
                               onCheckedChange={(event) => {
-                                const fieldIsChecked =
-                                  typeof event === "boolean"
-                                    ? event
-                                    : //@ts-ignore
-                                      event.target.checked;
+                                const fieldIsChecked = event === true;
                                 field.onChange(fieldIsChecked);
 
                                 form.setValue(

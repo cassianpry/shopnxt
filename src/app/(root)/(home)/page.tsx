@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, use } from "react";
+import React, { useMemo, useState, use } from "react";
 import { useProducts } from "@/app/services/product/queries";
 import { useWishListUser } from "@/app/services/wishlist/queries";
 import { useSession } from "next-auth/react";
@@ -35,17 +35,14 @@ function LandingPage(props: SearchParamsProps) {
   const userId = getUserId(data, status);
   const wishlistProducts = useWishListUser(userId);
 
-  const activeProducts = products?.data?.products?.filter(
+  const activeProducts = (products?.data?.products?.filter(
     (product: ProductProps) => product.active === true
-  );
+  ) ?? []);
 
-  useEffect(() => {
-    if (wishlistProducts?.data?.wishlist?.products) {
-      const slugs = wishlistProducts.data.wishlist.products.map(
-        (product: any) => product.slug!
-      );
-      setIsWishListed(slugs);
-    }
+  const wishlistedSlugs = useMemo(() => {
+    return wishlistProducts?.data?.wishlist?.products?.map(
+      (product: ProductProps) => product.slug!
+    ) ?? [];
   }, [wishlistProducts?.data?.wishlist?.products]);
 
   return (
@@ -54,7 +51,7 @@ function LandingPage(props: SearchParamsProps) {
         <LoadingHome />
       ) : (
         <>
-          {products.data?.products?.length > 0 && (
+          {(products.data?.products?.length ?? 0) > 0 && (
             <>
               <section className="bg-dark-200 min-h-screen flex items-center pt-20">
                 <div className="max-w-[1400px] mx-auto px-4 sm:px-6 w-full">
@@ -93,7 +90,7 @@ function LandingPage(props: SearchParamsProps) {
                       Ver todos
                     </Link>
                   </div>
-                  <ProductPriceCard products={activeProducts} title="" userId={userId} isWishListed={isWishListed} setIsWishListed={setIsWishListed} />
+                  <ProductPriceCard products={activeProducts} userId={userId} isWishListed={isWishListed} setIsWishListed={setIsWishListed} />
                 </div>
               </section>
               <section className="bg-dark-200 py-12 sm:py-16">

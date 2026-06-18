@@ -6,14 +6,10 @@ import { getServerSession } from "next-auth";
 import type { Session } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
+import type { RouteParams, SessionUser } from "@/lib/api/shared";
+import { errorMessage } from "@/lib/api/shared";
 
-interface contextProps {
-  params: Promise<{
-    id: string;
-  }>;
-}
-
-export async function GET(req: NextRequest, context: contextProps) {
+export async function GET(req: NextRequest, context: RouteParams<"id">) {
   const params = await context.params;
 
   try {
@@ -21,7 +17,7 @@ export async function GET(req: NextRequest, context: contextProps) {
 
     const session = (await getServerSession(authOptions)) as Session | null;
     const sessionEmail = session?.user?.email;
-    const sessionUser = session?.user as { _id?: string; role?: string } | null;
+    const sessionUser = session?.user as SessionUser | null;
     const isAdmin = sessionUser?.role === "admin";
 
     // Search by orderNum or _id
@@ -54,6 +50,6 @@ export async function GET(req: NextRequest, context: contextProps) {
 
     return NextResponse.json(null, { status: 404 });
   } catch (error) {
-    return NextResponse.json((error as Error).message, { status: 500 });
+    return errorMessage(error);
   }
 }

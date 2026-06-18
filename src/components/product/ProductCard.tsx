@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "../ui/button";
 import {
@@ -30,8 +30,6 @@ function ProductCard({
 }: ProductCardProps) {
   const query = useQueryClient();
   const addWishList = useCreateWishList();
-  const [newProducts, setNewProducts] = useState<ProductProps[]>([]);
-
   const addToWishList = async (productId: string, slug: string) => {
     try {
       addWishList.mutate({ user: userId!, product: productId });
@@ -42,19 +40,14 @@ function ProductCard({
     }
   };
 
-  useEffect(() => {
-    const getRandomIndex = (length: number) => {
-      return Math.floor(Math.random() * length);
-    };
-
-    const index1 = getRandomIndex(products.length);
-    let index2 = getRandomIndex(products.length);
-
-    while (index2 === index1) {
-      index2 = getRandomIndex(products.length);
+  const newProducts = useMemo(() => {
+    const getRandomIndex = (length: number) => Math.floor(Math.random() * length);
+    const idx1 = getRandomIndex(products.length);
+    let idx2 = getRandomIndex(products.length);
+    while (idx2 === idx1 && products.length > 1) {
+      idx2 = getRandomIndex(products.length);
     }
-
-    setNewProducts([products[index1], products[index2]]);
+    return [products[idx1], products[idx2]];
   }, [products]);
 
   const formatPrice = (value: number | string) => {

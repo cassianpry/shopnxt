@@ -3,10 +3,7 @@ import { Product } from "@/database/product.model";
 import { connectToDatabase } from "@/lib/actions/mongoose";
 import { NextRequest, NextResponse } from "next/server";
 import slugify from "slugify";
-
-function escapeRegex(str: string): string {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
+import { escapeRegex, errorMessage, serverError } from "@/lib/api/shared";
 
 export async function GET(req: NextRequest) {
   const searchQuery = new URL(
@@ -70,7 +67,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ products, isNext, totalProducts });
     }
   } catch (error) {
-    return NextResponse.json((error as Error).message, { status: 500 });
+    return errorMessage(error);
   }
 }
 
@@ -121,15 +118,11 @@ export async function POST(req: NextRequest) {
       active: validated.active,
     });
 
-    const genreDocuments = [];
-    for (const genre of validated.genres) {
-      const existingGenre = await Genres.findById(genre);
-
-      genreDocuments.push({
-        _id: existingGenre!._id,
-        name: existingGenre!.name,
-      });
-    }
+    const genreDocs = await Genres.find({ _id: { $in: validated.genres } });
+    const genreDocuments = genreDocs.map((g) => ({
+      _id: g._id,
+      name: g.name,
+    }));
 
     await Product.findByIdAndUpdate(product._id, {
       $push: { genres: { $each: genreDocuments } },
@@ -138,9 +131,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json("Produto criado");
   } catch (error) {
     console.log(error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return serverError(error);
   }
 }

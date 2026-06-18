@@ -2,10 +2,9 @@
 import ProductCartCard from "@/components/product/ProductCartCard";
 import { Button } from "@/components/ui/button";
 
-import { CartContext } from "@/context/CartContext";
-import { ProductProps, UserProps } from "@/types/index.d";
+import { useCart } from "@/context/CartContext";
+import { ProductProps, isUserProps } from "@/types/index.d";
 import Link from "next/link";
-import { useContext } from "react";
 import { LuShoppingCart } from "react-icons/lu";
 
 import { useWishListUser } from "@/app/services/wishlist/queries";
@@ -14,12 +13,13 @@ import { useSession } from "next-auth/react";
 
 function CartPage() {
   const user = useSession();
-  const { cartProducts } = useContext(CartContext);
+  const { cartProducts } = useCart();
 
   const searchParams = useSearchParams();
   const id: string | "" = searchParams.get("id") || "";
+  const userData = isUserProps(user?.data?.user) ? user.data.user : undefined;
   const wishlistResult = useWishListUser(
-    id ? id : (user?.data?.user as UserProps)?._id
+    id ? id : userData?._id
   );
 
   const calcTotalPrice = (products: ProductProps[]) => {
@@ -65,7 +65,7 @@ function CartPage() {
                     product={prod}
                     wishList={wishlistResult?.data?.wishlist?.products}
                     key={prod._id}
-                    index={index as number}
+                    index={index}
                     isLoading={wishlistResult.isLoading}
                   />
                 ))}

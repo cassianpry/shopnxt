@@ -53,13 +53,21 @@ export const ResetPasswordSchema = z
     path: ["confirm_password"],
   });
 
+const addressFields = {
+  name: z.string().min(3, { message: "Mínimo de 3 caracteres." }).max(25, { message: "Máximo de 25 caracteres." }).regex(/^[A-Za-z\u00C0-\u00FF ]+$/i, "Somente letras."),
+  address: z.string().max(250, { message: "Endereço muito extenso" }),
+  postalCode: z.string().min(9, { message: "CEP Inválido" }).max(9, { message: "CEP Inválido" }),
+  state: z.string({ error: (issue) => issue.input === undefined ? "Inválido" : "Precisa ser uma string" }).regex(/^[A-Za-z]+$/i, "Inválido."),
+  city: z.string({ error: (issue) => issue.input === undefined ? "Inválido" : "Precisa ser uma string" }).regex(/^[\p{L}\s]+$/u, "Inválido.").max(50, { message: "Cidade muito extenso" }),
+  phone: z.string({ error: (issue) => issue.input === undefined ? "Inválido" : "Precisa ser uma string" }).min(10, { message: "Numero de telefone inválido" }).max(11),
+};
+
+const addressSchema = z.object(addressFields);
+
 export const ProfileSchema = z.object({
   _id: z.string().optional(),
-  name: z
-    .string()
-    .min(3, { message: "Mínimo de 3 caracteres." })
-    .max(25, { message: "Máximo de 25 caracteres." })
-    .regex(/^[A-Za-z\u00C0-\u00FF ]+$/i, "Somente letras."),
+
+  name: addressFields.name,
 
   email: z
     .string({ error: (issue) => issue.input === undefined ? "E-mail inválido" : "Precisa ser uma string" })
@@ -68,26 +76,15 @@ export const ProfileSchema = z.object({
 
   role: z.string(),
 
-  address: z.string().max(250, { message: "Endereço muito extenso" }),
+  address: addressFields.address,
 
-  postalCode: z
-    .string()
-    .min(9, { message: "CEP Inválido" })
-    .max(9, { message: "CEP Inválido" }),
+  postalCode: addressFields.postalCode,
 
-  state: z
-    .string({ error: (issue) => issue.input === undefined ? "Inválido" : "Precisa ser uma string" })
-    .regex(/^[A-Za-z]+$/i, "Inválido."),
+  state: addressFields.state,
 
-  city: z
-    .string({ error: (issue) => issue.input === undefined ? "Inválido" : "Precisa ser uma string" })
-    .regex(/^[\p{L}\s]+$/u, "Inválido.")
-    .max(50, { message: "Cidade muito extenso" }),
+  city: addressFields.city,
 
-  phone: z
-    .string({ error: (issue) => issue.input === undefined ? "Inválido" : "Precisa ser uma string" })
-    .min(10, { message: "Numero de telefone inválido" })
-    .max(11),
+  phone: addressFields.phone,
 });
 
 export const GenreFormSchema = z.object({
@@ -161,59 +158,34 @@ export const ProductFormSchema = z.object({
   active: z.boolean().optional(),
 });
 
+const billingAddressFields = {
+  billingAddress: z.string({ error: (issue) => issue.input === undefined ? "Inválido" : "Precisa ser uma string" }).min(5, { message: "Endereço inválido" }).max(250, { message: "Endereço muito extenso" }),
+  billingPostalCode: z.string().min(9, { message: "CEP Inválido" }).max(9, { message: "CEP Inválido" }),
+  billingState: z.string({ error: (issue) => issue.input === undefined ? "Inválido" : "Precisa ser uma string" }).regex(/^[A-Za-z]+$/i, "Inválido."),
+  billingCity: z.string({ error: (issue) => issue.input === undefined ? "Inválido" : "Precisa ser uma string" }).regex(/^[\p{L}\s]+$/u, "Inválido.").max(50, { message: "Limite de 50 caracteres" }),
+};
+
 export const UserOrderSchema = z.object({
   _id: z.string().optional(),
 
-  name: z
-    .string()
-    .min(3, { message: "Mínimo de 3 caracteres." })
-    .max(25, { message: "Máximo de 25 caracteres." })
-    .regex(/^[A-Za-z\u00C0-\u00FF ]+$/i, "Somente letras."),
+  name: addressFields.name,
 
   email: z
     .string({ error: (issue) => issue.input === undefined ? "E-mail inválido" : "Precisa ser uma string" })
     .email({ message: "E-mail inválido" })
     .min(5, { message: "E-mail inválido." }),
 
-  address: z.string().max(250, { message: "Endereço muito extenso" }),
+  address: addressFields.address,
 
-  postalCode: z
-    .string()
-    .min(9, { message: "CEP Inválido" })
-    .max(9, { message: "CEP Inválido" }),
+  postalCode: addressFields.postalCode,
 
-  state: z
-    .string({ error: (issue) => issue.input === undefined ? "Inválido" : "Precisa ser uma string" })
-    .regex(/^[A-Za-z]+$/i, "Inválido."),
+  state: addressFields.state,
 
-  city: z
-    .string({ error: (issue) => issue.input === undefined ? "Inválido" : "Precisa ser uma string" })
-    .regex(/^[\p{L}\s]+$/u, "Inválido.")
-    .max(50, { message: "Cidade muito extenso" }),
+  city: addressFields.city,
 
-  phone: z
-    .string({ error: (issue) => issue.input === undefined ? "Inválido" : "Precisa ser uma string" })
-    .min(10, { message: "Numero de telefone inválido" })
-    .max(11),
+  phone: addressFields.phone,
 
   checkAddress: z.boolean(),
 
-  billingAddress: z
-    .string({ error: (issue) => issue.input === undefined ? "Inválido" : "Precisa ser uma string" })
-    .min(5, { message: "Endereço inválido" })
-    .max(250, { message: "Endereço muito extenso" }),
-
-  billingPostalCode: z
-    .string()
-    .min(9, { message: "CEP Inválido" })
-    .max(9, { message: "CEP Inválido" }),
-
-  billingState: z
-    .string({ error: (issue) => issue.input === undefined ? "Inválido" : "Precisa ser uma string" })
-    .regex(/^[A-Za-z]+$/i, "Inválido."),
-
-  billingCity: z
-    .string({ error: (issue) => issue.input === undefined ? "Inválido" : "Precisa ser uma string" })
-    .regex(/^[\p{L}\s]+$/u, "Inválido.")
-    .max(50, { message: "Limite de 50 caracteres" }),
+  ...billingAddressFields,
 });

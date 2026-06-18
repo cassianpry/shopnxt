@@ -3,15 +3,13 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 import { connectToDatabase } from "@/lib/actions/mongoose";
 import GameKey from "@/database/gamekey.model";
+import type { RouteParams, SessionUser } from "@/lib/api/shared";
+import { serverError } from "@/lib/api/shared";
 
-interface ContextProps {
-  params: Promise<{ id: string }>;
-}
-
-export async function GET(req: NextRequest, context: ContextProps) {
+export async function GET(req: NextRequest, context: RouteParams<"id">) {
   try {
     const session = await getServerSession(authOptions);
-    const sessionUser = session?.user as { role?: string } | null;
+    const sessionUser = session?.user as SessionUser | null;
     const isAdmin = sessionUser?.role === "admin";
     if (!isAdmin) {
       return NextResponse.json({ error: "Não autorizado" }, { status: 403 });
@@ -26,14 +24,14 @@ export async function GET(req: NextRequest, context: ContextProps) {
 
     return NextResponse.json({ keys, stats: { total: keys.length, available, sold } });
   } catch (error) {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return serverError(error);
   }
 }
 
-export async function POST(req: NextRequest, context: ContextProps) {
+export async function POST(req: NextRequest, context: RouteParams<"id">) {
   try {
     const session = await getServerSession(authOptions);
-    const sessionUser = session?.user as { role?: string } | null;
+    const sessionUser = session?.user as SessionUser | null;
     const isAdmin = sessionUser?.role === "admin";
     if (!isAdmin) {
       return NextResponse.json({ error: "Não autorizado" }, { status: 403 });
@@ -57,6 +55,6 @@ export async function POST(req: NextRequest, context: ContextProps) {
 
     return NextResponse.json({ created: created.length }, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return serverError(error);
   }
 }

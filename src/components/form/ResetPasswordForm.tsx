@@ -11,7 +11,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -88,7 +87,7 @@ function ResetPasswordForm({ isOpen, setIsOpen }: ResetPasswordFormProps) {
                         {...field}
                       />
                     </FormControl>
-                    <FormDescription className="text-text-muted text-xs"></FormDescription>
+
                   </FormItem>
                 )}
               />
