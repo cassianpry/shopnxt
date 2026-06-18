@@ -12,11 +12,12 @@ import { UserProps } from "@/types/index.d";
 import { useUpdateUser } from "@/app/services/users/mutations";
 
 interface ProfileFormProps {
-  user: UserProps;
+  user: UserProps | null;
 }
 
 const ProfileForm: FC<ProfileFormProps> = ({ user }) => {
   const { toast } = useToast();
+  if (!user) return null;
   const { name, email, address, city, phone, state, postalCode, role } = user;
   const updateUser = useUpdateUser();
 

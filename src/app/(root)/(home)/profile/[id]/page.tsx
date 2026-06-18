@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import ProfileForm from "@/components/form/ProfileForm";
 
 import { redirect } from "next/navigation";
-import { UserProps } from "@/types/index.d";
+import { UserProps, isUserProps } from "@/types/index.d";
 import LoadingProfile from "@/components/loadings/LoadingProfile";
 
 const ProfileEditPage = () => {
@@ -22,7 +22,7 @@ const ProfileEditPage = () => {
       {status === "loading" ? (
         <LoadingProfile />
       ) : data ? (
-        <ProfileForm user={data?.user as UserProps} />
+        <ProfileForm user={isUserProps(data?.user) ? data.user : null} />
       ) : null}
     </div>
   );

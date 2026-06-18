@@ -1,23 +1,23 @@
 "use client";
 import Link from "next/link";
-import React, { useContext } from "react";
+import React from "react";
 import { BsJoystick } from "react-icons/bs";
 import NavItems from "./NavItems";
 import Theme from "./Theme";
 import UserMenu from "./UserMenu";
 import { Skeleton } from "../ui/skeleton";
-import { CartContext } from "@/context/CartContext";
+import { useCart } from "@/context/CartContext";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { UserProps } from "@/types/index.d";
 import SearchBar from "../search/SearchBar";
 
 interface NavbarProps {
-  user: UserProps;
+  user: UserProps | null;
   status: "authenticated" | "loading" | "unauthenticated";
 }
 
 const Navbar: React.FC<NavbarProps> = ({ user, status }) => {
-  const { cartProducts } = useContext(CartContext);
+  const { cartProducts } = useCart();
 
   return (
     <nav className="bg-dark-200 fixed z-50 w-full border-b border-dark-400">

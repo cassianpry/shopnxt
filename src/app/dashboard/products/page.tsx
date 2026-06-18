@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { ProductProps, SearchParamsProps } from "@/types/index.d";
+import { SearchParamsProps } from "@/types/index.d";
 import Link from "next/link";
 
 import { useProducts } from "@/app/services/product/queries";
@@ -49,7 +49,7 @@ function Products(props: SearchParamsProps) {
             </Link>
           </div>
 
-          {products?.data?.products?.length > 0 && !products.isFetching ? (
+          {(products?.data?.products?.length ?? 0) > 0 && !products.isFetching ? (
             <div className="flex mx-auto border rounded-md mt-1 text-text-high">
               <Table>
                 <TableHeader>
@@ -67,7 +67,7 @@ function Products(props: SearchParamsProps) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {(products?.data?.products as ProductProps[])?.map(
+                   {products?.data?.products?.map(
                     (product) => (
                       <ProductRow
                         key={product._id}

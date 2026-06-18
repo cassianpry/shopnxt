@@ -1,4 +1,3 @@
-"use client";
 import ProductForm from "@/components/form/ProductForm";
 import { Separator } from "@/components/ui/separator";
 import React from "react";

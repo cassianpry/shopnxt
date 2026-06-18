@@ -74,7 +74,7 @@ describe("ProductFormSchema", () => {
       memory: "8GB",
       storage: "50GB",
       graphicCard: "GTX 1060",
-      price: "59.99",
+      price: 59.99,
       active: true,
     });
     expect(result.success).toBe(true);

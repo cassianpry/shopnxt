@@ -129,63 +129,6 @@ export interface OrderProps {
   updatedAt?: string;
 }
 
-export interface GameKeyProps {
-  _id?: string;
-  product: string;
-  key: string;
-  status: "available" | "sold" | "revoked";
-  order?: string;
-  assignedAt?: string;
-  createdAt?: string;
-}
-
-export interface LibraryProductProps {
-  product: string;
-  keys: string[];
-  purchasedAt: string;
-  orderNum: string;
-}
-
-export interface LibraryProps {
-  _id?: string;
-  user: string;
-  products: LibraryProductProps[];
-  createdAt?: string;
-}
-
-export interface ReviewProps {
-  _id?: string;
-  user: string;
-  product: string;
-  rating: number;
-  title?: string;
-  body?: string;
-  createdAt?: string;
-}
-
-export interface CouponProps {
-  _id?: string;
-  code: string;
-  discountType: "percentage" | "fixed";
-  discountValue: number;
-  minPurchase?: number;
-  validFrom?: string;
-  validUntil?: string;
-  usageLimit?: number;
-  usedCount?: number;
-  active: boolean;
-  createdAt?: string;
-}
-
-export interface CartItemProps {
-  product: string;
-  price: number;
-}
-
-export interface CartProps {
-  _id?: string;
-  user: string;
-  items: CartItemProps[];
-  createdAt?: string;
-  updatedAt?: string;
+export function isUserProps(user: unknown): user is UserProps {
+  return !!user && typeof user === "object" && "role" in user;
 }

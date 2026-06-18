@@ -1,8 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { getToken, getUser, getUsers, updateUser } from "./api";
+import { UserProps } from "@/types/index.d";
+
+interface UsersResponse {
+  users: UserProps[];
+  totalUsers?: number;
+  isNext?: boolean;
+}
 
 export function useUsers(searchQuery: Record<string, string>) {
-  return useQuery({
+  return useQuery<UsersResponse>({
     queryKey: ["users", searchQuery],
     queryFn: () => getUsers(searchQuery),
   });

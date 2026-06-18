@@ -1,5 +1,5 @@
 import { ProductProps } from "@/types/index.d";
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 function isValidCartData(data: unknown): data is ProductProps[] {
   return Array.isArray(data) && data.every(
@@ -15,9 +15,15 @@ interface CartContextProps {
   setCartProducts: React.Dispatch<React.SetStateAction<ProductProps[]>>;
 }
 
-export const CartContext = createContext<CartContextProps>(
-  {} as CartContextProps
+export const CartContext = createContext<CartContextProps | undefined>(
+  undefined
 );
+
+export function useCart(): CartContextProps {
+  const context = useContext(CartContext);
+  if (!context) throw new Error("useCart must be used within CartProvider");
+  return context;
+}
 
 function CartProvider({ children }: { children: React.ReactNode }) {
   const [cartProducts, setCartProducts] = useState<ProductProps[]>([]);

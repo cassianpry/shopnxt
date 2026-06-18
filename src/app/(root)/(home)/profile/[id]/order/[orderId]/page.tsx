@@ -92,6 +92,7 @@ const UserOrder = () => {
                 </span>
               </div>
             </div>
+            {/* API returns OrderProps — response.json() is untyped so assertion is needed */}
             <OrderShipmentCard order={order.data as OrderProps} />
           </div>
         </div>

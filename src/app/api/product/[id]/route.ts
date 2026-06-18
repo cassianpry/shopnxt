@@ -4,14 +4,10 @@ import { connectToDatabase } from "@/lib/actions/mongoose";
 import { ProductFormSchema } from "@/lib/actions/validations";
 import { NextRequest, NextResponse } from "next/server";
 import slugify from "slugify";
+import type { RouteParams } from "@/lib/api/shared";
+import { serverError } from "@/lib/api/shared";
 
-interface contextProps {
-  params: Promise<{
-    id: string;
-  }>;
-}
-
-export async function GET(req: NextRequest, context: contextProps) {
+export async function GET(req: NextRequest, context: RouteParams<"id">) {
   const params = await context.params;
 
   try {
@@ -20,14 +16,11 @@ export async function GET(req: NextRequest, context: contextProps) {
 
     return NextResponse.json(product);
   } catch (error) {
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return serverError(error);
   }
 }
 
-export async function PUT(req: NextRequest, context: contextProps) {
+export async function PUT(req: NextRequest, context: RouteParams<"id">) {
   const params = await context.params;
   const data = await req.json();
 
@@ -66,15 +59,11 @@ export async function PUT(req: NextRequest, context: contextProps) {
       },
     });
 
-    const genreDocuments = [];
-    for (const genre of validated.genres) {
-      const existingGenre = await Genres.findById(genre);
-
-      genreDocuments.push({
-        _id: existingGenre!._id,
-        name: existingGenre!.name,
-      });
-    }
+    const genreDocs = await Genres.find({ _id: { $in: validated.genres } });
+    const genreDocuments = genreDocs.map((g) => ({
+      _id: g._id,
+      name: g.name,
+    }));
 
     await Product.findByIdAndUpdate(product!._id, {
       $push: { genres: { $each: genreDocuments } },
@@ -83,9 +72,6 @@ export async function PUT(req: NextRequest, context: contextProps) {
     return NextResponse.json("Produto alterado");
   } catch (error) {
     console.log(error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return serverError(error);
   }
 }

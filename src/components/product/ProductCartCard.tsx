@@ -1,12 +1,11 @@
-import { CartContext } from "@/context/CartContext";
+import { useCart } from "@/context/CartContext";
 import Image from "next/image";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useMemo } from "react";
 import { Button } from "../ui/button";
 import { MdAutorenew, MdOutlineDeleteForever } from "react-icons/md";
-import { ProductProps, UserProps } from "@/types/index.d";
+import { ProductProps, isUserProps } from "@/types/index.d";
 import { Skeleton } from "../ui/skeleton";
 import { useSession } from "next-auth/react";
-import { createWishList } from "@/app/services/wishlist/api";
 import {
   useCreateWishList,
   useDeleteProductWishList,
@@ -31,15 +30,37 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
   type,
   index = 0,
 }) => {
-  const { addToCart, removeFromCart } = useContext(CartContext);
+  const { addToCart, removeFromCart } = useCart();
   const user = useSession();
   const addWishList = useCreateWishList();
   const deleteProductWishList = useDeleteProductWishList();
-  const [isWishListed, setWishListed] = useState<boolean | undefined>(false);
-  const [isCartListed, setCartListed] = useState<boolean | undefined>(false);
   const queryClient = useQueryClient();
 
-  const userId: string = (user?.data?.user as UserProps)?._id!;
+  const isWishListed = useMemo(() => {
+    if (!isLoading && type !== "wishlist" && product && wishList) {
+      return (wishList as ProductProps[]).some(
+        (wishListProduct: ProductProps) =>
+          wishListProduct.slug ===
+          (Array.isArray(product) ? product[index].slug : product.slug)
+      );
+    }
+    return false;
+  }, [product, wishList, isLoading, type, index]);
+
+  const isCartListed = useMemo(() => {
+    if (type === "wishlist" && !isLoading) {
+      return (
+        Array.isArray(product) &&
+        !Array.isArray(wishList) &&
+        product.some(
+          (cartProd: ProductProps) => cartProd.slug === wishList.slug
+        )
+      );
+    }
+    return false;
+  }, [product, wishList, isLoading, type]);
+
+  const userId: string = (isUserProps(user?.data?.user) ? user.data.user._id : undefined)!;
   const addToWishList = async (user: string, product: string) => {
     try {
       addWishList.mutate({ user, product });
@@ -61,27 +82,6 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
       console.log(error);
     }
   };
-  useEffect(() => {
-    if (type === "wishlist" && !isLoading) {
-      const cartCheck = Array.isArray(product) && !Array.isArray(wishList)
-        ? product.some(
-            (cartProd: ProductProps) => cartProd.slug === wishList.slug
-          )
-        : false;
-      setCartListed(cartCheck);
-    }
-    if (!isLoading && type !== "wishlist") {
-      const wishListCheck = Array.isArray(wishList)
-        ? wishList.some(
-            (wishListProduct: ProductProps) =>
-              wishListProduct.slug ===
-              (Array.isArray(product) ? product[index].slug : product.slug)
-          )
-        : false;
-      setWishListed(wishListCheck);
-    }
-  }, [index, isLoading, product, type, wishList]);
-
   return (
     <>
       {isLoading ? (
@@ -213,8 +213,7 @@ const ProductCartCard: React.FC<ProductCartCardProps> = ({
                 <>
                   <Button
                     className="rounded-md font-semibold text-sm text-white bg-accent hover:bg-accent-hover transition-all duration-300 ease-in-out"
-                    //@ts-ignore
-                    onClick={() => addToWishList(userId, product?._id!)}
+                    onClick={() => addToWishList(userId, (Array.isArray(product) ? product[index]._id : product._id)!)}
                   >
                     Adicionar à lista de desejos
                   </Button>

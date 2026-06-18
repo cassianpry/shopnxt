@@ -6,10 +6,8 @@ import { UserOrderSchema } from "@/lib/actions/validations";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 import { NextRequest, NextResponse } from "next/server";
-
-function escapeRegex(str: string): string {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
+import { escapeRegex, errorMessage, serverError } from "@/lib/api/shared";
+import type { SessionUser } from "@/lib/api/shared";
 
 export async function GET(req: NextRequest) {
   const searchQuery = new URL(
@@ -87,7 +85,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json(null);
     }
   } catch (error) {
-    return NextResponse.json((error as Error).message, { status: 500 });
+    return errorMessage(error);
   }
 }
 
@@ -113,7 +111,7 @@ export async function POST(req: NextRequest) {
     await connectToDatabase();
 
     const session = await getServerSession(authOptions);
-    const sessionUser = session?.user as { _id?: string; email?: string } | null;
+    const sessionUser = session?.user as SessionUser | null;
 
     let discountAmount = 0;
     let appliedCoupon = null;
@@ -147,7 +145,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Map frontend cartProducts (ProductProps[]) to schema items array
-    const items = data.cartProducts?.map((item: any) => ({
+    const items = data.cartProducts?.map((item: { _id: string; name: string; price: string | number }) => ({
       product: item._id,
       name: item.name,
       price: typeof item.price === "string" ? parseFloat(item.price) : item.price,
@@ -178,9 +176,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ userId, orderId: order.orderNum, orderStatus: order.status });
   } catch (error) {
     console.log(error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return serverError(error);
   }
 }

@@ -4,12 +4,12 @@ import LoadingProductCard from "@/components/loadings/LoadingProductCard";
 import ProductCartCard from "@/components/product/ProductCartCard";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CartContext } from "@/context/CartContext";
+import { useCart } from "@/context/CartContext";
 import { ProductProps } from "@/types/index.d";
 import { useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
 
 function WishList() {
   const { status } = useSession();
@@ -20,8 +20,7 @@ function WishList() {
 
   const params = useParams<{ id: string }>();
   const wishlistResult = useWishListUser(params.id.toString());
-  const [loading, setLoading] = useState(true);
-  const { cartProducts } = useContext(CartContext);
+  const { cartProducts } = useCart();
 
   return (
     <>
@@ -50,7 +49,7 @@ function WishList() {
                     wishList={wishProd}
                     type="wishlist"
                     key={wishProd._id}
-                    index={index as number}
+                    index={index}
                   />
                 )
               )}

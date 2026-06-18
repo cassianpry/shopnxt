@@ -199,7 +199,7 @@ function UserForm({ isOpen, setIsOpen, user }: FormUserProps) {
                           {...field}
                         />
                       </FormControl>
-                      <FormDescription className="text-text-muted"></FormDescription>
+
                     </FormItem>
                   )}
                 />
@@ -222,7 +222,7 @@ function UserForm({ isOpen, setIsOpen, user }: FormUserProps) {
                           {...field}
                         />
                       </FormControl>
-                      <FormDescription className="text-text-muted"></FormDescription>
+
                     </FormItem>
                   )}
                 />
@@ -245,7 +245,7 @@ function UserForm({ isOpen, setIsOpen, user }: FormUserProps) {
                             {...field}
                           />
                         </FormControl>
-                        <FormDescription className="text-text-muted"></FormDescription>
+  
                       </FormItem>
                     )}
                   />
@@ -267,7 +267,7 @@ function UserForm({ isOpen, setIsOpen, user }: FormUserProps) {
                             {...field}
                           />
                         </FormControl>
-                        <FormDescription className="text-text-muted"></FormDescription>
+  
                       </FormItem>
                     )}
                   />
@@ -289,7 +289,7 @@ function UserForm({ isOpen, setIsOpen, user }: FormUserProps) {
                             {...field}
                           />
                         </FormControl>
-                        <FormDescription className="text-text-muted"></FormDescription>
+  
                       </FormItem>
                     )}
                   />
@@ -312,7 +312,7 @@ function UserForm({ isOpen, setIsOpen, user }: FormUserProps) {
                           {...field}
                         />
                       </FormControl>
-                      <FormDescription className="text-text-muted"></FormDescription>
+
                     </FormItem>
                   )}
                 />

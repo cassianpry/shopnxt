@@ -1,7 +1,6 @@
 "use client";
 import React, {
   ChangeEvent,
-  Suspense,
   useEffect,
   useRef,
   useState,
@@ -36,6 +35,7 @@ import {
 import { useGenres } from "@/app/services/genres/queries";
 import { useProduct } from "@/app/services/product/queries";
 import { useTheme } from "@/context/ThemeProvider";
+import { ProductProps } from "@/types/index.d";
 import { Checkbox } from "../ui/checkbox";
 
 const ProductForm = () => {
@@ -47,7 +47,7 @@ const ProductForm = () => {
   const query: string | "" = searchParams.get("query") || "";
   const genres = useGenres({ searchQuery: query });
   const product = useProduct(id);
-  const editorRef = useRef(null);
+  const editorRef = useRef<unknown>(null);
   const { mode } = useTheme();
 
   const [uploading, setUploading] = useState(false);
@@ -89,15 +89,13 @@ const ProductForm = () => {
         if (image !== false && image !== 500) {
           values.productImage = image.secure_url;
         }
-        //@ts-ignore
-        updateExistingProduct.mutate({ ...values });
+        updateExistingProduct.mutate(values as unknown as ProductProps);
       } else {
         //   //New product
         const image = await uploadImage();
         if (image !== false && image !== 500) {
           values.productImage = image.secure_url;
-          //@ts-ignore
-          createNewProduct.mutate(values);
+          createNewProduct.mutate(values as unknown as ProductProps);
         } else {
           return null;
         }
@@ -246,7 +244,7 @@ const ProductForm = () => {
                     }}
                   />
                 </FormControl>
-                <FormDescription className="text-text-muted"></FormDescription>
+
               </FormItem>
             )}
           />
@@ -348,10 +346,9 @@ const ProductForm = () => {
                 <FormControl className="mt-3.5">
                   <Editor
                     apiKey={process.env.NEXT_PUBLIC_TINY_EDITOR_API_KEY}
-                    onInit={(evt, editor) =>
-                      //@ts-ignore
-                      (editorRef.current = editor)
-                    }
+                    onInit={(_evt, editor) => {
+                      editorRef.current = editor;
+                    }}
                     onBlur={field.onBlur}
                     onEditorChange={(content) => field.onChange(content)}
                     initialValue={product.data?.about}
@@ -422,10 +419,8 @@ const ProductForm = () => {
                 <MultiSelect
                   className="bg-dark-400 border border-dark-500 rounded-md text-text-body"
                   placeholder={"Selecione o(s) gênero(s)..."}
-                  //@ts-ignore
                   selected={field.value}
-                  //@ts-ignore
-                  options={genres.data?.genre || []}
+                  options={(genres.data?.genre ?? []) as { _id: string; name: string }[]}
                   {...field}
                 />
 
@@ -462,7 +457,7 @@ const ProductForm = () => {
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription className="text-text-muted"></FormDescription>
+  
                 </FormItem>
               )}
             />
@@ -489,7 +484,7 @@ const ProductForm = () => {
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription className="text-text-muted"></FormDescription>
+  
                 </FormItem>
               )}
             />
@@ -519,7 +514,7 @@ const ProductForm = () => {
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription className="text-text-muted"></FormDescription>
+  
                 </FormItem>
               )}
             />
@@ -546,7 +541,7 @@ const ProductForm = () => {
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription className="text-text-muted"></FormDescription>
+  
                 </FormItem>
               )}
             />
@@ -579,7 +574,7 @@ const ProductForm = () => {
                       </FormControl>
                       <span>&nbsp;GB</span>
                     </div>
-                    <FormDescription className="text-text-muted"></FormDescription>
+    
                   </FormItem>
                 )}
               />
@@ -610,7 +605,7 @@ const ProductForm = () => {
                       </FormControl>
                       <span>&nbsp;GB</span>
                     </div>
-                    <FormDescription className="text-text-muted"></FormDescription>
+    
                   </FormItem>
                 )}
               />
@@ -640,7 +635,7 @@ const ProductForm = () => {
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription className="text-text-muted"></FormDescription>
+  
                 </FormItem>
               )}
             />
@@ -668,7 +663,7 @@ const ProductForm = () => {
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription className="text-text-muted"></FormDescription>
+  
                 </FormItem>
               )}
             />

@@ -1,10 +1,7 @@
 import User from "@/database/user.model";
 import { connectToDatabase } from "@/lib/actions/mongoose";
 import { NextRequest, NextResponse } from "next/server";
-
-function escapeRegex(str: string): string {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
+import { escapeRegex, serverError } from "@/lib/api/shared";
 
 export async function GET(req: NextRequest) {
   const searchQuery = new URL(
@@ -50,9 +47,6 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ users, isNext, totalUsers });
   } catch (error) {
     console.log(error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return serverError(error);
   }
 }

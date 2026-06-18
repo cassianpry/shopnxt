@@ -4,15 +4,14 @@ import ParseHTML from "@/components/product/ParseHTML";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { GenreProps, UserProps } from "@/types/index.d";
+import { GenreProps, ProductProps, isUserProps } from "@/types/index.d";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import moment from "moment";
-// @ts-expect-error -- moment locale has no type declarations
 import "moment/locale/pt-br";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CartContext } from "@/context/CartContext";
+import { useCart } from "@/context/CartContext";
 import Link from "next/link";
 import {
   IoMdAddCircleOutline,
@@ -26,41 +25,32 @@ import { useQueryClient } from "@tanstack/react-query";
 function ProductPage() {
   const params = useParams<{ slug: string }>();
   const product = useProductBySlug(params.slug.toString());
-  const { addToCart, cartProducts } = useContext(CartContext);
+  const { addToCart, cartProducts } = useCart();
   const user = useSession();
   const query = useQueryClient();
-  const [isWishListed, setIsWishListed] = useState(false);
-
   const existingProduct = cartProducts?.find(
     (item) => item._id === product?.data?._id
   );
 
-  const userId = (user?.data?.user as UserProps)?._id;
+  const userId = isUserProps(user?.data?.user) ? user.data.user._id : undefined;
   const productId = product?.data?._id;
 
   const wishList = useWishListUser(userId);
 
   const addWishList = useCreateWishList();
 
+  const isWishListed = wishList?.data?.wishlist?.products?.some(
+    (wishListProduct: ProductProps) => wishListProduct.slug === product?.data?.slug
+  ) ?? false;
+
   const addToWishList = async (user: string, product: string) => {
     try {
       addWishList.mutate({ user, product });
-      setIsWishListed(true);
       await query.invalidateQueries({ queryKey: ["wishlists"] });
     } catch (error) {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    if (wishList?.data?.wishlist?.products && product?.data) {
-      setIsWishListed(
-        wishList?.data?.wishlist?.products.some(
-          (wishListProduct: any) => wishListProduct.slug === product.data.slug
-        )
-      );
-    }
-  }, [wishList.data?.wishlist?.products, product.data]);
 
   const formatPrice = (value: string) =>
     parseFloat(value).toLocaleString("pt-BR", {

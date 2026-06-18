@@ -4,11 +4,13 @@ import { authOptions } from "@/lib/authOptions";
 import { connectToDatabase } from "@/lib/actions/mongoose";
 import Cart from "@/database/cart.model";
 import { Product } from "@/database/product.model";
+import type { SessionUser } from "@/lib/api/shared";
+import { serverError } from "@/lib/api/shared";
 
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
-    const sessionUser = session?.user as { _id?: string } | null;
+    const sessionUser = session?.user as SessionUser | null;
     if (!sessionUser?._id) {
       return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
     }
@@ -18,14 +20,14 @@ export async function GET() {
 
     return NextResponse.json(cart ?? { items: [] });
   } catch (error) {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return serverError(error);
   }
 }
 
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    const sessionUser = session?.user as { _id?: string } | null;
+    const sessionUser = session?.user as SessionUser | null;
     if (!sessionUser?._id) {
       return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
     }
@@ -52,6 +54,6 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(cart);
   } catch (error) {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return serverError(error);
   }
 }

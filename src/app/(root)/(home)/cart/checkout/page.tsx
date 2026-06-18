@@ -2,7 +2,7 @@
 
 import UserCheckoutForm from "@/components/form/UserCheckoutForm";
 import Loading from "@/components/loading";
-import { UserProps } from "@/types/index.d";
+import { isUserProps } from "@/types/index.d";
 import { useSession } from "next-auth/react";
 
 
@@ -13,7 +13,7 @@ const Checkout = () => {
     <div className="bg-dark-100 min-h-screen">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 pt-24 pb-16">
         {data?.user ? (
-          <UserCheckoutForm user={data.user as UserProps} />
+          <UserCheckoutForm user={isUserProps(data.user) ? data.user : null} />
         ) : (
           <Loading />
         )}

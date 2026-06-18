@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -34,10 +34,12 @@ function GenreForm({ isOpen, setIsOpen, genre }: FormGenreProps) {
     register,
     handleSubmit,
     reset,
-    setValue,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(GenreFormSchema),
+    defaultValues: {
+      name: newGenre.data?.name ?? "",
+    },
   });
 
   const onSubmit: SubmitHandler<FormValues> = async (
@@ -56,12 +58,6 @@ function GenreForm({ isOpen, setIsOpen, genre }: FormGenreProps) {
     }
     setIsOpen(false);
   };
-
-  useEffect(() => {
-    if (newGenre.data) {
-      setValue("name", newGenre.data.name);
-    }
-  }, [newGenre.data, setValue]);
 
   return (
     <Dialog

@@ -2,12 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/actions/mongoose";
 import Review from "@/database/review.model";
 import mongoose from "mongoose";
+import type { RouteParams } from "@/lib/api/shared";
+import { serverError } from "@/lib/api/shared";
 
-interface ContextProps {
-  params: Promise<{ id: string }>;
-}
-
-export async function GET(req: NextRequest, context: ContextProps) {
+export async function GET(req: NextRequest, context: RouteParams<"id">) {
   try {
     const { id } = await context.params;
 
@@ -35,6 +33,6 @@ export async function GET(req: NextRequest, context: ContextProps) {
 
     return NextResponse.json({ reviews, averageRating, totalReviews, isNext });
   } catch (error) {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return serverError(error);
   }
 }

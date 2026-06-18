@@ -4,18 +4,18 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { sidebarLinks } from "@/constants";
 import { usePathname } from "next/navigation";
-import { UserProps, SidebarLink } from "@/types/index.d";
+import { isUserProps, SidebarLink } from "@/types/index.d";
 import { MdDashboard } from "react-icons/md";
 
 const LeftSidebar = () => {
   const { data: session, status } = useSession();
-  const user = session?.user as UserProps;
+  const user = isUserProps(session?.user) ? session.user : null;
   const pathname = usePathname();
 
   return (
     <section className="sticky left-0 top-0 flex h-screen w-[220px] flex-col bg-dark-100 border-r border-dark-400 pt-16 max-sm:hidden">
       <div className="flex flex-col flex-1 px-3 py-4">
-        {status === "authenticated" && user && (
+        {status === "authenticated" && user !== null && (
           <div className="flex items-center gap-3 px-3 py-3 mb-4 rounded-lg bg-dark-300">
             <div className="w-8 h-8 rounded-full bg-dark-500 flex items-center justify-center text-xs font-bold text-text-high">
               {user.name?.charAt(0).toUpperCase()}

@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { ResetPasswordSchema } from "@/lib/actions/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { MdAutorenew, MdKey, MdLogin } from "react-icons/md";
+import { MdAutorenew, MdKey } from "react-icons/md";
 import { GoPasskeyFill } from "react-icons/go";
 import { toast } from "@/components/ui/use-toast";
 import LoadingResetPassword from "@/components/loadings/LoadingResetPassword";

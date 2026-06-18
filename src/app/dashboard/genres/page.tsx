@@ -20,18 +20,6 @@ import { useGenres } from "@/app/services/genres/queries";
 import { SearchParamsProps } from "@/types/index.d";
 import Pagination from "@/components/Pagination";
 
-interface GenresProps {
-  data: {
-    genre: [
-      {
-        _id: string;
-        name: string;
-        slug: string;
-      }
-    ];
-  };
-}
-
 const Genres = (props: SearchParamsProps) => {
   const searchParams = use(props.searchParams);
   const [editGenre, setEditGenre] = useState("");
@@ -102,7 +90,7 @@ const Genres = (props: SearchParamsProps) => {
             </Button>
           </div>
 
-          {newGenres.data.genre !== undefined ? (
+          {newGenres.data?.genre !== undefined ? (
             <div className="bg-dark-300 rounded-xl border border-dark-400 overflow-hidden">
               <Table>
                 <TableHeader>
@@ -114,7 +102,7 @@ const Genres = (props: SearchParamsProps) => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {(newGenres as GenresProps).data?.genre?.map((genre) => (
+                  {newGenres.data?.genre?.map((genre) => (
                     <TableRow
                       key={genre._id}
                       className="border-b border-dark-400 text-text-body text-sm hover:bg-dark-400"
@@ -183,21 +171,21 @@ const Genres = (props: SearchParamsProps) => {
           <div className="flex items-center justify-end space-x-2 py-4">
             <div className="flex-1 text-sm text-text-body">
               {searchParams.query !== undefined &&
-              newGenres.data.genre !== undefined ? (
+              newGenres.data?.genre !== undefined ? (
                 <>
                   <span className="font-semibold text-md">
                     Total de gêneros encontrados:
                   </span>
                   &nbsp;
-                  {newGenres.data.genre.length}
+                  {newGenres.data?.genre.length}
                 </>
-              ) : newGenres.data.genre !== undefined ? (
+              ) : newGenres.data?.genre !== undefined ? (
                 <>
                   <span className="font-semibold text-md">
                     Total de gêneros cadastrados:
                   </span>
                   &nbsp;
-                  {newGenres.data.genre.length}
+                  {newGenres.data?.genre.length}
                 </>
               ) : (
                 ""

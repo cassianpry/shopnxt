@@ -17,7 +17,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 interface MultiSelectProps {
-  options: [{ _id: string; name: string }];
+  options: { _id: string; name: string }[];
   selected: string[];
   onChange: (selected: string[]) => void;
   placeholder: string;

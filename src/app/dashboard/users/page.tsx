@@ -13,7 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { SearchParamsProps, UserProps } from "@/types/index.d";
+import { SearchParamsProps } from "@/types/index.d";
 import React, { useState, use } from "react";
 
 function Users(props: SearchParamsProps) {
@@ -39,7 +39,7 @@ function Users(props: SearchParamsProps) {
             <div className="flex justify-start gap-3 pb-4">
               <SearchBar route="/dashboard/users" />
             </div>
-            {users?.data?.users?.length > 0 && !users?.isFetching ? (
+            {(users?.data?.users?.length ?? 0) > 0 && !users?.isFetching ? (
               <div className="bg-dark-300 rounded-xl border border-dark-400 overflow-hidden">
                 <Table>
                   <TableHeader>
@@ -52,7 +52,7 @@ function Users(props: SearchParamsProps) {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {(users?.data?.users as UserProps[])?.map((user) => (
+                    {users?.data?.users?.map((user) => (
                       <UsersRow
                         key={user._id}
                         user={user}

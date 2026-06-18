@@ -13,7 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { OrderProps, SearchParamsProps } from "@/types/index.d";
+import { SearchParamsProps } from "@/types/index.d";
 import Link from "next/link";
 import OrderModal from "@/components/order/OrderModal";
 
@@ -61,7 +61,7 @@ function Orders(props: SearchParamsProps) {
           <div className="flex justify-start gap-3 pb-4">
             <SearchBar route="/dashboard/orders" />
           </div>
-          {fetchedOrders?.orders.length > 0 ? (
+          {(fetchedOrders?.orders?.length ?? 0) > 0 ? (
             <div className="bg-dark-300 rounded-xl border border-dark-400 overflow-hidden">
               <Table>
                 <TableHeader>
@@ -72,7 +72,7 @@ function Orders(props: SearchParamsProps) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {(fetchedOrders?.orders as OrderProps[])?.map((order) => (
+                  {fetchedOrders?.orders?.map((order) => (
                     <TableRow
                       key={order._id}
                       className="border-b border-dark-400 text-text-body text-sm hover:bg-dark-400 hover:cursor-pointer"
@@ -95,13 +95,13 @@ function Orders(props: SearchParamsProps) {
           <div className="flex items-center justify-between space-x-2 py-4 text-text-body">
             <div className="flex-1 text-sm text-text-body">
               {searchParams.query !== undefined &&
-              fetchedOrders?.length !== undefined ? (
+              fetchedOrders?.orders?.length !== undefined ? (
                 <>
                   <span className="font-semibold text-md">
                     Total de vendas encontradas:
                   </span>
                   &nbsp;
-                  {fetchedOrders?.orders.length}
+                  {fetchedOrders?.orders?.length}
                 </>
               ) : fetchedOrders?.orders !== undefined ? (
                 <>

@@ -1,6 +1,11 @@
 import { withAuth } from "next-auth/middleware";
 import { JWT } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
+import type { SessionUser } from "@/lib/api/shared";
+
+interface NextAuthRequest extends NextRequest {
+  nextauth?: { token: JWT | null };
+}
 
 const PUBLIC_API_ROUTES = [
   "/api/auth",
@@ -14,10 +19,10 @@ export const config = {
   matcher: ["/dashboard/:path*", "/cart", "/profile/:path*", "/api/:path*"],
 };
 
-export const proxy = (withAuth as any)(
-  async function middleware(req: NextRequest): Promise<NextResponse | void> {
+export const proxy = withAuth(
+  async function middleware(req: NextAuthRequest): Promise<NextResponse | void> {
     const url = req.nextUrl.pathname;
-    const token: JWT | null = (req as any).nextauth?.token ?? null;
+    const token: JWT | null = req.nextauth?.token ?? null;
 
     const isFullyPublic = PUBLIC_API_ROUTES.some((route) =>
       url.startsWith(route),
@@ -40,7 +45,7 @@ export const proxy = (withAuth as any)(
       return NextResponse.redirect(signInUrl);
     }
 
-    const userRole = (token.user as { role?: string })?.role;
+    const userRole = (token.user as SessionUser)?.role;
 
     if (url.startsWith("/dashboard") && userRole !== "admin") {
       return NextResponse.redirect(new URL("/", req.url));

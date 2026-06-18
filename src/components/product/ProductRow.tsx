@@ -33,7 +33,7 @@ function ProductRow({ product, isLoading, isFetching }: ProductRowProps) {
         product.shortDescription
       )}
       <TableCell className="capitalize whitespace-nowrap overflow-hidden text-ellipsis max-w-52 max-xl:hidden">
-        {product?.genres?.map((g: any) => (
+        {product?.genres?.map((g: { _id: string; name: string }) => (
           <span key={g._id}>{g.name}&nbsp;</span>
         ))}
       </TableCell>
